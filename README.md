@@ -15,6 +15,6 @@ To install Flex (Lex) on Windows, you must proceed as following:
 
 # Run the code 
 - Clone the project in your PC with the following command : git clone https://github.com/ENRIQUEZ21/compilerProject.git 
-- with your Terminal go to the compilerProject folder, and run the command flex Compiler.l to generate a lex.yy.c C file 
-- Then, run the command gcc lex.yy.c -o output to create an output 
-- After that launch output in tour Terminal and enter a string to test the program
+- with your Terminal go to the compilerProject folder, and run the command *flex Compiler.l* to generate a lex.yy.c C file 
+- Then, run the command *gcc lex.yy.c -o output* to create an output 
+- After that launch *output* in your Terminal and enter a string to test the program
