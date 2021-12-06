@@ -1,18 +1,22 @@
 %{
     #include "scanner.h"
+
+
+
 %}
 
 
 
 WS     [ \t]+
+line    \n
 digit  [0-9]
 letter [a-zA-Z]
 alphanum {letter}|{digit}|_
 identifier {letter}{alphanum}*
 integer {digit}{digit}*
 real {digit}{digit}*.{digit}*
-char '{alphanum}*'
-string \"{alphanum}*\"
+char '({alphanum}|{WS})*'
+string \"({alphanum}|{WS})*\"
 boolean true|false
 literal {integer}|{char}|{string}|{boolean}|{real}
 
@@ -67,20 +71,20 @@ class {modifier}{WS}{WS}*class{WS}{WS}*{identifier}{WS}{WS}*({group_statements}{
 
  /* end prgm to add - real to add - change assignment - change print to read - remove read */
 {WS} ;
+{line}  { ; }
 {comment} ;
 {digit} printf("DIGIT");
 startprgm printf("START_PROGRAM");
 {write} printf("WRITE_STATEMENT"); 
 
-endprgm printf("END_PROGRAM");
-
+{else_statement} printf("else_statement");
 {statement} printf("STATEMENT");
 {group_statements} printf("GROUP OF STATEMENTS");
 {conditional_statement} printf("conditional_statement");
 {loop_statement} printf("loop_statement");
 {function} printf("FUNCTION");
 {class} printf("CLASS");
-. printf("Unexpected character");
+. printf("Unexpected character"); ;
 
 %%
 
