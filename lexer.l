@@ -1,8 +1,5 @@
 %{
     #include "scanner.h"
-
-
-
 %}
 
 
@@ -31,14 +28,16 @@ declaration var{WS}{WS}*{identifier}(,{WS}*{identifier})*{WS}*:{WS}*{type}
 
 arithmetic_operator [-+*/]|div|mod
 boolean_operator ==|<=|>=|<|>|<>|and|or|not
-call_function ({mathematical_function}|{identifier}){WS}{WS}*({identifier}|{literal})({WS}*,{WS}*({identifier}|{literal}))*{WS}*:{WS}*func
+simple_function  {identifier}{WS}{WS}*:{WS}*func
+with_arguments_function {identifier}{WS}{WS}*({identifier}|{literal})({WS}*,{WS}*({identifier}|{literal}))*{WS}*:{WS}*func
+call_function {simple_function}|{with_arguments_function}
 arithmetical_expression ({identifier}|{literal}|{call_function}){WS}*{arithmetic_operator}{WS}*({identifier}|{literal}|{call_function})
 boolean_expression ({identifier}|{literal}|{call_function}){WS}*{boolean_operator}{WS}*({identifier}|{literal}|{call_function})
 expression {boolean_expression}|{arithmetical_expression}
 assignment :=
 statement {identifier}{WS}*{assignment}{WS}*({expression}|{literal}|{identifier}|{call_function})
 
-write write{WS}{WS}*({identifier}|{literal})
+write write{WS}{WS}*({identifier}|{literal}|{expression})
 
 
 group_statements begin{WS}{WS}*(({statement}|{comment}|{declaration}|{write}){WS}{WS}*)*end
@@ -69,15 +68,13 @@ class {modifier}{WS}{WS}*class{WS}{WS}*{identifier}{WS}{WS}*({group_statements}{
 
 
 
- /* end prgm to add - real to add - change assignment - change print to read - remove read */
 {WS} ;
 {line}  { ; }
 {comment} ;
 {digit} printf("DIGIT");
-startprgm printf("START_PROGRAM");
+start printf("START_PROGRAM");
 {write} printf("WRITE_STATEMENT"); 
 
-{else_statement} printf("else_statement");
 {statement} printf("STATEMENT");
 {group_statements} printf("GROUP OF STATEMENTS");
 {conditional_statement} printf("conditional_statement");
