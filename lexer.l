@@ -1,87 +1,79 @@
 %{
-    #include "scanner.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int cnt_line = 0;
+
+typedef enum{STARTPRGM=1, COMMA, DBPTS, OPENPAR, CLOSEPAR, OPENBRA, CLOSEBRA, OPENBRACK, CLOSEBRACK, 
+SEMICOLON, DOT, INTEGER, REAL, CHAR, STRING, BOOLEAN, BOOLOP, ARITHMOP, TYPE, VAR,
+IF, THEN, ELIF, ELSE, ENDIF, WHILE, DO, ENDWHILE, BEGSTMT, ENDSTMT, ASSIGNMENT, 
+ MATHFCT, FCT, RETURN, MODIFIER, CLASS, ENDCLASS, COMMENT, WRITE, ID, WS, LINE} tok;
+
 %}
-
-
-
-WS     [ \t]+
-line    \n
-digit  [0-9]
+delim [\t ]
+WS {delim}+
+line 			\n
 letter [a-zA-Z]
+digit  [0-9]
 alphanum {letter}|{digit}|_
+ponctuations ","|"."|":"|"("|")"|"{"|"}"|";"|"_"|"!"|"~"|"@"|"="|"&"|"["|"]"|"'"|"`"|"%"|"$"|"€"|"?"|"#"
 identifier {letter}{alphanum}*
-integer {digit}{digit}*
-real {digit}{digit}*.{digit}*
-char '({alphanum}|{WS})*'
-string \"({alphanum}|{WS})*\"
+integer {digit}+
+real {digit}+\.{digit}*
+char '({alphanum}|{WS}|{ponctuations}|{arithmetic_operator}|{boolean_operator})*'
+string \"({alphanum}|{WS}|{ponctuations}|{arithmetic_operator}|{boolean_operator})*\"
 boolean true|false
-literal {integer}|{char}|{string}|{boolean}|{real}
-
-comment  \{({alphanum}|{WS}|{arithmetic_operator}|{boolean_operator})*\}
-
-
+comment  \{({alphanum}|{WS}|{arithmetic_operator}|{boolean_operator}|{ponctuations})*\}
 mathematical_function exp|log|ln|abs|pow|sqrt
-
-
 type integer|char|string|boolean|real
-declaration var{WS}{WS}*{identifier}(,{WS}*{identifier})*{WS}*:{WS}*{type}
-
 arithmetic_operator [-+*/]|div|mod
 boolean_operator ==|<=|>=|<|>|<>|and|or|not
-simple_function  {identifier}{WS}{WS}*:{WS}*func
-with_arguments_function {identifier}{WS}{WS}*({identifier}|{literal})({WS}*,{WS}*({identifier}|{literal}))*{WS}*:{WS}*func
-call_function {simple_function}|{with_arguments_function}
-arithmetical_expression ({identifier}|{literal}|{call_function}){WS}*{arithmetic_operator}{WS}*({identifier}|{literal}|{call_function})
-boolean_expression ({identifier}|{literal}|{call_function}){WS}*{boolean_operator}{WS}*({identifier}|{literal}|{call_function})
-expression {boolean_expression}|{arithmetical_expression}
-assignment :=
-statement {identifier}{WS}*{assignment}{WS}*({expression}|{literal}|{identifier}|{call_function})
-
-write write{WS}{WS}*({identifier}|{literal}|{expression})
-
-
-group_statements begin{WS}{WS}*(({statement}|{comment}|{declaration}|{write}){WS}{WS}*)*end
-
-
-if_statement if{WS}{WS}*{boolean_expression}{WS}{WS}*then{WS}{WS}*({group_statements}{WS}{WS}*)
-elif_statement elif{WS}{WS}*{boolean_expression}{WS}{WS}*then{WS}{WS}*({group_statements}{WS}{WS}*)
-else_statement else{WS}{WS}*({group_statements}{WS}{WS}*)
-simple_if_statement {if_statement}
-if_else_statement {if_statement}{elif_statement}*{else_statement}
-conditional_statement {simple_if_statement}|{if_else_statement}
-
-while_statement while{WS}{WS}*{boolean_expression}{WS}{WS}*
-do_statement do{WS}{WS}*({group_statements}{WS}{WS}*)
-loop_statement {while_statement}{do_statement}
-
-function_with_arg function{WS}{WS}*{identifier}{WS}*({WS}*{identifier}({WS}*,{WS}*{identifier}{WS}*)*){WS}*:{WS}*{type}{WS}{WS}*({group_statements}{WS}{WS}*)return{WS}{WS}*({identifier}|{literal})
-function_without_args function{WS}{WS}*{identifier}{WS}*:{WS}*{type}{WS}{WS}*({group_statements}{WS}{WS}*)return{WS}{WS}*({identifier}|{literal})
-
-function {function_with_arg}|{function_without_args}
-
-modifier public|private|protected|final
-class {modifier}{WS}{WS}*class{WS}{WS}*{identifier}{WS}{WS}*({group_statements}{WS}{WS}*)
-
-
-
 %%
 
-
-
-{WS} ;
-{line}  { ; }
-{comment} ;
-{digit} printf("DIGIT");
-start printf("START_PROGRAM");
-{write} printf("WRITE_STATEMENT"); 
-
-{statement} printf("STATEMENT");
-{group_statements} printf("GROUP OF STATEMENTS");
-{conditional_statement} printf("conditional_statement");
-{loop_statement} printf("loop_statement");
-{function} printf("FUNCTION");
-{class} printf("CLASS");
-. printf("Unexpected character"); ;
+start {printf("STARTPRGM\n");}
+{comment} {printf("COMMENT\n");}
+"," {printf("COMMA\n");}
+":" {printf("DBPTS\n");}
+"(" {printf("OPENPAR\n");}
+")" {printf("CLOSEPAR\n");}
+"{" {printf("OPENBRA\n");}
+"}" {printf("CLOSEBRA\n");}
+"[" {printf("OPENBRACK\n");}
+"]" {printf("CLOSEBRACK\n");}
+";" {printf("SEMICOLON\n");}
+"." {printf("DOT");}
+{boolean_operator} {printf("BOOLOP\n");}
+{arithmetic_operator} {printf("ARITHMOP\n");}
+{integer} {printf("INTEGER\n");}
+{real} {printf("REAL\n");}
+{char} {printf("CHAR\n");}
+{string} {printf("STRING\n");}
+{boolean} {printf("BOOLEAN\n");}
+{type} {printf("TYPE\n");}
+var {printf("VAR\n");}
+if {printf("IF\n");}
+then {printf("THEN\n");}
+elif {printf("ELIF\n");}
+else {printf("ELSE\n");}
+endif {printf("ENDIF\n");}
+while {printf("WHILE\n");}
+do {printf("DO\n");}
+endwhile {printf("ENDWHILE\n");}
+begin {printf("BEGSTMT\n");}
+end {printf("ENDSTMT\n");}
+":=" {printf("ASSIGNMENT\n");}
+{mathematical_function} {printf("MATHFCT\n");}
+Function {printf("FCT\n");}
+return {printf("RETURN\n");}
+"public"|"private"|"protected"|"final" {printf("MODIFIER\n");}
+Class {printf("CLASS\n");}
+endClass {printf("ENDCLASS\n");}
+write {printf("WRITE\n");} 
+{identifier} {printf("ID\n");}
+{WS}						{;}
+{line}						{printf("%d ", ++cnt_line);}
+.							{printf("Error : is not a valid token in line %d ", cnt_line); exit(3);}
 
 %%
 
