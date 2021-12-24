@@ -1,14 +1,10 @@
 %{
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "yacc.tab.h"
+void yyerror(char *);
+
 
 int cnt_line = 0;
 
-typedef enum{STARTPRGM=1, COMMA, DBPTS, OPENPAR, CLOSEPAR, OPENBRA, CLOSEBRA, OPENBRACK, CLOSEBRACK, 
-SEMICOLON, DOT, INTEGER, REAL, CHAR, STRING, BOOLEAN, BOOLOP, ARITHMOP, TYPE, VAR,
-IF, THEN, ELIF, ELSE, ENDIF, WHILE, DO, ENDWHILE, BEGSTMT, ENDSTMT, ASSIGNMENT, 
- MATHFCT, FCT, RETURN, MODIFIER, CLASS, ENDCLASS, COMMENT, WRITE, ID, WS, LINE} tok;
 
 %}
 delim [\t ]
@@ -17,74 +13,80 @@ line 			\n
 letter [a-zA-Z]
 digit  [0-9]
 alphanum {letter}|{digit}|_
-ponctuations ","|"."|":"|"("|")"|"{"|"}"|";"|"_"|"!"|"~"|"@"|"="|"&"|"["|"]"|"'"|"`"|"%"|"$"|"€"|"?"|"#"
+punctuations ","|"."|":"|"("|")"|"{"|"}"|";"|"_"|"!"|"~"|"@"|"="|"&"|"["|"]"|"'"|"`"|"%"|"$"|"€"|"?"|"#"|"+"|"-"|"*"|"/"|"<"|">"
 identifier {letter}{alphanum}*
 integer {digit}+
 real {digit}+\.{digit}*
-char '({alphanum}|{WS}|{ponctuations}|{arithmetic_operator}|{boolean_operator})*'
-string \"({alphanum}|{WS}|{ponctuations}|{arithmetic_operator}|{boolean_operator})*\"
+char '({alphanum}|{WS}|{punctuations})*'
+string \"({alphanum}|{WS}|{punctuations})*\"
 boolean true|false
-comment  \{({alphanum}|{WS}|{arithmetic_operator}|{boolean_operator}|{ponctuations})*\}
-mathematical_function exp|log|ln|abs|pow|sqrt
+comment  \{({alphanum}|{WS}|{punctuations})*\}
 type integer|char|string|boolean|real
-arithmetic_operator [-+*/]|div|mod
-boolean_operator ==|<=|>=|<|>|<>|and|or|not
 %%
 
-start {printf("STARTPRGM\n");}
-{comment} {printf("COMMENT\n");}
-"," {printf("COMMA\n");}
-":" {printf("DBPTS\n");}
-"(" {printf("OPENPAR\n");}
-")" {printf("CLOSEPAR\n");}
-"{" {printf("OPENBRA\n");}
-"}" {printf("CLOSEBRA\n");}
-"[" {printf("OPENBRACK\n");}
-"]" {printf("CLOSEBRACK\n");}
-";" {printf("SEMICOLON\n");}
-"." {printf("DOT");}
-{boolean_operator} {printf("BOOLOP\n");}
-{arithmetic_operator} {printf("ARITHMOP\n");}
-{integer} {printf("INTEGER\n");}
-{real} {printf("REAL\n");}
-{char} {printf("CHAR\n");}
-{string} {printf("STRING\n");}
-{boolean} {printf("BOOLEAN\n");}
-{type} {printf("TYPE\n");}
-var {printf("VAR\n");}
-if {printf("IF\n");}
-then {printf("THEN\n");}
-elif {printf("ELIF\n");}
-else {printf("ELSE\n");}
-endif {printf("ENDIF\n");}
-while {printf("WHILE\n");}
-do {printf("DO\n");}
-endwhile {printf("ENDWHILE\n");}
-begin {printf("BEGSTMT\n");}
-end {printf("ENDSTMT\n");}
-":=" {printf("ASSIGNMENT\n");}
-{mathematical_function} {printf("MATHFCT\n");}
-Function {printf("FCT\n");}
-return {printf("RETURN\n");}
-"public"|"private"|"protected"|"final" {printf("MODIFIER\n");}
-Class {printf("CLASS\n");}
-endClass {printf("ENDCLASS\n");}
-write {printf("WRITE\n");} 
-{identifier} {printf("ID\n");}
-{WS}						{;}
-{line}						{printf("%d ", ++cnt_line);}
-.							{printf("Error : is not a valid token in line %d ", cnt_line); exit(3);}
+start return STARTPRGM;
+end   return ENDPRGM;
+{comment}  return COMMENT;
+","  return COMMA; 
+":"  return DBPTS;
+"("  return OPENPAR;
+")"  return CLOSEPAR;
+"{"  return OPENBRA;
+"}"  return CLOSEBRA;
+";"  return SEMICOLON;
+"."  return DOT;
+"==" return EQ;
+"<=" return LE;
+">=" return GE;
+"<"  return LT;
+">"  return GT;
+"<>" return NE;
+and  return AND;
+or   return OR;
+not  return NOT;
+"+"  return ADDOP; 
+"-"  return MINOP; 
+"*"  return MULOP;
+"/"  return DIVOP;
+div  return DIV;
+mod  return MOD;
+abs  return ABS;
+pow  return POW;
+sqrt return SQRT;
+exp  return EXP;
+log  return LOG;
+ln   return LN;
+{integer}  yylval=atoi(yytext);return INTEGER;
+{real}  yylval=atoi(yytext);return REAL;
+{char}   return CHAR;
+{string} return STRING;
+{boolean}   yylval=atoi(yytext);return BOOLEAN;
+{type}  yylval=atoi(yytext);return TYPE;
+var     return VAR;
+if      return IF;
+then    return THEN;
+elif    return ELIF;
+else    return ELSE;
+endif   return ENDIF;
+while   return WHILE;
+do      return DO;
+endwhile    return ENDWHILE;
+beginstmt   return BEGSTMT;
+endstmt     return ENDSTMT;
+":="        return ASSIGNMENT;
+Function return FCT;
+return return RETURN;
+"public"|"private"|"protected"|"final" return MODIFIER;
+Class return CLASS;
+endClass return ENDCLASS;
+new return NEWINSTCLASS;
+write return WRITE;     
+{identifier}    return ID; 
+{WS}						;
+{line}						++cnt_line;
+.							{return(yytext[0]);}
 
 %%
 
+// Supplementary C functions
 int yywrap(void) {return 1;}
-
-int main() {
-    printf("Enter a string: ");
-    yylex();
-    
-
-    return 0;
-}
-
-

@@ -2,6 +2,8 @@
 
 These instructions are on Windows
 
+#LEXICAL ANALYSIS
+
 # Install Lex 
 To install Flex (Lex) on Windows, you must proceed as following: 
 - Go to the link : https://sourceforge.net/projects/gnuwin32/files/flex/2.5.4a-1/flex-2.5.4a-1.exe/download?use_mirror=deac-ams&download= 
@@ -18,3 +20,8 @@ To install Flex (Lex) on Windows, you must proceed as following:
 - with your Terminal go to the compilerProject folder, and run the command `flex Compiler.l` to generate a lex.yy.c C file 
 - Then, run the command `gcc lex.yy.c -o output` to create an output 
 - After that launch `output` in your Terminal and enter a string to test the program
+
+#SYNTAX ANALYSIS
+
+#Install Bison 
+- To install Bison on Windows, follow the instructions of the following video: https://www.youtube.com/watch?v=cBUBN_B_vm4 
