@@ -15,13 +15,13 @@ To install Flex (Lex) on Windows, you must proceed as following:
 - Install it on your PC 
 - Add the PATH to the system environment variable  (/bin path)
 
-# Run the code 
+
+# Install Bison 
+To install Bison on Windows, follow the instructions of the following video: https://www.youtube.com/watch?v=cBUBN_B_vm4 
+
+# Run the code
 - Clone the project in your PC with the following command : git clone https://github.com/ENRIQUEZ21/compilerProject.git 
-- with your Terminal go to the compilerProject folder, and run the command `flex Compiler.l` to generate a lex.yy.c C file 
-- Then, run the command `gcc lex.yy.c -o output` to create an output 
-- After that launch `output` in your Terminal and enter a string to test the program
-
-# Syntax Analysis
-
-#Install Bison 
-- To install Bison on Windows, follow the instructions of the following video: https://www.youtube.com/watch?v=cBUBN_B_vm4 
+- with your Terminal go to the compilerProject foder and launch the command `bison -d yacc.y` to generate yacc.tab.h file and yacc.tab.c file.
+- with your Terminal go to the compilerProject folder, and run the command `flex lexer.l` to generate the lex.yy.c C file 
+- Then, run the command `gcc -o a yacc.tab.c lex.yy.c` to create an a.exe executable file 
+- After that launch `a.exe input.txt` in your Terminal to parse the pseudo-code in the input.txt text file
