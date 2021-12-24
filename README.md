@@ -2,7 +2,6 @@
 
 These instructions are on Windows
 
-#LEXICAL ANALYSIS
 
 # Install Lex 
 To install Flex (Lex) on Windows, you must proceed as following: 
