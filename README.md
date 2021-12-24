@@ -21,7 +21,7 @@ To install Flex (Lex) on Windows, you must proceed as following:
 - Then, run the command `gcc lex.yy.c -o output` to create an output 
 - After that launch `output` in your Terminal and enter a string to test the program
 
-#SYNTAX ANALYSIS
+# Syntax Analysis
 
 #Install Bison 
 - To install Bison on Windows, follow the instructions of the following video: https://www.youtube.com/watch?v=cBUBN_B_vm4 
