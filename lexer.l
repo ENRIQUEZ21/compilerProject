@@ -15,8 +15,8 @@ digit  [0-9]
 alphanum {letter}|{digit}|_
 punctuations ","|"."|":"|"("|")"|"{"|"}"|";"|"_"|"!"|"~"|"@"|"="|"&"|"["|"]"|"'"|"`"|"%"|"$"|"€"|"?"|"#"|"+"|"-"|"*"|"/"|"<"|">"
 identifier {letter}{alphanum}*
-integer {digit}+
-real {digit}+\.{digit}*
+integer [-]?{digit}+
+real [-]?{digit}+\.{digit}*
 char '({alphanum}|{WS}|{punctuations})*'
 string \"({alphanum}|{WS}|{punctuations})*\"
 boolean true|false
@@ -57,7 +57,7 @@ exp  return EXP;
 log  return LOG;
 ln   return LN;
 {integer}  yylval=atoi(yytext);return INTEGER;
-{real}  yylval=atoi(yytext);return REAL;
+{real}  yylval=atoi(yytext); return REAL;
 {char}   return CHAR;
 {string} return STRING;
 {boolean}   yylval=atoi(yytext);return BOOLEAN;

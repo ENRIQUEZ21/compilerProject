@@ -42,8 +42,8 @@ expr: ariexpr
 |   boolexpr
 ;
 
-number: INTEGER
-|   REAL
+number: INTEGER             { $$ = $1}
+|   REAL                    { $$ = $1;}
 ;
 ariexpr: number
 |   ID
@@ -53,6 +53,7 @@ ariexpr: number
 |   ariexpr DIVOP ariexpr    { $$ = $1 / $3; printf("result = %d\n", $$);};
 |   ariexpr DIV ariexpr
 |   ariexpr MOD ariexpr
+|   OPENPAR ariexpr CLOSEPAR   {$$ = $2; printf("result = %d\n", $$);}
 |   ABS OPENPAR ariexpr CLOSEPAR {$$ = abs($3); printf("result = %d\n", $$);}
 |   POW OPENPAR ariexpr COMMA ariexpr CLOSEPAR {$$ = pow($3, $5); printf("result = %d\n", $$);}
 |   SQRT OPENPAR ariexpr CLOSEPAR {$$ = sqrt($3); printf("result = %d\n", $$);}
@@ -62,6 +63,7 @@ ariexpr: number
 ;
 
 boolexpr: BOOLEAN
+|   OPENPAR boolexpr CLOSEPAR   {$$ = $2; printf("result = %d\n", $$);}
 |   ariexpr GE ariexpr      { $$ = $1 >= $3; printf("result = %d\n", $$);};  
 |   ariexpr LE ariexpr      { $$ = $1 <= $3; printf("result = %d\n", $$);};
 |   ariexpr GT ariexpr      { $$ = $1 > $3; printf("result = %d\n", $$);};
@@ -115,6 +117,17 @@ callfct: ID ASSIGNMENT ID OPENPAR varinstdeclar CLOSEPAR
 callclass: ID ASSIGNMENT NEWINSTCLASS ID;
 
 %%
+
+/*yylex() {
+    int c;
+    c = getchar();
+    if (isdigit(c)) {
+    yylval = c-'0';
+    return DIGIT;
+    }
+    return c;
+}*/
+
 
 void yyerror(char *s) {
     fprintf(stderr, "%s\n", s);
