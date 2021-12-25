@@ -942,7 +942,7 @@ yylval=atoi(yytext);return INTEGER;
 case 34:
 YY_RULE_SETUP
 #line 60 "lexer.l"
-yylval=atoi(yytext); return REAL;
+yylval=atof(yytext); return REAL;
 	YY_BREAK
 case 35:
 YY_RULE_SETUP

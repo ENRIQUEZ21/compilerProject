@@ -99,6 +99,17 @@ void yyerror(char *);
 # define YYTOKEN_TABLE 0
 #endif
 
+/* "%code requires" blocks.  */
+
+/* Line 209 of yacc.c  */
+#line 11 "yacc.y"
+
+    #define YYSTYPE double
+  
+
+
+/* Line 209 of yacc.c  */
+#line 113 "yacc.tab.c"
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
@@ -183,7 +194,7 @@ typedef int YYSTYPE;
 
 
 /* Line 264 of yacc.c  */
-#line 187 "yacc.tab.c"
+#line 198 "yacc.tab.c"
 
 #ifdef short
 # undef short
@@ -500,13 +511,13 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    24,    24,    26,    27,    30,    32,    33,    34,    35,
-      36,    37,    38,    41,    42,    45,    46,    48,    49,    50,
-      51,    52,    53,    54,    55,    56,    57,    58,    59,    60,
-      61,    62,    65,    66,    67,    68,    69,    70,    71,    72,
-      73,    74,    75,    77,    78,    81,    82,    85,    86,    89,
-      90,    93,    94,    97,    98,    99,   100,   101,   102,   105,
-     106,   109,   110,   113,   114,   117
+       0,    29,    29,    31,    32,    35,    37,    38,    39,    40,
+      41,    42,    43,    46,    47,    50,    51,    53,    54,    55,
+      56,    57,    58,    59,    60,    61,    62,    63,    64,    65,
+      66,    67,    70,    71,    72,    73,    74,    75,    76,    77,
+      78,    79,    80,    82,    83,    86,    87,    90,    91,    94,
+      95,    98,    99,   102,   103,   104,   105,   106,   107,   110,
+     111,   114,   115,   118,   119,   122
 };
 #endif
 
@@ -1527,196 +1538,196 @@ yyreduce:
         case 6:
 
 /* Line 1455 of yacc.c  */
-#line 32 "yacc.y"
+#line 37 "yacc.y"
     {printf("SIMPLE STATEMENT");;}
     break;
 
   case 7:
 
 /* Line 1455 of yacc.c  */
-#line 33 "yacc.y"
+#line 38 "yacc.y"
     {printf("CONDITIONAL STATEMENT");;}
     break;
 
   case 8:
 
 /* Line 1455 of yacc.c  */
-#line 34 "yacc.y"
+#line 39 "yacc.y"
     {printf("LOOP STATEMENT");;}
     break;
 
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 36 "yacc.y"
+#line 41 "yacc.y"
     {printf("DECLARATION");;}
     break;
 
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 45 "yacc.y"
-    { (yyval) = (yyvsp[(1) - (1)]);}
+#line 50 "yacc.y"
+    { (yyval) = (yyvsp[(1) - (1)]);;}
     break;
 
   case 16:
 
 /* Line 1455 of yacc.c  */
-#line 46 "yacc.y"
-    { (yyval) = (yyvsp[(1) - (1)]);;}
+#line 51 "yacc.y"
+    { (yyval) = (yyvsp[(1) - (1)]); printf("REAL = %f\n", (yyval));}
     break;
 
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 50 "yacc.y"
-    { (yyval) = (yyvsp[(1) - (3)]) + (yyvsp[(3) - (3)]); printf("result = %d\n", (yyval));;}
+#line 55 "yacc.y"
+    { (yyval) = (yyvsp[(1) - (3)]) + (yyvsp[(3) - (3)]); printf("result = %f\n", (yyval));;}
     break;
 
   case 20:
 
 /* Line 1455 of yacc.c  */
-#line 51 "yacc.y"
-    { (yyval) = (yyvsp[(1) - (3)]) - (yyvsp[(3) - (3)]); printf("result = %d\n", (yyval));;}
+#line 56 "yacc.y"
+    { (yyval) = (yyvsp[(1) - (3)]) - (yyvsp[(3) - (3)]); printf("result = %f\n", (yyval));;}
     break;
 
   case 21:
 
 /* Line 1455 of yacc.c  */
-#line 52 "yacc.y"
-    { (yyval) = (yyvsp[(1) - (3)]) * (yyvsp[(3) - (3)]); printf("result = %d\n", (yyval));;}
+#line 57 "yacc.y"
+    { (yyval) = (yyvsp[(1) - (3)]) * (yyvsp[(3) - (3)]); printf("result = %f\n", (yyval));;}
     break;
 
   case 22:
 
 /* Line 1455 of yacc.c  */
-#line 53 "yacc.y"
-    { (yyval) = (yyvsp[(1) - (3)]) / (yyvsp[(3) - (3)]); printf("result = %d\n", (yyval));;}
+#line 58 "yacc.y"
+    { (yyval) = (yyvsp[(1) - (3)]) / (yyvsp[(3) - (3)]); printf("result = %f\n", (yyval));;}
     break;
 
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 56 "yacc.y"
-    {(yyval) = (yyvsp[(2) - (3)]); printf("result = %d\n", (yyval));;}
+#line 61 "yacc.y"
+    {(yyval) = (yyvsp[(2) - (3)]); printf("result = %f\n", (yyval));;}
     break;
 
   case 26:
 
 /* Line 1455 of yacc.c  */
-#line 57 "yacc.y"
-    {(yyval) = abs((yyvsp[(3) - (4)])); printf("result = %d\n", (yyval));;}
+#line 62 "yacc.y"
+    {(yyval) = abs((yyvsp[(3) - (4)])); printf("result = %f\n", (yyval));;}
     break;
 
   case 27:
 
 /* Line 1455 of yacc.c  */
-#line 58 "yacc.y"
-    {(yyval) = pow((yyvsp[(3) - (6)]), (yyvsp[(5) - (6)])); printf("result = %d\n", (yyval));;}
+#line 63 "yacc.y"
+    {(yyval) = pow((yyvsp[(3) - (6)]), (yyvsp[(5) - (6)])); printf("result = %f\n", (yyval));;}
     break;
 
   case 28:
 
 /* Line 1455 of yacc.c  */
-#line 59 "yacc.y"
-    {(yyval) = sqrt((yyvsp[(3) - (4)]))*1.0f; printf("result = %3.2d\n", (yyval));;}
+#line 64 "yacc.y"
+    {(yyval) = sqrt((yyvsp[(3) - (4)])); printf("result = %f\n", (yyval));;}
     break;
 
   case 29:
 
 /* Line 1455 of yacc.c  */
-#line 60 "yacc.y"
-    {(yyval) = exp((yyvsp[(3) - (4)])); printf("result = %d\n", (yyval));;}
+#line 65 "yacc.y"
+    {(yyval) = exp((yyvsp[(3) - (4)])); printf("result = %f\n", (yyval));;}
     break;
 
   case 30:
 
 /* Line 1455 of yacc.c  */
-#line 61 "yacc.y"
-    {(yyval) = log10((yyvsp[(3) - (4)])); printf("result = %d\n", (yyval));;}
+#line 66 "yacc.y"
+    {(yyval) = log10((yyvsp[(3) - (4)])); printf("result = %f\n", (yyval));;}
     break;
 
   case 31:
 
 /* Line 1455 of yacc.c  */
-#line 62 "yacc.y"
-    {(yyval) = log((yyvsp[(3) - (4)])); printf("result = %d\n", (yyval));;}
+#line 67 "yacc.y"
+    {(yyval) = log((yyvsp[(3) - (4)])); printf("result = %f\n", (yyval));;}
     break;
 
   case 33:
 
 /* Line 1455 of yacc.c  */
-#line 66 "yacc.y"
+#line 71 "yacc.y"
     {(yyval) = (yyvsp[(2) - (3)]); printf("result = %d\n", (yyval));;}
     break;
 
   case 34:
 
 /* Line 1455 of yacc.c  */
-#line 67 "yacc.y"
+#line 72 "yacc.y"
     { (yyval) = (yyvsp[(1) - (3)]) >= (yyvsp[(3) - (3)]); printf("result = %d\n", (yyval));;}
     break;
 
   case 35:
 
 /* Line 1455 of yacc.c  */
-#line 68 "yacc.y"
+#line 73 "yacc.y"
     { (yyval) = (yyvsp[(1) - (3)]) <= (yyvsp[(3) - (3)]); printf("result = %d\n", (yyval));;}
     break;
 
   case 36:
 
 /* Line 1455 of yacc.c  */
-#line 69 "yacc.y"
+#line 74 "yacc.y"
     { (yyval) = (yyvsp[(1) - (3)]) > (yyvsp[(3) - (3)]); printf("result = %d\n", (yyval));;}
     break;
 
   case 37:
 
 /* Line 1455 of yacc.c  */
-#line 70 "yacc.y"
+#line 75 "yacc.y"
     { (yyval) = (yyvsp[(1) - (3)]) < (yyvsp[(3) - (3)]); printf("result = %d\n", (yyval));;}
     break;
 
   case 38:
 
 /* Line 1455 of yacc.c  */
-#line 71 "yacc.y"
+#line 76 "yacc.y"
     { (yyval) = (yyvsp[(1) - (3)]) == (yyvsp[(3) - (3)]); printf("result = %d\n", (yyval));;}
     break;
 
   case 39:
 
 /* Line 1455 of yacc.c  */
-#line 72 "yacc.y"
+#line 77 "yacc.y"
     { (yyval) = (yyvsp[(1) - (3)]) != (yyvsp[(3) - (3)]); printf("result = %d\n", (yyval));;}
     break;
 
   case 40:
 
 /* Line 1455 of yacc.c  */
-#line 73 "yacc.y"
+#line 78 "yacc.y"
     { (yyval) = (yyvsp[(1) - (3)]) && (yyvsp[(3) - (3)]); printf("result = %d\n", (yyval));;}
     break;
 
   case 41:
 
 /* Line 1455 of yacc.c  */
-#line 74 "yacc.y"
+#line 79 "yacc.y"
     { (yyval) = (yyvsp[(1) - (3)]) || (yyvsp[(3) - (3)]); printf("result = %d\n", (yyval));;}
     break;
 
   case 42:
 
 /* Line 1455 of yacc.c  */
-#line 75 "yacc.y"
+#line 80 "yacc.y"
     { (yyval) = ((yyvsp[(1) - (2)]) == (yyvsp[(0) - (2)])); printf("result = %d\n", (yyval));;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1720 "yacc.tab.c"
+#line 1731 "yacc.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1928,7 +1939,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 119 "yacc.y"
+#line 124 "yacc.y"
 
 
 /*yylex() {

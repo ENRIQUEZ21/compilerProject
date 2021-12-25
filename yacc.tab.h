@@ -32,6 +32,17 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
+/* "%code requires" blocks.  */
+
+/* Line 1676 of yacc.c  */
+#line 11 "yacc.y"
+
+    #define YYSTYPE double
+  
+
+
+/* Line 1676 of yacc.c  */
+#line 46 "yacc.tab.h"
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE

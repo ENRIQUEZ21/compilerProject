@@ -7,6 +7,11 @@ void yyerror(char *);
 
 %}
 
+%code requires
+  {
+    #define YYSTYPE double
+  }
+
 %token ID
 %token WS
 %token LINE
@@ -42,24 +47,24 @@ expr: ariexpr
 |   boolexpr
 ;
 
-number: INTEGER             { $$ = $1}
-|   REAL                    { $$ = $1;}
+number: INTEGER             { $$ = $1;}
+|   REAL                    { $$ = $1; printf("REAL = %f\n", $$)} 
 ;
 ariexpr: number
 |   ID
-|   ariexpr ADDOP ariexpr    { $$ = $1 + $3; printf("result = %d\n", $$);};
-|   ariexpr MINOP ariexpr    { $$ = $1 - $3; printf("result = %d\n", $$);};
-|   ariexpr MULOP ariexpr    { $$ = $1 * $3; printf("result = %d\n", $$);};
-|   ariexpr DIVOP ariexpr    { $$ = $1 / $3; printf("result = %d\n", $$);};
+|   ariexpr ADDOP ariexpr    { $$ = $1 + $3; printf("result = %f\n", $$);};
+|   ariexpr MINOP ariexpr    { $$ = $1 - $3; printf("result = %f\n", $$);};
+|   ariexpr MULOP ariexpr    { $$ = $1 * $3; printf("result = %f\n", $$);};
+|   ariexpr DIVOP ariexpr    { $$ = $1 / $3; printf("result = %f\n", $$);};
 |   ariexpr DIV ariexpr
 |   ariexpr MOD ariexpr
-|   OPENPAR ariexpr CLOSEPAR   {$$ = $2; printf("result = %d\n", $$);}
-|   ABS OPENPAR ariexpr CLOSEPAR {$$ = abs($3); printf("result = %d\n", $$);}
-|   POW OPENPAR ariexpr COMMA ariexpr CLOSEPAR {$$ = pow($3, $5); printf("result = %d\n", $$);}
-|   SQRT OPENPAR ariexpr CLOSEPAR {$$ = sqrt($3); printf("result = %d\n", $$);}
-|   EXP OPENPAR ariexpr CLOSEPAR {$$ = exp($3); printf("result = %d\n", $$);}
-|   LOG OPENPAR ariexpr CLOSEPAR {$$ = log10($3); printf("result = %d\n", $$);}
-|   LN OPENPAR ariexpr CLOSEPAR {$$ = log($3); printf("result = %d\n", $$);}
+|   OPENPAR ariexpr CLOSEPAR   {$$ = $2; printf("result = %f\n", $$);}
+|   ABS OPENPAR ariexpr CLOSEPAR {$$ = abs($3); printf("result = %f\n", $$);}
+|   POW OPENPAR ariexpr COMMA ariexpr CLOSEPAR {$$ = pow($3, $5); printf("result = %f\n", $$);}
+|   SQRT OPENPAR ariexpr CLOSEPAR {$$ = sqrt($3); printf("result = %f\n", $$);}
+|   EXP OPENPAR ariexpr CLOSEPAR {$$ = exp($3); printf("result = %f\n", $$);}
+|   LOG OPENPAR ariexpr CLOSEPAR {$$ = log10($3); printf("result = %f\n", $$);}
+|   LN OPENPAR ariexpr CLOSEPAR {$$ = log($3); printf("result = %f\n", $$);}
 ;
 
 boolexpr: BOOLEAN

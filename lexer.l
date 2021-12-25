@@ -57,7 +57,7 @@ exp  return EXP;
 log  return LOG;
 ln   return LN;
 {integer}  yylval=atoi(yytext);return INTEGER;
-{real}  yylval=atoi(yytext); return REAL;
+{real}  yylval=atof(yytext); return REAL;
 {char}   return CHAR;
 {string} return STRING;
 {boolean}   yylval=atoi(yytext);return BOOLEAN;
