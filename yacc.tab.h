@@ -32,17 +32,6 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-/* "%code requires" blocks.  */
-
-/* Line 1676 of yacc.c  */
-#line 11 "yacc.y"
-
-    #define YYSTYPE double
-  
-
-
-/* Line 1676 of yacc.c  */
-#line 46 "yacc.tab.h"
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
@@ -103,20 +92,44 @@
      MULOP = 308,
      MINOP = 309,
      ADDOP = 310,
-     LN = 311,
-     LOG = 312,
-     EXP = 313,
-     SQRT = 314,
-     POW = 315,
-     ABS = 316,
-     NOT = 317
+     CEIL = 311,
+     FLOOR = 312,
+     SIN = 313,
+     COS = 314,
+     TAN = 315,
+     RAND = 316,
+     LN = 317,
+     LOG = 318,
+     EXP = 319,
+     SQRT = 320,
+     POW = 321,
+     ABS = 322,
+     NOT = 323
    };
 #endif
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+typedef union 
+/* Line 1676 of yacc.c  */
+#line 33 "yacc.y"
+semrec
+{
+
+/* Line 1676 of yacc.c  */
+#line 34 "yacc.y"
+
+  double doubleval;
+  int intval; 
+  char *id;
+  struct lbs *lbls; 
+
+
+
+/* Line 1676 of yacc.c  */
+#line 132 "yacc.tab.h"
+} YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

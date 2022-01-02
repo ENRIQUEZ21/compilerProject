@@ -1,5 +1,7 @@
 %{
 #include "yacc.tab.h"
+#include <string.h>
+#include <stdlib.h>
 void yyerror(char *);
 
 
@@ -56,12 +58,12 @@ sqrt return SQRT;
 exp  return EXP;
 log  return LOG;
 ln   return LN;
-{integer}  yylval=atoi(yytext);return INTEGER;
-{real}  yylval=atof(yytext); return REAL;
+{integer}  yylval.intval = atoi( yytext ); return INTEGER;
+{real}   return REAL;
 {char}   return CHAR;
 {string} return STRING;
-{boolean}   yylval=atoi(yytext);return BOOLEAN;
-{type}  yylval=atoi(yytext);return TYPE;
+{boolean}   return BOOLEAN;
+{type}  return TYPE;
 var     return VAR;
 if      return IF;
 then    return THEN;
@@ -81,7 +83,7 @@ Class return CLASS;
 endClass return ENDCLASS;
 new return NEWINSTCLASS;
 write return WRITE;     
-{identifier}    return ID; 
+{identifier}    yylval.id = (char *) strdup(yytext); return(ID); 
 {WS}						;
 {line}						++cnt_line;
 .							{return(yytext[0]);}
