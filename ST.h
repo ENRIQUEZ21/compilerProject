@@ -1,9 +1,13 @@
+
+
+
 struct symrec
 {
     char *name; 
     int type;
     int int_val;
     double real_val;
+    int bool_val;
     struct symrec *next;        
 };
 typedef struct symrec symrec;
@@ -12,7 +16,7 @@ symrec *identifier;
 
 symrec *sym_table = (symrec *)0; 
 
-symrec * putsym (char *sym_name, int type, int int_val, double real_val) 
+symrec * putsym (char *sym_name, int type, int int_val, double real_val, int bool_val) 
 {
     symrec *ptr;
     ptr = (symrec *) malloc (sizeof(symrec));
@@ -21,6 +25,7 @@ symrec * putsym (char *sym_name, int type, int int_val, double real_val)
     ptr->type = type;
     ptr->int_val = int_val;
     ptr->real_val = real_val;
+    ptr->bool_val = bool_val;
     /*ptr->offset = data_location();*/
     ptr->next = (struct symrec *)sym_table;
     sym_table = ptr;
@@ -47,5 +52,20 @@ double getrealval(char * sym_name) {
     symrec *ptr;
     ptr = getsym(sym_name);
     return ptr->real_val;
+
+}
+
+void setboolval(char * sym_name, int bool_val) {
+    symrec *ptr;
+    ptr = getsym(sym_name);
+    ptr->bool_val = bool_val;
+    ptr->next = (struct symrec *)sym_table;
+    sym_table = ptr;
+}
+
+int getboolval(char * sym_name) {
+    symrec *ptr;
+    ptr = getsym(sym_name);
+    return ptr->bool_val;
 
 }

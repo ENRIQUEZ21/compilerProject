@@ -8,13 +8,14 @@
   int yylex(void);
   void yyerror(char *);
 
-  void install ( char *sym_name, int type, int int_val, double real_val)
+
+  void install ( char *sym_name, int type, int int_val, double real_val, int bool_val)
   {
     symrec *s;
     symrec *i;
     s = getsym (sym_name);
     if (s == 0) {
-      s = putsym (sym_name, type, int_val, real_val);     
+      s = putsym (sym_name, type, int_val, real_val, bool_val);     
       i = getsym(sym_name);
     } else { 
       printf( "%s is already defined\n", sym_name );
@@ -34,9 +35,14 @@
     symrec *identifier;
     identifier = getsym( sym_name );
     if(identifier->type != type) {
-      printf("%d", identifier->type);
       printf( "%s", sym_name );
-      printf( "%s\n", " is not a real" );
+      if(type == 259) {
+        printf( "%s\n", " is not an integer" );
+      } else if(type == 260) {
+        printf( "%s\n", " is not a real" );
+      } else if(type == 263) {
+        printf( "%s\n", " is not a boolean" );
+      }
       exit(1);
     }
     
@@ -50,12 +56,21 @@
     return getrealval(sym_name);
   }
 
+  void set_bool_value(char *sym_name, int bool_value) {
+    setboolval(sym_name, bool_value);
+  }
+
+  int get_bool_value(char *sym_name) {
+    return getboolval(sym_name);
+  }
+
 %}
 
 %union semrec 
 {
   double doubleval;
   int intval; 
+  int boolval;
   char *id;
   struct lbs *lbls; 
 }
@@ -77,7 +92,16 @@
 
 %type <intval> type;
 
-%type <doubleval> stmt;
+
+
+%type <boolval> TRUE FALSE;
+
+%type <doubleval> assignariexpr;
+%type <boolval> assignboolexpr;
+
+
+%type <boolval> boolexpr;
+%type <boolval> boolean;
 
 %token INT_TYPE;
 %token REAL_TYPE;
@@ -91,7 +115,7 @@
 %token STARTPRGM ENDPRGM 
 %token IF THEN ELIF ELSE ENDIF WHILE DO ENDWHILE BEGSTMT ENDSTMT CLASS ENDCLASS WRITE
 %token COMMA DBPTS OPENPAR CLOSEPAR OPENBRA CLOSEBRA SEMICOLON DOT
-%token INTEGER REAL CHAR STRING BOOLEAN MODIFIER VAR NEWINSTCLASS
+%token INTEGER REAL CHAR STRING TRUE FALSE MODIFIER VAR NEWINSTCLASS
 %token FCT RETURN
 %token AND OR 
 %left ADDOP MINOP MULOP DIVOP DIV MOD ASSIGNMENT LE GE LT GT EQ NE 
@@ -107,8 +131,8 @@ stmts:
 
 // groupstmts: BEGSTMT stmts ENDSTMT
 
-stmt: ID ASSIGNMENT ariexpr        { context_check($1); check_type($1, REAL_TYPE); set_real_value($1, $3); $$ = $3; printf("SIMPLE STATEMENT = %f\n", $$);}
-|   VAR ID DBPTS type    { install($2, $4, 0, 0); printf("DECLARATION");}
+stmt: assignboolexpr  
+|   VAR ID DBPTS type    { install($2, $4, 0, 0, 0); printf("DECLARATION\n");}
 /*|   IF boolexpr THEN groupstmts elifstmt elsestmt ENDIF    {printf("CONDITIONAL STATEMENT");}
 |   WHILE boolexpr DO groupstmts ENDWHILE       {printf("LOOP STATEMENT");}
 |   WRITE expr
@@ -117,10 +141,15 @@ stmt: ID ASSIGNMENT ariexpr        { context_check($1); check_type($1, REAL_TYPE
 |   callclass*/
 ;
 
-/*expr: ariexpr
-|   boolexpr
+assignboolexpr: ID ASSIGNMENT boolexpr  { context_check($1); check_type($1, BOOL_TYPE); set_bool_value($1, $3); $$ = $3; printf("BOOL EXPRESSION: SIMPLE STATEMENT\n");}
 ;
-*/
+
+assignariexpr: ID ASSIGNMENT ariexpr   { context_check($1); check_type($1, REAL_TYPE); set_real_value($1, $3); $$ = $3; printf("ARITHM EXPRESSION: SIMPLE STATEMENT\n");}
+; 
+
+ 
+
+
 type: INT_TYPE   {$$ = INT_TYPE;}
 |   REAL_TYPE     {$$ = REAL_TYPE;}
 |   CHAR_TYPE     {$$ = CHAR_TYPE;}
@@ -145,7 +174,7 @@ factor: term
 ;
 
 term:  ID                      { check_type($1, REAL_TYPE); $$ = get_real_value($1); printf("MY REAL = %f\n", $$); }
-|    number
+|    REAL
 |    OPENPAR ariexpr CLOSEPAR  {$$ = $2; printf("result = %f\n", $$);}
 |   ABS OPENPAR ariexpr CLOSEPAR {$$ = abs($3); printf("result = %f\n", $$);}
 |   POW OPENPAR ariexpr COMMA ariexpr CLOSEPAR {$$ = pow($3, $5); printf("result = %f\n", $$);}
@@ -162,7 +191,8 @@ term:  ID                      { check_type($1, REAL_TYPE); $$ = get_real_value(
 ;
 
 
-/*boolexpr: BOOLEAN
+boolexpr: ID                { check_type($1, BOOL_TYPE); $$ = get_bool_value($1); printf("MY BOOL = %d\n", $$); }
+|   boolean                   
 |   OPENPAR boolexpr CLOSEPAR   {$$ = $2; printf("result = %d\n", $$);}
 |   ariexpr GE ariexpr      { $$ = $1 >= $3; printf("result = %d\n", $$);};  
 |   ariexpr LE ariexpr      { $$ = $1 <= $3; printf("result = %d\n", $$);};
@@ -172,8 +202,13 @@ term:  ID                      { check_type($1, REAL_TYPE); $$ = get_real_value(
 |   ariexpr NE ariexpr      { $$ = $1 != $3; printf("result = %d\n", $$);};
 |   boolexpr AND boolexpr   { $$ = $1 && $3; printf("result = %d\n", $$);};
 |   boolexpr OR boolexpr    { $$ = $1 || $3; printf("result = %d\n", $$);};
-|   NOT boolexpr            { $$ = ($1 == $0); printf("result = %d\n", $$);};
+|   NOT boolexpr            { $$ = (!$2); printf("result = %d\n", $$);};
 ;
+
+boolean: TRUE               { $$ = 1; printf("BOOL VALUE = %d\n", $$);}
+|       FALSE               { $$ = 0; printf("BOOL VALUE = %d\n", $$);}
+;
+/*
 elifstmt: 
 |   elifstmt ELIF boolexpr THEN groupstmts
 ;

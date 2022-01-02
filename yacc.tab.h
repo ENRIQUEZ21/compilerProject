@@ -75,40 +75,41 @@
      REAL = 291,
      CHAR = 292,
      STRING = 293,
-     BOOLEAN = 294,
-     MODIFIER = 295,
-     VAR = 296,
-     NEWINSTCLASS = 297,
-     FCT = 298,
-     RETURN = 299,
-     AND = 300,
-     OR = 301,
-     NE = 302,
-     EQ = 303,
-     GT = 304,
-     LT = 305,
-     GE = 306,
-     LE = 307,
-     ASSIGNMENT = 308,
-     MOD = 309,
-     DIV = 310,
-     DIVOP = 311,
-     MULOP = 312,
-     MINOP = 313,
-     ADDOP = 314,
-     CEIL = 315,
-     FLOOR = 316,
-     SIN = 317,
-     COS = 318,
-     TAN = 319,
-     RAND = 320,
-     LN = 321,
-     LOG = 322,
-     EXP = 323,
-     SQRT = 324,
-     POW = 325,
-     ABS = 326,
-     NOT = 327
+     TRUE = 294,
+     FALSE = 295,
+     MODIFIER = 296,
+     VAR = 297,
+     NEWINSTCLASS = 298,
+     FCT = 299,
+     RETURN = 300,
+     AND = 301,
+     OR = 302,
+     NE = 303,
+     EQ = 304,
+     GT = 305,
+     LT = 306,
+     GE = 307,
+     LE = 308,
+     ASSIGNMENT = 309,
+     MOD = 310,
+     DIV = 311,
+     DIVOP = 312,
+     MULOP = 313,
+     MINOP = 314,
+     ADDOP = 315,
+     CEIL = 316,
+     FLOOR = 317,
+     SIN = 318,
+     COS = 319,
+     TAN = 320,
+     RAND = 321,
+     LN = 322,
+     LOG = 323,
+     EXP = 324,
+     SQRT = 325,
+     POW = 326,
+     ABS = 327,
+     NOT = 328
    };
 #endif
 
@@ -117,22 +118,23 @@
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union 
 /* Line 1676 of yacc.c  */
-#line 55 "yacc.y"
+#line 69 "yacc.y"
 semrec
 {
 
 /* Line 1676 of yacc.c  */
-#line 56 "yacc.y"
+#line 70 "yacc.y"
 
   double doubleval;
   int intval; 
+  int boolval;
   char *id;
   struct lbs *lbls; 
 
 
 
 /* Line 1676 of yacc.c  */
-#line 136 "yacc.tab.h"
+#line 138 "yacc.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
