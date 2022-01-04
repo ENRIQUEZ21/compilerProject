@@ -168,13 +168,13 @@ ariexpr: factor
 
 factor: term
 |   factor MULOP term    { $$ = $1 * $3; printf("result = %f\n", $$);}
-|   factor DIVOP term    {if($3 != 0) {$$ = $1 / $3; printf("result = %f\n", $$);} else {yyerror("Illegal division by 0");exit(1);} }
+|   factor DIVOP term    { if($3 != 0) {$$ = $1 / $3; printf("result = %f\n", $$);} else {yyerror("Illegal division by 0");exit(1);} }
 |   factor DIV term      { if($3 != 0){	$$ = floor($1 / $3); printf("result = %f\n", $$);} else{yyerror("Illegal division by 0");exit(1);}};
 |   factor MOD term      { $$ = fmod($1, $3); printf("result = %f\n", $$);};
 ;
 
 term:  ID                      { check_type($1, REAL_TYPE); $$ = get_real_value($1); printf("MY REAL = %f\n", $$); }
-|    REAL
+|    number
 |    OPENPAR ariexpr CLOSEPAR  {$$ = $2; printf("result = %f\n", $$);}
 |   ABS OPENPAR ariexpr CLOSEPAR {$$ = abs($3); printf("result = %f\n", $$);}
 |   POW OPENPAR ariexpr COMMA ariexpr CLOSEPAR {$$ = pow($3, $5); printf("result = %f\n", $$);}

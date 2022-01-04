@@ -69,3 +69,17 @@ int getboolval(char * sym_name) {
     return ptr->bool_val;
 
 }
+
+void setintval(char * sym_name, int int_val) {
+    symrec *ptr;
+    ptr = getsym(sym_name);
+    ptr->int_val = int_val;
+    ptr->next = (struct symrec *)sym_table;
+    sym_table = ptr;
+}
+
+int getintval(char * sym_name) {
+    symrec *ptr;
+    ptr = getsym(sym_name);
+    return ptr->int_val;
+}
