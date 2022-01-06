@@ -3,6 +3,7 @@
   #include <stdlib.h>
   #include <string.h>
   #include <math.h>
+  #include <ctype.h>
   #include "ST.h"
   #define YYDEBUG 1
   int yylex(void);
@@ -15,8 +16,7 @@
     symrec *i;
     s = getsym (sym_name);
     if (s == 0) {
-      s = putsym (sym_name, type, int_val, real_val, bool_val);     
-      i = getsym(sym_name);
+      putsym (sym_name, type, int_val, real_val, bool_val);   
     } else { 
       printf( "%s is already defined\n", sym_name );
     }
@@ -36,13 +36,8 @@
     identifier = getsym( sym_name );
     if(identifier->type != type) {
       printf( "%s", sym_name );
-      if(type == 259) {
-        printf( "%s\n", " is not an integer" );
-      } else if(type == 260) {
-        printf( "%s\n", " is not a real" );
-      } else if(type == 263) {
-        printf( "%s\n", " is not a boolean" );
-      }
+      int int_type = identifier->type;
+      printf( "%s\n", " hasn't the right type" );
       exit(1);
     }
     
@@ -72,99 +67,165 @@
     return getintval(sym_name);
   }
 
+
+
 %}
 
 %union semrec 
 {
   double doubleval;
   int intval; 
-  int boolval;
+  char *chstval;
   char *id;
   struct lbs *lbls; 
 }
 
 %token <id> ID;
 
-%token INTEGER INT_TYPE REAL_TYPE CHAR_TYPE STRING_TYPE BOOL_TYPE;
-%type <intval> INTEGER; 
-%type <intval> intexpr; 
-%type <intval> intfactor; 
-%type <intval> intterm; 
-%type <intval> assignintexpr; 
+%token TRUE FALSE REAL INTEGER CHAR STRING INT_TYPE REAL_TYPE CHAR_TYPE STRING_TYPE BOOL_TYPE;
 %type <intval> type INT_TYPE REAL_TYPE CHAR_TYPE STRING_TYPE BOOL_TYPE;
 
 
-%token <doubleval> REAL;
-%token VAR DBPTS OPENPAR CLOSEPAR COMMA 
-%token STARTPRGM ENDPRGM 
+%type <intval> INTEGER intexpr intfactor intterm assignintexpr;
+%type <doubleval> REAL number reaexpr reafactor reaterm assignreaexpr;
+%type <intval> TRUE FALSE boolean booexpr boofactor booterm assignbooexpr;
+%type <chstval> CHAR STRING charsandstrings
 
+%token VAR DBPTS OPENPAR CLOSEPAR COMMA COMMENT  NEWLINE
+%token STARTPRGM ENDPRGM BEGSTMT ENDSTMT
+%token IF THEN ELIF ELSE ENDIF WHILE DO ENDWHILE 
+%token WRITE FCT RETURN
+%token OR AND
 
-%left ADDOP MINOP MULOP DIVOP DIV MOD ASSIGNMENT
-%left FLOOR CEIL POW ABS 
+%left ADDOP MINOP MULOP DIVOP DIV MOD ASSIGNMENT LE GE LT GT EQ NE 
+%right NOT FLOOR CEIL POW ABS EXP LOG LN COS SIN TAN SQRT
+
 
 %%
-
+// IL RESTE A FINIR LES DECLARATIONS DE FCTS
 program: STARTPRGM stmts ENDPRGM; 
 
+groupstmts: BEGSTMT stmts ENDSTMT
+;
+
+
 stmts: 
-|   stmts stmt 
+|   stmts comment NEWLINE stmt 
 ;
 
-stmt: assignintexpr  
+stmt: assignexpr  
 |   VAR ID DBPTS type    { install($2, $4, 0, 0, 0); printf("DECLARATION %s, %d \n", $2, $4);}
+|   IF booexpr THEN groupstmts elifstmt elsestmt ENDIF    {printf("CONDITIONAL STATEMENT");}
+|   WHILE booexpr DO groupstmts ENDWHILE       {printf("LOOP STATEMENT");}
+|   write
+|   callfct
+|    fcts  {printf("FUNCTIONS    DECLARED !!! ");}
 ;
-/*
+
+comment:  
+|     COMMENT
+;
+
 assignexpr: assignintexpr
-|           assignrealexpr
-;
-*/
-assignintexpr: ID ASSIGNMENT intexpr  { set_int_value($1, $3); printf("INTEGER SET = %d\n", $3);}  
-;
-/*
-assignrealexpr: ID ASSIGNMENT realexpr  { set_real_value($1, $3); printf("REAL SET = %f\n", $3);} 
-; */
-
-intexpr: intfactor
-|       intexpr ADDOP intfactor  { $$ = $1 + $3; printf("result adding = %d, with $1 = %d and $3 = %d\n", $$, $1, $3);}
-|       intexpr MINOP intfactor  { $$ = $1 - $3; printf("result = %d\n", $$);}
-|       MINOP intfactor  { $$ = - $2; printf("result = %d\n", $$);}
+|   assignreaexpr
+|   assignbooexpr
 ;
 
-intfactor: intterm              { $$ = $1;}
-|   intfactor MULOP intterm    { $$ = $1 * $3; printf("result = %d\n", $$);}
-|   intfactor DIVOP intterm    { if($3 != 0) {$$ = $1 / $3; printf("result = %d\n", $$);} else {yyerror("Illegal division by 0");exit(1);} }
-|   intfactor DIV intterm      { if($3 != 0){	$$ = floor($1 / $3); printf("result = %d\n", $$);} else{yyerror("Illegal division by 0");exit(1);}};
-|   intfactor MOD intterm      { $$ = fmod($1, $3); printf("result = %d\n", $$);};
+assignintexpr: ID ASSIGNMENT INT_TYPE intexpr { context_check($1); check_type($1, INT_TYPE); set_int_value($1, $4); printf("INTEGER %d ASSIGNED TO %s\n", $4, $1);}
 ;
 
-intterm: ID  { check_type($1, INT_TYPE); $$ = get_int_value($1); printf("ID %s HAS TYPE INTEGER CHECKED AND VALUE = %d \n", $1, $$); }
-|       INTEGER     { $$ = $1; printf("MY INTEGER = %d\n", $$); }
-|    OPENPAR intexpr CLOSEPAR  {$$ = $2; printf("result = %d\n", $$);}
-|   ABS OPENPAR intexpr CLOSEPAR {$$ = abs($3); printf("result = %d\n", $$);}
-|   POW OPENPAR intexpr COMMA intexpr CLOSEPAR {$$ = pow($3, $5); printf("result = %d\n", $$);}
+assignreaexpr: ID ASSIGNMENT REAL_TYPE reaexpr  { context_check($1); check_type($1, REAL_TYPE); set_real_value($1, $4); printf("REAL %f ASSIGNED TO %s\n", $4, $1);}
 ;
 
-/*
-realexpr: realfactor
-|       realexpr ADDOP realfactor  { $$ = $1 + $3; printf("result adding = %f, with $1 = %f and $3 = %f\n", $$, $1, $3);}
-|       realexpr MINOP realfactor  { $$ = $1 - $3; printf("result = %f\n", $$);}
-|       MINOP realfactor  { $$ = - $2; printf("result = %f\n", $$);}
+assignbooexpr: ID ASSIGNMENT BOOL_TYPE booexpr   { context_check($1); check_type($1, BOOL_TYPE); set_bool_value($1, $4); printf("BOOLEAN %d ASSIGNED TO %s\n", $4, $1);}
 ;
 
-realfactor: realterm              { $$ = $1;}
-|   realfactor MULOP realterm    { $$ = $1 * $3; printf("result = %f\n", $$);}
-|   realfactor DIVOP realterm    { if($3 != 0) {$$ = $1 / $3; printf("result = %f\n", $$);} else {yyerror("Illegal division by 0");exit(1);} }
-|   realfactor DIV realterm      { if($3 != 0){	$$ = floor($1 / $3); printf("result = %f\n", $$);} else{yyerror("Illegal division by 0");exit(1);}};
-|   realfactor MOD realterm      { $$ = fmod($1, $3); printf("result = %f\n", $$);};
+intexpr: intfactor              {$$ = $1; printf("MY INT FACTOR = %d\n", $$);}
+|   intexpr ADDOP intfactor     { $$ = $1+$3; }
+|   intexpr MINOP intfactor      { $$ = $1-$3; }
+|   MINOP intfactor                { $$ = -$2; }
 ;
 
-realterm: ID  { check_type($1, REAL_TYPE); $$ = get_real_value($1); printf("ID %s HAS TYPE REAL CHECKED AND VALUE = %f \n", $1, $$); }
-|       REAL     { $$ = $1; printf("MY REAL = %f\n", $$); }
-|    OPENPAR realexpr CLOSEPAR  {$$ = $2; printf("result = %f\n", $$);}
-|   ABS OPENPAR realexpr CLOSEPAR {$$ = abs($3); printf("result = %f\n", $$);}
-|   POW OPENPAR realexpr COMMA realexpr CLOSEPAR {$$ = pow($3, $5); printf("result = %f\n", $$);}
-;*/
+intfactor: intterm              {$$ = $1; printf("MY INT TERM = %d\n", $$);}
+|   intfactor MULOP intterm    { $$ = $1*$3; }
+|   intfactor DIVOP intterm    { $$ = $1/$3; }
+|   intfactor DIV intterm      { $$ = floor($1 / $3); }
+|   intfactor MOD intterm      { $$ = fmod($1, $3); }
+;
 
+intterm: INT_TYPE ID          { check_type($2, INT_TYPE); $$ = get_int_value($2); printf("MY INT = %d\n", $$); }
+|       INTEGER             {$$ = $1;}
+|    OPENPAR intexpr CLOSEPAR  {$$ = $2;}
+|   ABS OPENPAR intexpr CLOSEPAR {$$ = abs($3);}
+|   POW OPENPAR intexpr COMMA intexpr CLOSEPAR      {$$ = pow($3, $5);}
+|   SQRT OPENPAR intexpr CLOSEPAR { if($3 >= 0) {$$ = sqrt($3); printf("result = %d\n", $$);} else{yyerror("Cannot make sqrt on negative number");exit(1);}}
+|   EXP OPENPAR intexpr CLOSEPAR {$$ = exp($3); printf("result = %d\n", $$);}
+|   LOG OPENPAR intexpr CLOSEPAR {if($3 >= 0) {$$ = log10($3); printf("result = %d\n", $$);} else {yyerror("Cannot make log on negative number");exit(1);}}
+|   LN OPENPAR intexpr CLOSEPAR  {if($3 >= 0) {$$ = log($3); printf("result = %d\n", $$);} else {yyerror("Cannot make ln on negative number");exit(1);}}
+|   FLOOR OPENPAR intexpr CLOSEPAR {$$ = floor($3); printf("result = %d\n", $$);}
+|   CEIL OPENPAR intexpr CLOSEPAR  {$$ = ceil($3); printf("result = %d\n", $$);}
+|   COS OPENPAR intexpr CLOSEPAR  {$$ = cos($3); printf("result = %d\n", $$);}
+|   SIN OPENPAR intexpr CLOSEPAR  {$$ = sin($3); printf("result = %d\n", $$);}
+|   TAN OPENPAR intexpr CLOSEPAR  {$$ = tan($3); printf("result = %d\n", $$);}
+;
+
+reaexpr: reafactor        {$$ = $1; printf("MY REAL FACTOR = %f\n", $$);}
+|   reaexpr ADDOP reafactor   {$$ = $1+$3;}
+|   reaexpr MINOP reafactor   {$$ = $1-$3;}
+|   MINOP reafactor           {$$ = -$2;}
+;
+
+reafactor: reaterm            {$$ = $1;}
+|   reafactor MULOP reaterm    {$$ = $1*$3;}
+|   reafactor DIVOP reaterm    {$$ = $1/$3;}
+|   reafactor DIV reaterm      {$$ = floor($1/$3);}
+|   reafactor MOD reaterm      {$$ = fmod($1, $3);}
+;
+
+reaterm: REAL_TYPE ID       { check_type($2, REAL_TYPE); $$ = get_real_value($2); printf("MY REAL = %f\n", $$); }
+|       number              {$$ = $1;}
+|    OPENPAR reaexpr CLOSEPAR  {$$ = $2;}
+|   ABS OPENPAR reaexpr CLOSEPAR {$$ = abs($3);}
+|   POW OPENPAR reaexpr COMMA reaexpr CLOSEPAR    {$$ = pow($3, $5);}
+|   SQRT OPENPAR reaexpr CLOSEPAR { if($3 >= 0) {$$ = sqrt($3); printf("result = %f\n", $$);} else{yyerror("Cannot make sqrt on negative number");exit(1);}}
+|   EXP OPENPAR reaexpr CLOSEPAR {$$ = exp($3); printf("result = %f\n", $$);}
+|   LOG OPENPAR reaexpr CLOSEPAR {if($3 >= 0) {$$ = log10($3); printf("result = %f\n", $$);} else {yyerror("Cannot make log on negative number");exit(1);}}
+|   LN OPENPAR reaexpr CLOSEPAR  {if($3 >= 0) {$$ = log($3); printf("result = %f\n", $$);} else {yyerror("Cannot make ln on negative number");exit(1);}}
+|   FLOOR OPENPAR reaexpr CLOSEPAR {$$ = floor($3); printf("result = %f\n", $$);}
+|   CEIL OPENPAR reaexpr CLOSEPAR  {$$ = ceil($3); printf("result = %f\n", $$);}
+|   COS OPENPAR reaexpr CLOSEPAR  {$$ = cos($3); printf("result = %f\n", $$);}
+|   SIN OPENPAR reaexpr CLOSEPAR  {$$ = sin($3); printf("result = %f\n", $$);}
+|   TAN OPENPAR reaexpr CLOSEPAR  {$$ = tan($3); printf("result = %f\n", $$);} 
+;
+
+
+number: INTEGER   {$$ = (float)$1; printf("MY INTEGER IS IN REAL = %f", $$);}
+|   REAL          {$$ = $1; printf("MY REAL = %f", $$);}
+;
+
+booexpr: boofactor             {$$ = $1; printf("MY BOOL EXPR = %d\n", $$);}  
+|   reaexpr GE reafactor      { $$ = $1 >= $3; printf("result = %d\n", $$);};  
+|   reaexpr LE reafactor      { $$ = $1 <= $3; printf("result = %d\n", $$);};
+|   reaexpr GT reafactor     { $$ = $1 > $3; printf("result = %d\n", $$);};
+|   reaexpr LT reafactor      { $$ = $1 < $3; printf("result = %d\n", $$);};
+|   reaexpr EQ reafactor     { $$ = $1 == $3; printf("result = %d\n", $$);};
+|   reaexpr NE reafactor   { $$ = $1 != $3; printf("result = %d\n", $$);};
+|   booexpr AND boofactor   { $$ = $1 && $3; printf("result = %d\n", $$);};
+|   booexpr OR boofactor    { $$ = $1 || $3; printf("result = %d\n", $$);};
+|   NOT boofactor            { $$ = (!$2); printf("result = %d\n", $$);};
+;
+
+boofactor:  booterm                     {$$ = $1; printf("result = %d\n", $$);}
+;
+
+booterm: BOOL_TYPE ID          { check_type($2, BOOL_TYPE); $$ = get_bool_value($2); printf("MY BOOL = %d\n", $$); }
+|     boolean                   {$$ = $1; printf("IT IS A BOOLEAN \n");}
+|     OPENPAR booexpr CLOSEPAR    {$$ = $2; printf("result = %d\n", $$);}
+;
+
+boolean: TRUE               { $$ = 1; printf("BOOL VALUE = %d\n", $$);}
+|       FALSE               { $$ = 0; printf("BOOL VALUE = %d\n", $$);}
+;
 
 
 type: INT_TYPE   {$$ = INT_TYPE;}
@@ -172,6 +233,44 @@ type: INT_TYPE   {$$ = INT_TYPE;}
 |   CHAR_TYPE     {$$ = CHAR_TYPE;}
 |   STRING_TYPE   {$$ = STRING_TYPE;}
 |   BOOL_TYPE     {$$ = BOOL_TYPE;}
+;
+
+elifstmt: 
+|   elifstmt ELIF booexpr THEN groupstmts
+;
+
+elsestmt:
+|   ELSE groupstmts
+;
+
+write: WRITE charsandstrings   {printf("WRITE: %s\n", $2);}
+;
+
+charsandstrings: CHAR    { $$ = $1; printf("OUR CHAR IS %s\n", $$);}
+|      STRING            { $$ = $1; printf("OUR STRING IS %s\n", $$);}
+;
+
+fcts: 
+|   fcts FCT ID OPENPAR parameters CLOSEPAR DBPTS type groupstmts RETURN ID {install($3, $8, 0, 0, 0); context_check($11); check_type($11, $8);}
+;
+
+parameters: ID       { context_check($1);}
+|   ID COMMA parameters     { context_check($1);}
+;
+
+instances: ID
+|   INTEGER
+|   REAL
+|   CHAR
+|   STRING
+|   boolean
+;
+
+parametersinstances: instances 
+|    instances COMMA parametersinstances
+; 
+
+callfct: ID ASSIGNMENT ID OPENPAR parametersinstances CLOSEPAR        
 ;
 
 %%

@@ -1,6 +1,6 @@
 start
 var a:real
 var b:real
-b := 7*(8+7)+92
-a := 5 - 6 + b
+b := real 7*(8+7)+92
+a := real 5 - 6 + real b
 end

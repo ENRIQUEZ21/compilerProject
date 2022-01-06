@@ -26,6 +26,7 @@ symrec * putsym (char *sym_name, int type, int int_val, double real_val, int boo
     ptr->int_val = int_val;
     ptr->real_val = real_val;
     ptr->bool_val = bool_val;
+    printf("PUT AN ID\n He has %d type %f real\n", ptr->type, ptr->real_val);
     /*ptr->offset = data_location();*/
     ptr->next = (struct symrec *)sym_table;
     sym_table = ptr;
@@ -44,13 +45,13 @@ void setrealval(char * sym_name, double real_val) {
     symrec *ptr;
     ptr = getsym(sym_name);
     ptr->real_val = real_val;
-    ptr->next = (struct symrec *)sym_table;
-    sym_table = ptr;
+    printf("PUT AREAL VAL TO AN ID \n He has %d type %f real\n", ptr->type, ptr->real_val);
 }
 
 double getrealval(char * sym_name) {
     symrec *ptr;
     ptr = getsym(sym_name);
+    printf("WE SEARCH A REAL VALUE");
     return ptr->real_val;
 
 }
@@ -59,8 +60,6 @@ void setboolval(char * sym_name, int bool_val) {
     symrec *ptr;
     ptr = getsym(sym_name);
     ptr->bool_val = bool_val;
-    ptr->next = (struct symrec *)sym_table;
-    sym_table = ptr;
 }
 
 int getboolval(char * sym_name) {
@@ -74,8 +73,6 @@ void setintval(char * sym_name, int int_val) {
     symrec *ptr;
     ptr = getsym(sym_name);
     ptr->int_val = int_val;
-    ptr->next = (struct symrec *)sym_table;
-    sym_table = ptr;
 }
 
 int getintval(char * sym_name) {

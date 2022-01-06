@@ -40,31 +40,66 @@
       know about them.  */
    enum yytokentype {
      ID = 258,
-     INTEGER = 259,
-     INT_TYPE = 260,
-     REAL_TYPE = 261,
-     CHAR_TYPE = 262,
-     STRING_TYPE = 263,
-     BOOL_TYPE = 264,
-     REAL = 265,
-     VAR = 266,
-     DBPTS = 267,
-     OPENPAR = 268,
-     CLOSEPAR = 269,
-     COMMA = 270,
-     STARTPRGM = 271,
-     ENDPRGM = 272,
-     ASSIGNMENT = 273,
-     MOD = 274,
-     DIV = 275,
-     DIVOP = 276,
-     MULOP = 277,
-     MINOP = 278,
-     ADDOP = 279,
-     ABS = 280,
-     POW = 281,
-     CEIL = 282,
-     FLOOR = 283
+     TRUE = 259,
+     FALSE = 260,
+     REAL = 261,
+     INTEGER = 262,
+     CHAR = 263,
+     STRING = 264,
+     INT_TYPE = 265,
+     REAL_TYPE = 266,
+     CHAR_TYPE = 267,
+     STRING_TYPE = 268,
+     BOOL_TYPE = 269,
+     VAR = 270,
+     DBPTS = 271,
+     OPENPAR = 272,
+     CLOSEPAR = 273,
+     COMMA = 274,
+     COMMENT = 275,
+     NEWLINE = 276,
+     STARTPRGM = 277,
+     ENDPRGM = 278,
+     BEGSTMT = 279,
+     ENDSTMT = 280,
+     IF = 281,
+     THEN = 282,
+     ELIF = 283,
+     ELSE = 284,
+     ENDIF = 285,
+     WHILE = 286,
+     DO = 287,
+     ENDWHILE = 288,
+     WRITE = 289,
+     FCT = 290,
+     RETURN = 291,
+     OR = 292,
+     AND = 293,
+     NE = 294,
+     EQ = 295,
+     GT = 296,
+     LT = 297,
+     GE = 298,
+     LE = 299,
+     ASSIGNMENT = 300,
+     MOD = 301,
+     DIV = 302,
+     DIVOP = 303,
+     MULOP = 304,
+     MINOP = 305,
+     ADDOP = 306,
+     SQRT = 307,
+     TAN = 308,
+     SIN = 309,
+     COS = 310,
+     LN = 311,
+     LOG = 312,
+     EXP = 313,
+     ABS = 314,
+     POW = 315,
+     CEIL = 316,
+     FLOOR = 317,
+     NOT = 318
    };
 #endif
 
@@ -73,23 +108,23 @@
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union 
 /* Line 1676 of yacc.c  */
-#line 77 "yacc2.y"
+#line 74 "yacc2.y"
 semrec
 {
 
 /* Line 1676 of yacc.c  */
-#line 78 "yacc2.y"
+#line 75 "yacc2.y"
 
   double doubleval;
   int intval; 
-  int boolval;
+  char *chstval;
   char *id;
   struct lbs *lbls; 
 
 
 
 /* Line 1676 of yacc.c  */
-#line 93 "yacc2.tab.h"
+#line 128 "yacc2.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

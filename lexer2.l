@@ -28,6 +28,9 @@ type integer|char|string|boolean|real
 
 start return STARTPRGM;
 end   return ENDPRGM;
+{comment}  return COMMENT;
+beginstmt   return BEGSTMT;
+endstmt     return ENDSTMT;
 ","  return COMMA; 
 ":"  return DBPTS;
 "("  return OPENPAR;
@@ -40,17 +43,42 @@ div  return DIV;
 mod  return MOD;
 abs  return ABS;
 pow  return POW;
+"==" return EQ;
+"<=" return LE;
+">=" return GE;
+"<"  return LT;
+">"  return GT;
+"<>" return NE;
+and  return AND;
+or   return OR;
+not  return NOT;
 {integer}  yylval.intval = atoi( yytext ); return INTEGER;
+{real}  yylval.doubleval = atof( yytext ); return REAL;
+"true"   return TRUE;
+"false"  return FALSE;
+{char}   yylval.chstval = (char *) strdup(yytext);   return CHAR;
+{string} yylval.chstval = (char *) strdup(yytext); return STRING;
 "integer"   return INT_TYPE;
 "real"      return REAL_TYPE;
 "char"      return CHAR_TYPE;
 "string"    return STRING_TYPE;
 "boolean"   return BOOL_TYPE;
 var     return VAR;
+if      return IF;
+then    return THEN;
+elif    return ELIF;
+else    return ELSE;
+endif   return ENDIF;
+while   return WHILE;
+do      return DO;
+endwhile    return ENDWHILE;
+Function return FCT;
+return return RETURN;
+write return WRITE;
 ":="        return ASSIGNMENT;    
 {identifier}    yylval.id = (char *) strdup(yytext); return(ID); 
 {WS}						;
-{line}						++cnt_line;
+{line}						++cnt_line; return NEWLINE;
 .							{return(yytext[0]);}
 
 %%
