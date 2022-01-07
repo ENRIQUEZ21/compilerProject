@@ -92,8 +92,10 @@
 
 %type <intval> INTEGER intexpr intfactor intterm assignintexpr;
 %type <doubleval> REAL number reaexpr reafactor reaterm assignreaexpr;
-%type <intval> TRUE FALSE boolean booexpr boofactor booterm assignbooexpr;
-%type <chstval> CHAR STRING charsandstrings
+%type <intval> TRUE FALSE boolean booexpr boofactor booterm assignbooexpr headfct;
+%type <chstval> CHAR STRING charsandstrings 
+
+%type <id> returnfct;
 
 %token VAR COLON OPENPAR CLOSEPAR COMMA COMMENT SEMICOLON 
 %token STARTPRGM ENDPRGM BEGSTMT ENDSTMT
@@ -106,7 +108,7 @@
 
 
 %%
-
+// VERIFIER LE TYPE DES ARGUMENTS DANS UN APPEL DE FONCTION ET CELUI DE L'ID QUI RECOIT
 program: STARTPRGM declarations fcts stmts ENDPRGM; 
 
 groupstmts: BEGSTMT stmts ENDSTMT
@@ -262,13 +264,13 @@ fcts:  SEMICOLON
 |   fcts fct
 ;
 
-fct:  headfct groupstmts returnfct 
+fct:  headfct groupstmts returnfct    { printf("curr_scope finishing = %d\n", curr_scope); check_type($3, $1, curr_scope+1); }
 ;
 
-headfct: FCT ID OPENPAR parameters CLOSEPAR COLON type  { curr_scope++; printf("curr_scope = %d\n", curr_scope); }
+headfct: FCT ID OPENPAR parameters CLOSEPAR COLON type  { printf("%d\n", curr_scope); install($2, $7, 0, 0, 0, curr_scope); printf("FUNTCION DECLARED"); curr_scope++; printf("curr_scope = %d\n", curr_scope); $$ = $7; }
 ;
 
-returnfct: RETURN ID   {curr_scope--;  printf("curr_scope = %d\n", curr_scope);}
+returnfct: RETURN ID   {curr_scope--;  $$ = $2;}
 ;
 
 

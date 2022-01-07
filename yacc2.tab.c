@@ -101,6 +101,7 @@
     if ( identifier == 0 ) { 
       printf( "%s", sym_name );
       printf( "%s\n", " is an undeclared identifier" );
+      exit(1);
     }
   }
 
@@ -145,7 +146,7 @@
 
 
 /* Line 189 of yacc.c  */
-#line 149 "yacc2.tab.c"
+#line 150 "yacc2.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -241,12 +242,12 @@
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union 
 /* Line 214 of yacc.c  */
-#line 77 "yacc2.y"
+#line 78 "yacc2.y"
 semrec
 {
 
 /* Line 214 of yacc.c  */
-#line 78 "yacc2.y"
+#line 79 "yacc2.y"
 
   double doubleval;
   int intval; 
@@ -257,7 +258,7 @@ semrec
 
 
 /* Line 214 of yacc.c  */
-#line 261 "yacc2.tab.c"
+#line 262 "yacc2.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -269,7 +270,7 @@ semrec
 
 
 /* Line 264 of yacc.c  */
-#line 273 "yacc2.tab.c"
+#line 274 "yacc2.tab.c"
 
 #ifdef short
 # undef short
@@ -607,18 +608,18 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   109,   109,   111,   114,   115,   118,   119,   122,   123,
-     124,   125,   126,   127,   130,   132,   133,   136,   137,   138,
-     141,   144,   147,   150,   151,   152,   153,   156,   157,   158,
-     159,   160,   163,   164,   165,   166,   167,   168,   169,   170,
-     171,   172,   173,   174,   175,   176,   179,   180,   181,   182,
-     185,   186,   187,   188,   189,   192,   193,   194,   195,   196,
-     197,   198,   199,   200,   201,   202,   203,   204,   205,   209,
-     210,   213,   214,   215,   216,   217,   218,   219,   220,   221,
-     222,   225,   228,   229,   230,   233,   234,   238,   239,   240,
-     241,   242,   245,   246,   249,   250,   253,   256,   257,   260,
-     261,   264,   267,   270,   274,   275,   278,   279,   280,   281,
-     282,   283,   286,   287,   290
+       0,   112,   112,   114,   117,   118,   121,   122,   125,   126,
+     127,   128,   129,   130,   133,   135,   136,   139,   140,   141,
+     144,   147,   150,   153,   154,   155,   156,   159,   160,   161,
+     162,   163,   166,   167,   168,   169,   170,   171,   172,   173,
+     174,   175,   176,   177,   178,   179,   182,   183,   184,   185,
+     188,   189,   190,   191,   192,   195,   196,   197,   198,   199,
+     200,   201,   202,   203,   204,   205,   206,   207,   208,   212,
+     213,   216,   217,   218,   219,   220,   221,   222,   223,   224,
+     225,   228,   231,   232,   233,   236,   237,   241,   242,   243,
+     244,   245,   248,   249,   252,   253,   256,   259,   260,   263,
+     264,   267,   270,   273,   277,   278,   281,   282,   283,   284,
+     285,   286,   289,   290,   293
 };
 #endif
 
@@ -1709,581 +1710,588 @@ yyreduce:
         case 10:
 
 /* Line 1455 of yacc.c  */
-#line 124 "yacc2.y"
+#line 127 "yacc2.y"
     {printf("CONDITIONAL STATEMENT");;}
     break;
 
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 125 "yacc2.y"
+#line 128 "yacc2.y"
     {printf("LOOP STATEMENT");;}
     break;
 
   case 14:
 
 /* Line 1455 of yacc.c  */
-#line 130 "yacc2.y"
+#line 133 "yacc2.y"
     { printf("curr_scope = %d\n", curr_scope); install((yyvsp[(2) - (4)].id), (yyvsp[(4) - (4)].intval), 0, 0, 0, curr_scope); printf("DECLARATION %s, %d \n", (yyvsp[(2) - (4)].id), (yyvsp[(4) - (4)].intval));;}
     break;
 
   case 20:
 
 /* Line 1455 of yacc.c  */
-#line 141 "yacc2.y"
+#line 144 "yacc2.y"
     { context_check((yyvsp[(1) - (4)].id), curr_scope); check_type((yyvsp[(1) - (4)].id), INT_TYPE, curr_scope); set_int_value((yyvsp[(1) - (4)].id), (yyvsp[(4) - (4)].intval), curr_scope); printf("INTEGER %d ASSIGNED TO %s\n", (yyvsp[(4) - (4)].intval), (yyvsp[(1) - (4)].id));;}
     break;
 
   case 21:
 
 /* Line 1455 of yacc.c  */
-#line 144 "yacc2.y"
+#line 147 "yacc2.y"
     { context_check((yyvsp[(1) - (4)].id), curr_scope); check_type((yyvsp[(1) - (4)].id), REAL_TYPE, curr_scope); set_real_value((yyvsp[(1) - (4)].id), (yyvsp[(4) - (4)].doubleval), curr_scope); printf("REAL %f ASSIGNED TO %s\n", (yyvsp[(4) - (4)].doubleval), (yyvsp[(1) - (4)].id));;}
     break;
 
   case 22:
 
 /* Line 1455 of yacc.c  */
-#line 147 "yacc2.y"
+#line 150 "yacc2.y"
     { context_check((yyvsp[(1) - (4)].id), curr_scope); check_type((yyvsp[(1) - (4)].id), BOOL_TYPE, curr_scope); set_bool_value((yyvsp[(1) - (4)].id), (yyvsp[(4) - (4)].intval), curr_scope); printf("BOOLEAN %d ASSIGNED TO %s\n", (yyvsp[(4) - (4)].intval), (yyvsp[(1) - (4)].id));;}
     break;
 
   case 23:
 
 /* Line 1455 of yacc.c  */
-#line 150 "yacc2.y"
+#line 153 "yacc2.y"
     {(yyval.intval) = (yyvsp[(1) - (1)].intval); printf("MY INT FACTOR = %d\n", (yyval.intval));;}
     break;
 
   case 24:
 
 /* Line 1455 of yacc.c  */
-#line 151 "yacc2.y"
+#line 154 "yacc2.y"
     { (yyval.intval) = (yyvsp[(1) - (3)].intval)+(yyvsp[(3) - (3)].intval); ;}
     break;
 
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 152 "yacc2.y"
+#line 155 "yacc2.y"
     { (yyval.intval) = (yyvsp[(1) - (3)].intval)-(yyvsp[(3) - (3)].intval); ;}
     break;
 
   case 26:
 
 /* Line 1455 of yacc.c  */
-#line 153 "yacc2.y"
+#line 156 "yacc2.y"
     { (yyval.intval) = -(yyvsp[(2) - (2)].intval); ;}
     break;
 
   case 27:
 
 /* Line 1455 of yacc.c  */
-#line 156 "yacc2.y"
+#line 159 "yacc2.y"
     {(yyval.intval) = (yyvsp[(1) - (1)].intval); printf("MY INT TERM = %d\n", (yyval.intval));;}
     break;
 
   case 28:
 
 /* Line 1455 of yacc.c  */
-#line 157 "yacc2.y"
+#line 160 "yacc2.y"
     { (yyval.intval) = (yyvsp[(1) - (3)].intval)*(yyvsp[(3) - (3)].intval); ;}
     break;
 
   case 29:
 
 /* Line 1455 of yacc.c  */
-#line 158 "yacc2.y"
+#line 161 "yacc2.y"
     { (yyval.intval) = (yyvsp[(1) - (3)].intval)/(yyvsp[(3) - (3)].intval); ;}
     break;
 
   case 30:
 
 /* Line 1455 of yacc.c  */
-#line 159 "yacc2.y"
+#line 162 "yacc2.y"
     { (yyval.intval) = floor((yyvsp[(1) - (3)].intval) / (yyvsp[(3) - (3)].intval)); ;}
     break;
 
   case 31:
 
 /* Line 1455 of yacc.c  */
-#line 160 "yacc2.y"
+#line 163 "yacc2.y"
     { (yyval.intval) = fmod((yyvsp[(1) - (3)].intval), (yyvsp[(3) - (3)].intval)); ;}
     break;
 
   case 32:
 
 /* Line 1455 of yacc.c  */
-#line 163 "yacc2.y"
+#line 166 "yacc2.y"
     { check_type((yyvsp[(2) - (2)].id), INT_TYPE, curr_scope); (yyval.intval) = get_int_value((yyvsp[(2) - (2)].id), curr_scope); printf("MY INT = %d\n", (yyval.intval)); ;}
     break;
 
   case 33:
 
 /* Line 1455 of yacc.c  */
-#line 164 "yacc2.y"
+#line 167 "yacc2.y"
     {(yyval.intval) = (yyvsp[(1) - (1)].intval);;}
     break;
 
   case 34:
 
 /* Line 1455 of yacc.c  */
-#line 165 "yacc2.y"
+#line 168 "yacc2.y"
     {(yyval.intval) = (yyvsp[(2) - (3)].intval);;}
     break;
 
   case 35:
 
 /* Line 1455 of yacc.c  */
-#line 166 "yacc2.y"
+#line 169 "yacc2.y"
     {(yyval.intval) = abs((yyvsp[(3) - (4)].intval));;}
     break;
 
   case 36:
 
 /* Line 1455 of yacc.c  */
-#line 167 "yacc2.y"
+#line 170 "yacc2.y"
     {(yyval.intval) = pow((yyvsp[(3) - (6)].intval), (yyvsp[(5) - (6)].intval));;}
     break;
 
   case 37:
 
 /* Line 1455 of yacc.c  */
-#line 168 "yacc2.y"
+#line 171 "yacc2.y"
     { if((yyvsp[(3) - (4)].intval) >= 0) {(yyval.intval) = sqrt((yyvsp[(3) - (4)].intval)); printf("result = %d\n", (yyval.intval));} else{yyerror("Cannot make sqrt on negative number");exit(1);};}
     break;
 
   case 38:
 
 /* Line 1455 of yacc.c  */
-#line 169 "yacc2.y"
+#line 172 "yacc2.y"
     {(yyval.intval) = exp((yyvsp[(3) - (4)].intval)); printf("result = %d\n", (yyval.intval));;}
     break;
 
   case 39:
 
 /* Line 1455 of yacc.c  */
-#line 170 "yacc2.y"
+#line 173 "yacc2.y"
     {if((yyvsp[(3) - (4)].intval) >= 0) {(yyval.intval) = log10((yyvsp[(3) - (4)].intval)); printf("result = %d\n", (yyval.intval));} else {yyerror("Cannot make log on negative number");exit(1);};}
     break;
 
   case 40:
 
 /* Line 1455 of yacc.c  */
-#line 171 "yacc2.y"
+#line 174 "yacc2.y"
     {if((yyvsp[(3) - (4)].intval) >= 0) {(yyval.intval) = log((yyvsp[(3) - (4)].intval)); printf("result = %d\n", (yyval.intval));} else {yyerror("Cannot make ln on negative number");exit(1);};}
     break;
 
   case 41:
 
 /* Line 1455 of yacc.c  */
-#line 172 "yacc2.y"
+#line 175 "yacc2.y"
     {(yyval.intval) = floor((yyvsp[(3) - (4)].intval)); printf("result = %d\n", (yyval.intval));;}
     break;
 
   case 42:
 
 /* Line 1455 of yacc.c  */
-#line 173 "yacc2.y"
+#line 176 "yacc2.y"
     {(yyval.intval) = ceil((yyvsp[(3) - (4)].intval)); printf("result = %d\n", (yyval.intval));;}
     break;
 
   case 43:
 
 /* Line 1455 of yacc.c  */
-#line 174 "yacc2.y"
+#line 177 "yacc2.y"
     {(yyval.intval) = cos((yyvsp[(3) - (4)].intval)); printf("result = %d\n", (yyval.intval));;}
     break;
 
   case 44:
 
 /* Line 1455 of yacc.c  */
-#line 175 "yacc2.y"
+#line 178 "yacc2.y"
     {(yyval.intval) = sin((yyvsp[(3) - (4)].intval)); printf("result = %d\n", (yyval.intval));;}
     break;
 
   case 45:
 
 /* Line 1455 of yacc.c  */
-#line 176 "yacc2.y"
+#line 179 "yacc2.y"
     {(yyval.intval) = tan((yyvsp[(3) - (4)].intval)); printf("result = %d\n", (yyval.intval));;}
     break;
 
   case 46:
 
 /* Line 1455 of yacc.c  */
-#line 179 "yacc2.y"
+#line 182 "yacc2.y"
     {(yyval.doubleval) = (yyvsp[(1) - (1)].doubleval); printf("MY REAL FACTOR = %f\n", (yyval.doubleval));;}
     break;
 
   case 47:
 
 /* Line 1455 of yacc.c  */
-#line 180 "yacc2.y"
+#line 183 "yacc2.y"
     {(yyval.doubleval) = (yyvsp[(1) - (3)].doubleval)+(yyvsp[(3) - (3)].doubleval);;}
     break;
 
   case 48:
 
 /* Line 1455 of yacc.c  */
-#line 181 "yacc2.y"
+#line 184 "yacc2.y"
     {(yyval.doubleval) = (yyvsp[(1) - (3)].doubleval)-(yyvsp[(3) - (3)].doubleval);;}
     break;
 
   case 49:
 
 /* Line 1455 of yacc.c  */
-#line 182 "yacc2.y"
+#line 185 "yacc2.y"
     {(yyval.doubleval) = -(yyvsp[(2) - (2)].doubleval);;}
     break;
 
   case 50:
 
 /* Line 1455 of yacc.c  */
-#line 185 "yacc2.y"
+#line 188 "yacc2.y"
     {(yyval.doubleval) = (yyvsp[(1) - (1)].doubleval);;}
     break;
 
   case 51:
 
 /* Line 1455 of yacc.c  */
-#line 186 "yacc2.y"
+#line 189 "yacc2.y"
     {(yyval.doubleval) = (yyvsp[(1) - (3)].doubleval)*(yyvsp[(3) - (3)].doubleval);;}
     break;
 
   case 52:
 
 /* Line 1455 of yacc.c  */
-#line 187 "yacc2.y"
+#line 190 "yacc2.y"
     {(yyval.doubleval) = (yyvsp[(1) - (3)].doubleval)/(yyvsp[(3) - (3)].doubleval);;}
     break;
 
   case 53:
 
 /* Line 1455 of yacc.c  */
-#line 188 "yacc2.y"
+#line 191 "yacc2.y"
     {(yyval.doubleval) = floor((yyvsp[(1) - (3)].doubleval)/(yyvsp[(3) - (3)].doubleval));;}
     break;
 
   case 54:
 
 /* Line 1455 of yacc.c  */
-#line 189 "yacc2.y"
+#line 192 "yacc2.y"
     {(yyval.doubleval) = fmod((yyvsp[(1) - (3)].doubleval), (yyvsp[(3) - (3)].doubleval));;}
     break;
 
   case 55:
 
 /* Line 1455 of yacc.c  */
-#line 192 "yacc2.y"
+#line 195 "yacc2.y"
     { check_type((yyvsp[(2) - (2)].id), REAL_TYPE, curr_scope); (yyval.doubleval) = get_real_value((yyvsp[(2) - (2)].id), curr_scope); printf("MY REAL = %f\n", (yyval.doubleval)); ;}
     break;
 
   case 56:
 
 /* Line 1455 of yacc.c  */
-#line 193 "yacc2.y"
+#line 196 "yacc2.y"
     {(yyval.doubleval) = (yyvsp[(1) - (1)].doubleval);;}
     break;
 
   case 57:
 
 /* Line 1455 of yacc.c  */
-#line 194 "yacc2.y"
+#line 197 "yacc2.y"
     {(yyval.doubleval) = (yyvsp[(2) - (3)].doubleval);;}
     break;
 
   case 58:
 
 /* Line 1455 of yacc.c  */
-#line 195 "yacc2.y"
+#line 198 "yacc2.y"
     {(yyval.doubleval) = abs((yyvsp[(3) - (4)].doubleval));;}
     break;
 
   case 59:
 
 /* Line 1455 of yacc.c  */
-#line 196 "yacc2.y"
+#line 199 "yacc2.y"
     {(yyval.doubleval) = pow((yyvsp[(3) - (6)].doubleval), (yyvsp[(5) - (6)].doubleval));;}
     break;
 
   case 60:
 
 /* Line 1455 of yacc.c  */
-#line 197 "yacc2.y"
+#line 200 "yacc2.y"
     { if((yyvsp[(3) - (4)].doubleval) >= 0) {(yyval.doubleval) = sqrt((yyvsp[(3) - (4)].doubleval)); printf("result = %f\n", (yyval.doubleval));} else{yyerror("Cannot make sqrt on negative number");exit(1);};}
     break;
 
   case 61:
 
 /* Line 1455 of yacc.c  */
-#line 198 "yacc2.y"
+#line 201 "yacc2.y"
     {(yyval.doubleval) = exp((yyvsp[(3) - (4)].doubleval)); printf("result = %f\n", (yyval.doubleval));;}
     break;
 
   case 62:
 
 /* Line 1455 of yacc.c  */
-#line 199 "yacc2.y"
+#line 202 "yacc2.y"
     {if((yyvsp[(3) - (4)].doubleval) >= 0) {(yyval.doubleval) = log10((yyvsp[(3) - (4)].doubleval)); printf("result = %f\n", (yyval.doubleval));} else {yyerror("Cannot make log on negative number");exit(1);};}
     break;
 
   case 63:
 
 /* Line 1455 of yacc.c  */
-#line 200 "yacc2.y"
+#line 203 "yacc2.y"
     {if((yyvsp[(3) - (4)].doubleval) >= 0) {(yyval.doubleval) = log((yyvsp[(3) - (4)].doubleval)); printf("result = %f\n", (yyval.doubleval));} else {yyerror("Cannot make ln on negative number");exit(1);};}
     break;
 
   case 64:
 
 /* Line 1455 of yacc.c  */
-#line 201 "yacc2.y"
+#line 204 "yacc2.y"
     {(yyval.doubleval) = floor((yyvsp[(3) - (4)].doubleval)); printf("result = %f\n", (yyval.doubleval));;}
     break;
 
   case 65:
 
 /* Line 1455 of yacc.c  */
-#line 202 "yacc2.y"
+#line 205 "yacc2.y"
     {(yyval.doubleval) = ceil((yyvsp[(3) - (4)].doubleval)); printf("result = %f\n", (yyval.doubleval));;}
     break;
 
   case 66:
 
 /* Line 1455 of yacc.c  */
-#line 203 "yacc2.y"
+#line 206 "yacc2.y"
     {(yyval.doubleval) = cos((yyvsp[(3) - (4)].doubleval)); printf("result = %f\n", (yyval.doubleval));;}
     break;
 
   case 67:
 
 /* Line 1455 of yacc.c  */
-#line 204 "yacc2.y"
+#line 207 "yacc2.y"
     {(yyval.doubleval) = sin((yyvsp[(3) - (4)].doubleval)); printf("result = %f\n", (yyval.doubleval));;}
     break;
 
   case 68:
 
 /* Line 1455 of yacc.c  */
-#line 205 "yacc2.y"
+#line 208 "yacc2.y"
     {(yyval.doubleval) = tan((yyvsp[(3) - (4)].doubleval)); printf("result = %f\n", (yyval.doubleval));;}
     break;
 
   case 69:
 
 /* Line 1455 of yacc.c  */
-#line 209 "yacc2.y"
+#line 212 "yacc2.y"
     {(yyval.doubleval) = (float)(yyvsp[(1) - (1)].intval); printf("MY INTEGER IS IN REAL = %f", (yyval.doubleval));;}
     break;
 
   case 70:
 
 /* Line 1455 of yacc.c  */
-#line 210 "yacc2.y"
+#line 213 "yacc2.y"
     {(yyval.doubleval) = (yyvsp[(1) - (1)].doubleval); printf("MY REAL = %f", (yyval.doubleval));;}
     break;
 
   case 71:
 
 /* Line 1455 of yacc.c  */
-#line 213 "yacc2.y"
+#line 216 "yacc2.y"
     {(yyval.intval) = (yyvsp[(1) - (1)].intval); printf("MY BOOL EXPR = %d\n", (yyval.intval));;}
     break;
 
   case 72:
 
 /* Line 1455 of yacc.c  */
-#line 214 "yacc2.y"
+#line 217 "yacc2.y"
     { (yyval.intval) = (yyvsp[(1) - (3)].doubleval) >= (yyvsp[(3) - (3)].doubleval); printf("result = %d\n", (yyval.intval));;}
     break;
 
   case 73:
 
 /* Line 1455 of yacc.c  */
-#line 215 "yacc2.y"
+#line 218 "yacc2.y"
     { (yyval.intval) = (yyvsp[(1) - (3)].doubleval) <= (yyvsp[(3) - (3)].doubleval); printf("result = %d\n", (yyval.intval));;}
     break;
 
   case 74:
 
 /* Line 1455 of yacc.c  */
-#line 216 "yacc2.y"
+#line 219 "yacc2.y"
     { (yyval.intval) = (yyvsp[(1) - (3)].doubleval) > (yyvsp[(3) - (3)].doubleval); printf("result = %d\n", (yyval.intval));;}
     break;
 
   case 75:
 
 /* Line 1455 of yacc.c  */
-#line 217 "yacc2.y"
+#line 220 "yacc2.y"
     { (yyval.intval) = (yyvsp[(1) - (3)].doubleval) < (yyvsp[(3) - (3)].doubleval); printf("result = %d\n", (yyval.intval));;}
     break;
 
   case 76:
 
 /* Line 1455 of yacc.c  */
-#line 218 "yacc2.y"
+#line 221 "yacc2.y"
     { (yyval.intval) = (yyvsp[(1) - (3)].doubleval) == (yyvsp[(3) - (3)].doubleval); printf("result = %d\n", (yyval.intval));;}
     break;
 
   case 77:
 
 /* Line 1455 of yacc.c  */
-#line 219 "yacc2.y"
+#line 222 "yacc2.y"
     { (yyval.intval) = (yyvsp[(1) - (3)].doubleval) != (yyvsp[(3) - (3)].doubleval); printf("result = %d\n", (yyval.intval));;}
     break;
 
   case 78:
 
 /* Line 1455 of yacc.c  */
-#line 220 "yacc2.y"
+#line 223 "yacc2.y"
     { (yyval.intval) = (yyvsp[(1) - (3)].intval) && (yyvsp[(3) - (3)].intval); printf("result = %d\n", (yyval.intval));;}
     break;
 
   case 79:
 
 /* Line 1455 of yacc.c  */
-#line 221 "yacc2.y"
+#line 224 "yacc2.y"
     { (yyval.intval) = (yyvsp[(1) - (3)].intval) || (yyvsp[(3) - (3)].intval); printf("result = %d\n", (yyval.intval));;}
     break;
 
   case 80:
 
 /* Line 1455 of yacc.c  */
-#line 222 "yacc2.y"
+#line 225 "yacc2.y"
     { (yyval.intval) = (!(yyvsp[(2) - (2)].intval)); printf("result = %d\n", (yyval.intval));;}
     break;
 
   case 81:
 
 /* Line 1455 of yacc.c  */
-#line 225 "yacc2.y"
+#line 228 "yacc2.y"
     {(yyval.intval) = (yyvsp[(1) - (1)].intval); printf("result = %d\n", (yyval.intval));;}
     break;
 
   case 82:
 
 /* Line 1455 of yacc.c  */
-#line 228 "yacc2.y"
+#line 231 "yacc2.y"
     { check_type((yyvsp[(2) - (2)].id), BOOL_TYPE, curr_scope); (yyval.intval) = get_bool_value((yyvsp[(2) - (2)].id), curr_scope); printf("MY BOOL = %d\n", (yyval.intval)); ;}
     break;
 
   case 83:
 
 /* Line 1455 of yacc.c  */
-#line 229 "yacc2.y"
+#line 232 "yacc2.y"
     {(yyval.intval) = (yyvsp[(1) - (1)].intval); printf("IT IS A BOOLEAN \n");;}
     break;
 
   case 84:
 
 /* Line 1455 of yacc.c  */
-#line 230 "yacc2.y"
+#line 233 "yacc2.y"
     {(yyval.intval) = (yyvsp[(2) - (3)].intval); printf("result = %d\n", (yyval.intval));;}
     break;
 
   case 85:
 
 /* Line 1455 of yacc.c  */
-#line 233 "yacc2.y"
+#line 236 "yacc2.y"
     { (yyval.intval) = 1; printf("BOOL VALUE = %d\n", (yyval.intval));;}
     break;
 
   case 86:
 
 /* Line 1455 of yacc.c  */
-#line 234 "yacc2.y"
+#line 237 "yacc2.y"
     { (yyval.intval) = 0; printf("BOOL VALUE = %d\n", (yyval.intval));;}
     break;
 
   case 87:
 
 /* Line 1455 of yacc.c  */
-#line 238 "yacc2.y"
+#line 241 "yacc2.y"
     {(yyval.intval) = INT_TYPE;;}
     break;
 
   case 88:
 
 /* Line 1455 of yacc.c  */
-#line 239 "yacc2.y"
+#line 242 "yacc2.y"
     {(yyval.intval) = REAL_TYPE;;}
     break;
 
   case 89:
 
 /* Line 1455 of yacc.c  */
-#line 240 "yacc2.y"
+#line 243 "yacc2.y"
     {(yyval.intval) = CHAR_TYPE;;}
     break;
 
   case 90:
 
 /* Line 1455 of yacc.c  */
-#line 241 "yacc2.y"
+#line 244 "yacc2.y"
     {(yyval.intval) = STRING_TYPE;;}
     break;
 
   case 91:
 
 /* Line 1455 of yacc.c  */
-#line 242 "yacc2.y"
+#line 245 "yacc2.y"
     {(yyval.intval) = BOOL_TYPE;;}
     break;
 
   case 96:
 
 /* Line 1455 of yacc.c  */
-#line 253 "yacc2.y"
+#line 256 "yacc2.y"
     {printf("WRITE: %s\n", (yyvsp[(2) - (2)].chstval));;}
     break;
 
   case 97:
 
 /* Line 1455 of yacc.c  */
-#line 256 "yacc2.y"
+#line 259 "yacc2.y"
     { (yyval.chstval) = (yyvsp[(1) - (1)].chstval); printf("OUR CHAR IS %s\n", (yyval.chstval));;}
     break;
 
   case 98:
 
 /* Line 1455 of yacc.c  */
-#line 257 "yacc2.y"
+#line 260 "yacc2.y"
     { (yyval.chstval) = (yyvsp[(1) - (1)].chstval); printf("OUR STRING IS %s\n", (yyval.chstval));;}
+    break;
+
+  case 101:
+
+/* Line 1455 of yacc.c  */
+#line 267 "yacc2.y"
+    { printf("curr_scope finishing = %d\n", curr_scope); check_type((yyvsp[(3) - (3)].id), (yyvsp[(1) - (3)].intval), curr_scope+1); ;}
     break;
 
   case 102:
 
 /* Line 1455 of yacc.c  */
-#line 267 "yacc2.y"
-    { curr_scope++; printf("curr_scope = %d\n", curr_scope); ;}
+#line 270 "yacc2.y"
+    { printf("%d\n", curr_scope); install((yyvsp[(2) - (7)].id), (yyvsp[(7) - (7)].intval), 0, 0, 0, curr_scope); printf("FUNTCION DECLARED"); curr_scope++; printf("curr_scope = %d\n", curr_scope); (yyval.intval) = (yyvsp[(7) - (7)].intval); ;}
     break;
 
   case 103:
 
 /* Line 1455 of yacc.c  */
-#line 270 "yacc2.y"
-    {curr_scope--;  printf("curr_scope = %d\n", curr_scope);;}
+#line 273 "yacc2.y"
+    {curr_scope--;  (yyval.id) = (yyvsp[(2) - (2)].id);;}
     break;
 
   case 104:
 
 /* Line 1455 of yacc.c  */
-#line 274 "yacc2.y"
+#line 277 "yacc2.y"
     { context_check((yyvsp[(1) - (1)].id), curr_scope); ;}
     break;
 
   case 105:
 
 /* Line 1455 of yacc.c  */
-#line 275 "yacc2.y"
+#line 278 "yacc2.y"
     { context_check((yyvsp[(1) - (3)].id), curr_scope);;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 2287 "yacc2.tab.c"
+#line 2295 "yacc2.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2495,7 +2503,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 293 "yacc2.y"
+#line 296 "yacc2.y"
 
 void yyerror(char *s) {
     fprintf(stderr, "%s\n", s);

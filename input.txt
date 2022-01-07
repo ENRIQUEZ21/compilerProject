@@ -5,7 +5,7 @@ var id2:real  ;
 var id3:integer  ;
 
 ;
-Function myFunc (id2):integer 
+Function myFunc (id2, id3):integer 
 beginstmt
 var a1:integer;
 a1 := integer 65;

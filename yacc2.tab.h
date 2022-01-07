@@ -108,12 +108,12 @@
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union 
 /* Line 1676 of yacc.c  */
-#line 77 "yacc2.y"
+#line 78 "yacc2.y"
 semrec
 {
 
 /* Line 1676 of yacc.c  */
-#line 78 "yacc2.y"
+#line 79 "yacc2.y"
 
   double doubleval;
   int intval; 

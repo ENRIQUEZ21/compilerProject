@@ -82,3 +82,4 @@ int getintval(char * sym_name, int scope) {
     ptr = getsym(sym_name, scope);
     return ptr->int_val;
 }
+
