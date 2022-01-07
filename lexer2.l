@@ -32,7 +32,8 @@ end   return ENDPRGM;
 beginstmt   return BEGSTMT;
 endstmt     return ENDSTMT;
 ","  return COMMA; 
-":"  return DBPTS;
+":"  return COLON;
+";"  return SEMICOLON;
 "("  return OPENPAR;
 ")"  return CLOSEPAR;
 "+"  return ADDOP; 
@@ -72,13 +73,13 @@ endif   return ENDIF;
 while   return WHILE;
 do      return DO;
 endwhile    return ENDWHILE;
-Function return FCT;
+"Function" return FCT;
 return return RETURN;
 write return WRITE;
 ":="        return ASSIGNMENT;    
 {identifier}    yylval.id = (char *) strdup(yytext); return(ID); 
 {WS}						;
-{line}						++cnt_line; return NEWLINE;
+{line}						++cnt_line; 
 .							{return(yytext[0]);}
 
 %%

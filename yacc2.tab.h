@@ -52,12 +52,12 @@
      STRING_TYPE = 268,
      BOOL_TYPE = 269,
      VAR = 270,
-     DBPTS = 271,
+     COLON = 271,
      OPENPAR = 272,
      CLOSEPAR = 273,
      COMMA = 274,
      COMMENT = 275,
-     NEWLINE = 276,
+     SEMICOLON = 276,
      STARTPRGM = 277,
      ENDPRGM = 278,
      BEGSTMT = 279,
@@ -108,12 +108,12 @@
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union 
 /* Line 1676 of yacc.c  */
-#line 74 "yacc2.y"
+#line 77 "yacc2.y"
 semrec
 {
 
 /* Line 1676 of yacc.c  */
-#line 75 "yacc2.y"
+#line 78 "yacc2.y"
 
   double doubleval;
   int intval; 

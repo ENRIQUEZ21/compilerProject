@@ -9,31 +9,34 @@
   int yylex(void);
   void yyerror(char *);
 
+  int curr_scope = 0;
 
-  void install ( char *sym_name, int type, int int_val, double real_val, int bool_val)
+
+  void install ( char *sym_name, int type, int int_val, double real_val, int bool_val, int current_scope)
   {
     symrec *s;
     symrec *i;
-    s = getsym (sym_name);
+    s = getsym (sym_name, current_scope);
     if (s == 0) {
-      putsym (sym_name, type, int_val, real_val, bool_val);   
+      putsym (sym_name, type, int_val, real_val, bool_val, current_scope);   
     } else { 
       printf( "%s is already defined\n", sym_name );
     }
   }
 
-  void context_check( char *sym_name ) { 
+  void context_check( char *sym_name, int scope ) { 
     symrec *identifier;
-    identifier = getsym( sym_name );
+    identifier = getsym( sym_name, scope );
     if ( identifier == 0 ) { 
       printf( "%s", sym_name );
       printf( "%s\n", " is an undeclared identifier" );
+      exit(1);
     }
   }
 
-  void check_type( char *sym_name, int type) { 
+  void check_type( char *sym_name, int type, int scope) { 
     symrec *identifier;
-    identifier = getsym( sym_name );
+    identifier = getsym( sym_name , scope);
     if(identifier->type != type) {
       printf( "%s", sym_name );
       int int_type = identifier->type;
@@ -43,33 +46,34 @@
     
   }
 
-  void set_real_value(char *sym_name, double real_value) {
-    setrealval(sym_name, real_value);
+  void set_real_value(char *sym_name, double real_value, int current_scope) {
+    setrealval(sym_name, real_value, current_scope);
   }
 
-  double get_real_value(char *sym_name) {
-    return getrealval(sym_name);
+  double get_real_value(char *sym_name, int current_scope) {
+    return getrealval(sym_name, current_scope);
   }
 
-  void set_bool_value(char *sym_name, int bool_value) {
-    setboolval(sym_name, bool_value);
+  void set_bool_value(char *sym_name, int bool_value, int current_scope) {
+    setboolval(sym_name, bool_value, current_scope);
   }
 
-  int get_bool_value(char *sym_name) {
-    return getboolval(sym_name);
+  int get_bool_value(char *sym_name, int current_scope) {
+    return getboolval(sym_name, current_scope);
   }
 
-  void set_int_value(char *sym_name, int int_value) {
-    setintval(sym_name, int_value);
+  void set_int_value(char *sym_name, int int_value, int current_scope) {
+    setintval(sym_name, int_value, current_scope);
   }
 
-  int get_int_value(char *sym_name) {
-    return getintval(sym_name);
+  int get_int_value(char *sym_name, int current_scope) {
+    return getintval(sym_name, current_scope);
   }
 
 
 
 %}
+
 
 %union semrec 
 {
@@ -91,7 +95,7 @@
 %type <intval> TRUE FALSE boolean booexpr boofactor booterm assignbooexpr;
 %type <chstval> CHAR STRING charsandstrings
 
-%token VAR DBPTS OPENPAR CLOSEPAR COMMA COMMENT  NEWLINE
+%token VAR COLON OPENPAR CLOSEPAR COMMA COMMENT SEMICOLON 
 %token STARTPRGM ENDPRGM BEGSTMT ENDSTMT
 %token IF THEN ELIF ELSE ENDIF WHILE DO ENDWHILE 
 %token WRITE FCT RETURN
@@ -102,28 +106,32 @@
 
 
 %%
-// IL RESTE A FINIR LES DECLARATIONS DE FCTS
-program: STARTPRGM stmts ENDPRGM; 
+
+program: STARTPRGM declarations fcts stmts ENDPRGM; 
 
 groupstmts: BEGSTMT stmts ENDSTMT
 ;
 
-
-stmts: 
-|   stmts comment NEWLINE stmt 
+declarations: 
+|     declarations declaration SEMICOLON
 ;
 
-stmt: assignexpr  
-|   VAR ID DBPTS type    { install($2, $4, 0, 0, 0); printf("DECLARATION %s, %d \n", $2, $4);}
+stmts: comment stmt SEMICOLON
+|   stmts comment stmt SEMICOLON
+;
+
+stmt:  assignexpr  
+|   declaration     
 |   IF booexpr THEN groupstmts elifstmt elsestmt ENDIF    {printf("CONDITIONAL STATEMENT");}
 |   WHILE booexpr DO groupstmts ENDWHILE       {printf("LOOP STATEMENT");}
 |   write
 |   callfct
-|    fcts  {printf("FUNCTIONS    DECLARED !!! ");}
 ;
 
-comment:  
-|     COMMENT
+declaration: VAR ID COLON type    { printf("curr_scope = %d\n", curr_scope); install($2, $4, 0, 0, 0, curr_scope); printf("DECLARATION %s, %d \n", $2, $4);}
+
+comment: 
+|   COMMENT
 ;
 
 assignexpr: assignintexpr
@@ -131,13 +139,13 @@ assignexpr: assignintexpr
 |   assignbooexpr
 ;
 
-assignintexpr: ID ASSIGNMENT INT_TYPE intexpr { context_check($1); check_type($1, INT_TYPE); set_int_value($1, $4); printf("INTEGER %d ASSIGNED TO %s\n", $4, $1);}
+assignintexpr: ID ASSIGNMENT INT_TYPE intexpr { context_check($1, curr_scope); check_type($1, INT_TYPE, curr_scope); set_int_value($1, $4, curr_scope); printf("INTEGER %d ASSIGNED TO %s\n", $4, $1);}
 ;
 
-assignreaexpr: ID ASSIGNMENT REAL_TYPE reaexpr  { context_check($1); check_type($1, REAL_TYPE); set_real_value($1, $4); printf("REAL %f ASSIGNED TO %s\n", $4, $1);}
+assignreaexpr: ID ASSIGNMENT REAL_TYPE reaexpr  { context_check($1, curr_scope); check_type($1, REAL_TYPE, curr_scope); set_real_value($1, $4, curr_scope); printf("REAL %f ASSIGNED TO %s\n", $4, $1);}
 ;
 
-assignbooexpr: ID ASSIGNMENT BOOL_TYPE booexpr   { context_check($1); check_type($1, BOOL_TYPE); set_bool_value($1, $4); printf("BOOLEAN %d ASSIGNED TO %s\n", $4, $1);}
+assignbooexpr: ID ASSIGNMENT BOOL_TYPE booexpr   { context_check($1, curr_scope); check_type($1, BOOL_TYPE, curr_scope); set_bool_value($1, $4, curr_scope); printf("BOOLEAN %d ASSIGNED TO %s\n", $4, $1);}
 ;
 
 intexpr: intfactor              {$$ = $1; printf("MY INT FACTOR = %d\n", $$);}
@@ -153,7 +161,7 @@ intfactor: intterm              {$$ = $1; printf("MY INT TERM = %d\n", $$);}
 |   intfactor MOD intterm      { $$ = fmod($1, $3); }
 ;
 
-intterm: INT_TYPE ID          { check_type($2, INT_TYPE); $$ = get_int_value($2); printf("MY INT = %d\n", $$); }
+intterm: INT_TYPE ID          { check_type($2, INT_TYPE, curr_scope); $$ = get_int_value($2, curr_scope); printf("MY INT = %d\n", $$); }
 |       INTEGER             {$$ = $1;}
 |    OPENPAR intexpr CLOSEPAR  {$$ = $2;}
 |   ABS OPENPAR intexpr CLOSEPAR {$$ = abs($3);}
@@ -182,7 +190,7 @@ reafactor: reaterm            {$$ = $1;}
 |   reafactor MOD reaterm      {$$ = fmod($1, $3);}
 ;
 
-reaterm: REAL_TYPE ID       { check_type($2, REAL_TYPE); $$ = get_real_value($2); printf("MY REAL = %f\n", $$); }
+reaterm: REAL_TYPE ID       { check_type($2, REAL_TYPE, curr_scope); $$ = get_real_value($2, curr_scope); printf("MY REAL = %f\n", $$); }
 |       number              {$$ = $1;}
 |    OPENPAR reaexpr CLOSEPAR  {$$ = $2;}
 |   ABS OPENPAR reaexpr CLOSEPAR {$$ = abs($3);}
@@ -218,7 +226,7 @@ booexpr: boofactor             {$$ = $1; printf("MY BOOL EXPR = %d\n", $$);}
 boofactor:  booterm                     {$$ = $1; printf("result = %d\n", $$);}
 ;
 
-booterm: BOOL_TYPE ID          { check_type($2, BOOL_TYPE); $$ = get_bool_value($2); printf("MY BOOL = %d\n", $$); }
+booterm: BOOL_TYPE ID          { check_type($2, BOOL_TYPE, curr_scope); $$ = get_bool_value($2, curr_scope); printf("MY BOOL = %d\n", $$); }
 |     boolean                   {$$ = $1; printf("IT IS A BOOLEAN \n");}
 |     OPENPAR booexpr CLOSEPAR    {$$ = $2; printf("result = %d\n", $$);}
 ;
@@ -250,12 +258,22 @@ charsandstrings: CHAR    { $$ = $1; printf("OUR CHAR IS %s\n", $$);}
 |      STRING            { $$ = $1; printf("OUR STRING IS %s\n", $$);}
 ;
 
-fcts: 
-|   fcts FCT ID OPENPAR parameters CLOSEPAR DBPTS type groupstmts RETURN ID {install($3, $8, 0, 0, 0); context_check($11); check_type($11, $8);}
+fcts:  SEMICOLON
+|   fcts fct
 ;
 
-parameters: ID       { context_check($1);}
-|   ID COMMA parameters     { context_check($1);}
+fct:  headfct groupstmts returnfct 
+;
+
+headfct: FCT ID OPENPAR parameters CLOSEPAR COLON type  { curr_scope++; printf("curr_scope = %d\n", curr_scope); }
+;
+
+returnfct: RETURN ID   {curr_scope--;  printf("curr_scope = %d\n", curr_scope);}
+;
+
+
+parameters: ID       { context_check($1, curr_scope); }
+|   ID COMMA parameters     { context_check($1, curr_scope);}
 ;
 
 instances: ID
