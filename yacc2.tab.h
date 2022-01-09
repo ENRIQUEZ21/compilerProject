@@ -108,13 +108,14 @@
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union 
 /* Line 1676 of yacc.c  */
-#line 78 "yacc2.y"
+#line 88 "yacc2.y"
 semrec
 {
 
 /* Line 1676 of yacc.c  */
-#line 79 "yacc2.y"
-
+#line 89 "yacc2.y"
+ 
+  struct Value val;
   double doubleval;
   int intval; 
   char *chstval;
@@ -124,7 +125,7 @@ semrec
 
 
 /* Line 1676 of yacc.c  */
-#line 128 "yacc2.tab.h"
+#line 129 "yacc2.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

@@ -1,4 +1,5 @@
 %{
+#include "variables.h"
 #include "yacc2.tab.h"
 #include <string.h>
 #include <stdlib.h>
@@ -36,14 +37,26 @@ endstmt     return ENDSTMT;
 ";"  return SEMICOLON;
 "("  return OPENPAR;
 ")"  return CLOSEPAR;
+
 "+"  return ADDOP; 
 "-"  return MINOP; 
 "*"  return MULOP;
 "/"  return DIVOP;
 div  return DIV;
 mod  return MOD;
+
 abs  return ABS;
 pow  return POW;
+sqrt return SQRT;
+exp  return EXP;
+log  return LOG;
+ln   return LN;
+floor return FLOOR;
+ceil  return CEIL;
+cos  return COS;
+sin  return SIN;
+tan  return TAN;
+
 "==" return EQ;
 "<=" return LE;
 ">=" return GE;
@@ -53,10 +66,11 @@ pow  return POW;
 and  return AND;
 or   return OR;
 not  return NOT;
-{integer}  yylval.intval = atoi( yytext ); return INTEGER;
-{real}  yylval.doubleval = atof( yytext ); return REAL;
-"true"   return TRUE;
-"false"  return FALSE;
+
+{integer}  yylval.val.ival = atoi( yytext ); yylval.val.type = INT_TYPE; return INTEGER;
+{real}  yylval.val.rval = atof( yytext ); yylval.val.type = REAL_TYPE; return REAL;
+"true"   yylval.val.type = BOOL_TYPE; return TRUE;
+"false"  yylval.val.type = BOOL_TYPE; return FALSE;
 {char}   yylval.chstval = (char *) strdup(yytext);   return CHAR;
 {string} yylval.chstval = (char *) strdup(yytext); return STRING;
 "integer"   return INT_TYPE;
@@ -65,6 +79,7 @@ not  return NOT;
 "string"    return STRING_TYPE;
 "boolean"   return BOOL_TYPE;
 var     return VAR;
+
 if      return IF;
 then    return THEN;
 elif    return ELIF;
@@ -73,9 +88,11 @@ endif   return ENDIF;
 while   return WHILE;
 do      return DO;
 endwhile    return ENDWHILE;
+
 "Function" return FCT;
 return return RETURN;
 write return WRITE;
+
 ":="        return ASSIGNMENT;    
 {identifier}    yylval.id = (char *) strdup(yytext); return(ID); 
 {WS}						;

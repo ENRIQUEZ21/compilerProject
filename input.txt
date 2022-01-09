@@ -4,22 +4,12 @@ var id2:real  ;
 
 var id3:integer  ;
 
-;
-Function myFunc (id2, id3):integer 
-beginstmt
-var a1:integer;
-a1 := integer 65;
-endstmt
-return id3
 
 
 var a:real;
 var b:real;
-b := real 7*(8+7)+92;
-a := real 5 - 6 + real b;
-var id1:integer;
-var c:integer;
-c := integer 90;
+
+id2 := 4;
 
 
 end

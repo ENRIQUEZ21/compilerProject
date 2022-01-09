@@ -1,6 +1,8 @@
 
 
 
+
+
 struct symrec
 {
     char *name; 
