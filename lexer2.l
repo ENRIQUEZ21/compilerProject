@@ -20,8 +20,8 @@ punctuations ","|"."|":"|"("|")"|"{"|"}"|";"|"_"|"!"|"~"|"@"|"="|"&"|"["|"]"|"'"
 identifier {letter}{alphanum}*
 integer [-]?{digit}+
 real [-]?{digit}+\.{digit}*
-char '({alphanum}|{WS}|{punctuations})*'
-string \"({alphanum}|{WS}|{punctuations})*\"
+char '{alphanum}|{punctuations}'
+string \"({alphanum}|{WS}|{punctuations})+\"
 boolean true|false
 comment  \{({alphanum}|{WS}|{punctuations})*\}
 type integer|char|string|boolean|real
@@ -71,8 +71,8 @@ not  return NOT;
 {real}  yylval.val.rval = atof( yytext ); yylval.val.type = REAL_TYPE; return REAL;
 "true"   yylval.val.type = BOOL_TYPE; return TRUE;
 "false"  yylval.val.type = BOOL_TYPE; return FALSE;
-{char}   yylval.chstval = (char *) strdup(yytext);   return CHAR;
-{string} yylval.chstval = (char *) strdup(yytext); return STRING;
+{char}   yylval.val.cval = (char *) strdup(yytext); yylval.val.type = CHAR_TYPE;  return CHAR;
+{string} yylval.val.sval = (char *) strdup(yytext); yylval.val.type = STRING_TYPE; return STRING;
 "integer"   return INT_TYPE;
 "real"      return REAL_TYPE;
 "char"      return CHAR_TYPE;

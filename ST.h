@@ -1,8 +1,5 @@
 
 
-
-
-
 struct symrec
 {
     char *name; 
@@ -10,6 +7,8 @@ struct symrec
     int int_val;
     double real_val;
     int bool_val;
+    char *char_val;
+    char *string_val;
     int scope;
     struct symrec *next;        
 };
@@ -19,7 +18,7 @@ symrec *identifier;
 
 symrec *sym_table = (symrec *)0; 
 
-symrec * putsym (char *sym_name, int type, int int_val, double real_val, int bool_val, int curr_scope) 
+symrec * putsym (char *sym_name, int type, int int_val, double real_val, int bool_val, char *char_val, char *string_val, int curr_scope) 
 {
     symrec *ptr;
     ptr = (symrec *) malloc (sizeof(symrec));
@@ -29,6 +28,8 @@ symrec * putsym (char *sym_name, int type, int int_val, double real_val, int boo
     ptr->int_val = int_val;
     ptr->real_val = real_val;
     ptr->bool_val = bool_val;
+    ptr->char_val = (char *) char_val;
+    ptr->string_val = (char *) string_val;
     ptr->scope = curr_scope;
     printf("PUT AN ID\n He has %d type %f real and current scope of %d\n", ptr->type, ptr->real_val, ptr->scope);
     /*ptr->offset = data_location();*/
@@ -84,4 +85,30 @@ int getintval(char * sym_name, int scope) {
     ptr = getsym(sym_name, scope);
     return ptr->int_val;
 }
+
+void setcharval(char * sym_name, char *char_val, int scope) {
+    symrec *ptr;
+    ptr = getsym(sym_name, scope);
+    ptr->char_val = char_val;
+}
+
+char * getcharval(char * sym_name, int scope) {
+    symrec *ptr;
+    ptr = getsym(sym_name, scope);
+    return ptr->char_val;
+}
+
+
+void setstringval(char * sym_name, char *string_val, int scope) {
+    symrec *ptr;
+    ptr = getsym(sym_name, scope);
+    ptr->string_val = string_val;
+}
+
+char * getstringval(char * sym_name, int scope) {
+    symrec *ptr;
+    ptr = getsym(sym_name, scope);
+    return ptr->string_val;
+}
+
 

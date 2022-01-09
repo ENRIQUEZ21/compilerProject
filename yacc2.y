@@ -16,13 +16,13 @@
   int curr_scope = 0;
 
 
-  void install ( char *sym_name, int type, int int_val, double real_val, int bool_val, int current_scope)
+  void install ( char *sym_name, int type, int int_val, double real_val, int bool_val, char *char_val, char *string_val, int current_scope)
   {
     symrec *s;
     symrec *i;
     s = getsym (sym_name, current_scope);
     if (s == 0) {
-      putsym (sym_name, type, int_val, real_val, bool_val, current_scope);   
+      putsym (sym_name, type, int_val, real_val, bool_val, char_val, string_val, current_scope);   
     } else { 
       printf( "%s is already defined\n", sym_name );
     }
@@ -79,6 +79,22 @@
   int get_int_value(char *sym_name, int current_scope) {
     return getintval(sym_name, current_scope);
   }
+
+  void set_char_value(char *sym_name, char *char_value, int current_scope) {
+    setcharval(sym_name, char_value, current_scope);
+  }
+
+  char * get_char_value(char *sym_name, int current_scope) {
+    return getcharval(sym_name, current_scope);
+  }
+
+  void set_string_value(char *sym_name, char *string_value, int current_scope) {
+    setstringval(sym_name, string_value, current_scope);
+  }
+
+  char * get_string_value(char *sym_name, int current_scope) {
+    return getstringval(sym_name, current_scope);
+  }
   
   
 
@@ -102,7 +118,7 @@
 %token TRUE FALSE REAL INTEGER CHAR STRING INT_TYPE REAL_TYPE CHAR_TYPE STRING_TYPE BOOL_TYPE;
 %type <intval> type INT_TYPE REAL_TYPE CHAR_TYPE STRING_TYPE BOOL_TYPE;
 
-%type <val> INTEGER REAL TRUE FALSE;
+%type <val> INTEGER REAL TRUE FALSE CHAR STRING;
 
 %type <val> expr factor term;
 
@@ -139,27 +155,28 @@ stmts: comment stmt SEMICOLON
 ;
 
 stmt:  assignexpr  
-|   declaration     
+|   declaration 
+|   write    
 /*|   IF booexpr THEN groupstmts elifstmt elsestmt ENDIF    {printf("CONDITIONAL STATEMENT");}
 |   WHILE booexpr DO groupstmts ENDWHILE       {printf("LOOP STATEMENT");}
 |   write
 |   callfct*/
 ;
 
-declaration: VAR ID COLON type    { printf("curr_scope = %d\n", curr_scope); install($2, $4, 0, 0, 0, curr_scope); printf("DECLARATION %s, %d \n", $2, $4);}
+declaration: VAR ID COLON type    { printf("curr_scope = %d\n", curr_scope); install($2, $4, 0, 0, 0, "N", "null", curr_scope); printf("DECLARATION %s, %d \n", $2, $4);}
 
 comment: 
 |   COMMENT
 ;
 
-assignexpr: ID ASSIGNMENT expr { context_check($1, curr_scope); if($3.type == INT_TYPE) {if(get_type($1, curr_scope) == INT_TYPE) { set_int_value($1, $3.ival, curr_scope); } else if(get_type($1, curr_scope) == REAL_TYPE) {set_real_value($1, $3.rval, curr_scope);} else {yyerror("Error assignment: bad type"); exit(1);}} else if($3.type == REAL_TYPE) {check_type($1, REAL_TYPE, curr_scope); set_real_value($1, $3.rval, curr_scope);} else if($3.type == BOOL_TYPE) {check_type($1, BOOL_TYPE, curr_scope); set_bool_value($1, $3.bval, curr_scope);} printf("ASSIGNED TO ID %s\n",$1); }
+assignexpr: ID ASSIGNMENT expr { context_check($1, curr_scope); if($3.type == INT_TYPE) {if(get_type($1, curr_scope) == INT_TYPE) { set_int_value($1, $3.ival, curr_scope); } else if(get_type($1, curr_scope) == REAL_TYPE) {set_real_value($1, $3.rval, curr_scope);} else {yyerror("Error assignment: bad type"); exit(1);}} else if($3.type == REAL_TYPE) {check_type($1, REAL_TYPE, curr_scope); set_real_value($1, $3.rval, curr_scope);} else if($3.type == BOOL_TYPE) {check_type($1, BOOL_TYPE, curr_scope); set_bool_value($1, $3.bval, curr_scope);} else if($3.type == CHAR_TYPE) {check_type($1, CHAR_TYPE, curr_scope); set_char_value($1, $3.cval, curr_scope);} else if($3.type == STRING_TYPE) {check_type($1, STRING_TYPE, curr_scope); set_string_value($1, $3.sval, curr_scope);} printf("ASSIGNED TO ID %s\n",$1); }
 ;
 
 /*assignintexpr: ID ASSIGNMENT INT_TYPE intexpr { context_check($1, curr_scope); check_type($1, INT_TYPE, curr_scope); set_int_value($1, $4, curr_scope); printf("INTEGER %d ASSIGNED TO %s\n", $4, $1);}
 ;*/
 
 
-expr: factor              {$$.type = $1.type;  if($1.type == INT_TYPE) {$$.ival = $1.ival;} else if($1.type == REAL_TYPE) {$$.rval = $1.rval;} else if($1.type == BOOL_TYPE) {$$.bval = $1.bval;} }
+expr: factor              {$$.type = $1.type;  if($1.type == INT_TYPE) {$$.ival = $1.ival;} else if($1.type == REAL_TYPE) {$$.rval = $1.rval;} else if($1.type == BOOL_TYPE) {$$.bval = $1.bval;} else if($1.type == CHAR_TYPE) {$$.cval = $1.cval;} else if($1.type == STRING_TYPE) {$$.sval = $1.sval;}}
 |   expr ADDOP factor     { if($1.type == INT_TYPE && $3.type == INT_TYPE) {$$.type = INT_TYPE; $$.ival = $1.ival+$3.ival;} else if($1.type == REAL_TYPE && $3.type == INT_TYPE) {$$.type = REAL_TYPE; $$.rval = $1.rval+(float)$3.ival;} else if($1.type == INT_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = (float)$1.ival+$3.rval;} else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = $1.rval+$3.rval;} else { yyerror("Must add numbers"); exit(1);} }
 |   expr MINOP factor      { if($1.type == INT_TYPE && $3.type == INT_TYPE) {$$.type = INT_TYPE; $$.ival = $1.ival-$3.ival;} else if($1.type == REAL_TYPE && $3.type == INT_TYPE) {$$.type = REAL_TYPE; $$.rval = $1.rval-(float)$3.ival;} else if($1.type == INT_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = (float)$1.ival-$3.rval;} else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = $1.rval-$3.rval;} else { yyerror("Must substract numbers"); exit(1);} }
 |   MINOP factor                { $$.type = $2.type; if($2.type == INT_TYPE) {$$.ival = -$2.ival;} else if($2.type == REAL_TYPE) {$$.rval = -$2.rval;} else {yyerror("- must be on number only"); exit(1);} }
@@ -174,18 +191,20 @@ expr: factor              {$$.type = $1.type;  if($1.type == INT_TYPE) {$$.ival 
 |   NOT factor            { $$.type = BOOL_TYPE; if($2.type == BOOL_TYPE) {$$.bval = (!$2.bval); } else {yyerror("Must make NOT operation on boolean");}}
 ;
 
-factor: term              {$$.type = $1.type;  if($1.type == INT_TYPE) {$$.ival = $1.ival;} else if($1.type == REAL_TYPE) {$$.rval = $1.rval;} else if($1.type == BOOL_TYPE) {$$.bval = $1.bval;} }
+factor: term              {$$.type = $1.type;  if($1.type == INT_TYPE) {$$.ival = $1.ival;} else if($1.type == REAL_TYPE) {$$.rval = $1.rval;} else if($1.type == BOOL_TYPE) {$$.bval = $1.bval;} else if($1.type == CHAR_TYPE) {$$.cval = $1.cval;} else if($1.type == STRING_TYPE) {$$.sval = $1.sval;} }
 |   factor MULOP term    { if($1.type == INT_TYPE && $3.type == INT_TYPE) {$$.type = INT_TYPE; $$.ival = $1.ival*$3.ival;} else if($1.type == REAL_TYPE && $3.type == INT_TYPE) {$$.type = REAL_TYPE; $$.rval = $1.rval*(float)$3.ival;} else if($1.type == INT_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = (float)$1.ival*$3.rval;} else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = $1.rval*$3.rval;} else { yyerror("Must multiply numbers"); exit(1);} }
 |   factor DIVOP term    { if($1.type == INT_TYPE && $3.type == INT_TYPE) {$$.type = INT_TYPE; $$.ival = $1.ival/$3.ival;} else if($1.type == REAL_TYPE && $3.type == INT_TYPE) {$$.type = REAL_TYPE; $$.rval = $1.rval/(float)$3.ival;} else if($1.type == INT_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = (float)$1.ival/$3.rval;} else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = (float) $1.rval/$3.rval;} else { yyerror("Must divide numbers"); exit(1);} }
 |   factor DIV term      { $$.type = INT_TYPE; if($1.type == INT_TYPE && $3.type == INT_TYPE) {$$.ival = $1.ival/$3.ival;} else if($1.type == REAL_TYPE && $3.type == INT_TYPE) {$$.ival = (int) $1.rval/$3.ival;} else if($1.type == INT_TYPE && $3.type == REAL_TYPE) {$$.ival = (int)$1.ival/$3.rval;} else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) {$$.ival = (int) $1.rval/$3.rval;} else { yyerror("Must divide numbers"); exit(1);} }
 |   factor MOD term      { if($1.type == INT_TYPE && $3.type == INT_TYPE) {$$.type = INT_TYPE; $$.ival = (int)fmod($1.ival, $3.ival);} else if($1.type == REAL_TYPE && $3.type == INT_TYPE) {$$.type = REAL_TYPE; $$.rval = fmod($1.rval, (float)$3.ival);} else if($1.type == INT_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = fmod((float)$1.ival, $3.rval);} else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = fmod($1.rval, $3.rval);} else { yyerror("Must divide numbers"); exit(1);}}
 ;
 
-term: ID          { $$.type = get_type($1, curr_scope); if(get_type($1, curr_scope) == INT_TYPE) { $$.ival = get_int_value($1, curr_scope);} else if(get_type($1, curr_scope) == REAL_TYPE) {$$.rval = get_real_value($1, curr_scope);} else if(get_type($1, curr_scope) == BOOL_TYPE) {$$.bval = get_bool_value($1, curr_scope);}}
+term: ID          { $$.type = get_type($1, curr_scope); if(get_type($1, curr_scope) == INT_TYPE) { $$.ival = get_int_value($1, curr_scope);} else if(get_type($1, curr_scope) == REAL_TYPE) {$$.rval = get_real_value($1, curr_scope);} else if(get_type($1, curr_scope) == BOOL_TYPE) {$$.bval = get_bool_value($1, curr_scope);} else if(get_type($1, curr_scope) == CHAR_TYPE) {$$.cval = get_char_value($1, curr_scope);} else if(get_type($1, curr_scope) == STRING_TYPE) {$$.sval = get_string_value($1, curr_scope);}}
 |      INTEGER             {$$.type = $1.type; $$.ival = $1.ival;}
 |     REAL                  {$$.type = $1.type; $$.rval = $1.rval;}
 |     TRUE                  {$$.type = $1.type; $$.bval = 1;}
 |     FALSE                 {$$.type = $1.type; $$.bval = 0;}
+|     CHAR                  {$$.type = $1.type; $$.cval = $1.cval;}
+|     STRING                {$$.type = $1.type; $$.sval = $1.sval;}
 |    OPENPAR expr CLOSEPAR  {$$ = $2; }
 |   ABS OPENPAR expr CLOSEPAR {$$.type = $3.type; if($3.type == INT_TYPE) {$$.ival = (int)abs($3.ival);} else if($3.type == REAL_TYPE) {$$.rval = abs($3.rval);} }
 |   POW OPENPAR expr COMMA expr CLOSEPAR      { if($3.type == INT_TYPE && $5.type == INT_TYPE) {$$.type = INT_TYPE; $$.ival = pow($3.ival, $5.ival);} else if($3.type == REAL_TYPE && $5.type == INT_TYPE) {$$.type = REAL_TYPE; $$.rval = pow($3.rval, (float)$5.ival);} else if($3.type == INT_TYPE && $5.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = pow((float)$3.ival, $5.rval);} else if($3.type == REAL_TYPE && $5.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = pow($3.rval, $5.rval);} else { yyerror("Must power numbers"); exit(1);} }
@@ -198,6 +217,10 @@ term: ID          { $$.type = get_type($1, curr_scope); if(get_type($1, curr_sco
 |   COS OPENPAR expr CLOSEPAR  {$$.type = REAL_TYPE; if($3.type == REAL_TYPE) {$$.rval = cos($3.rval);} else {yyerror("Must make cos on real");}}
 |   SIN OPENPAR expr CLOSEPAR  {$$.type = REAL_TYPE; if($3.type == REAL_TYPE) {$$.rval = sin($3.rval);} else {yyerror("Must make sin on real");}}
 |   TAN OPENPAR expr CLOSEPAR  {$$.type = REAL_TYPE; if($3.type == REAL_TYPE) {$$.rval = tan($3.rval);} else {yyerror("Must make tan on real");}}
+;
+
+
+write: WRITE expr   {if($2.type == CHAR_TYPE) {printf("WRITE: %s\n", $2.cval);} else if($2.type == STRING_TYPE) {printf("WRITE: %s\n", $2.sval);} else if($2.type == REAL_TYPE) {printf("WRITE: %f\n", $2.rval);} else if($2.type == INT_TYPE) {printf("WRITE: %d\n", $2.ival);} else if($2.type == BOOL_TYPE) {printf("WRITE: %d\n", $2.bval);} }
 ;
 
 /*reaexpr: reafactor        {$$ = $1; printf("MY REAL FACTOR = %f\n", $$);}
@@ -274,8 +297,6 @@ elsestmt:
 |   ELSE groupstmts
 ;
 
-write: WRITE charsandstrings   {printf("WRITE: %s\n", $2);}
-;
 
 charsandstrings: CHAR    { $$ = $1; printf("OUR CHAR IS %s\n", $$);}
 |      STRING            { $$ = $1; printf("OUR STRING IS %s\n", $$);}

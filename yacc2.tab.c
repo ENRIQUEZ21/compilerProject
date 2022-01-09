@@ -87,13 +87,13 @@
   int curr_scope = 0;
 
 
-  void install ( char *sym_name, int type, int int_val, double real_val, int bool_val, int current_scope)
+  void install ( char *sym_name, int type, int int_val, double real_val, int bool_val, char *char_val, char *string_val, int current_scope)
   {
     symrec *s;
     symrec *i;
     s = getsym (sym_name, current_scope);
     if (s == 0) {
-      putsym (sym_name, type, int_val, real_val, bool_val, current_scope);   
+      putsym (sym_name, type, int_val, real_val, bool_val, char_val, string_val, current_scope);   
     } else { 
       printf( "%s is already defined\n", sym_name );
     }
@@ -150,13 +150,29 @@
   int get_int_value(char *sym_name, int current_scope) {
     return getintval(sym_name, current_scope);
   }
+
+  void set_char_value(char *sym_name, char *char_value, int current_scope) {
+    setcharval(sym_name, char_value, current_scope);
+  }
+
+  char * get_char_value(char *sym_name, int current_scope) {
+    return getcharval(sym_name, current_scope);
+  }
+
+  void set_string_value(char *sym_name, char *string_value, int current_scope) {
+    setstringval(sym_name, string_value, current_scope);
+  }
+
+  char * get_string_value(char *sym_name, int current_scope) {
+    return getstringval(sym_name, current_scope);
+  }
   
   
 
 
 
 /* Line 189 of yacc.c  */
-#line 160 "yacc2.tab.c"
+#line 176 "yacc2.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -252,12 +268,12 @@
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union 
 /* Line 214 of yacc.c  */
-#line 88 "yacc2.y"
+#line 104 "yacc2.y"
 semrec
 {
 
 /* Line 214 of yacc.c  */
-#line 89 "yacc2.y"
+#line 105 "yacc2.y"
  
   struct Value val;
   double doubleval;
@@ -269,7 +285,7 @@ semrec
 
 
 /* Line 214 of yacc.c  */
-#line 273 "yacc2.tab.c"
+#line 289 "yacc2.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -281,7 +297,7 @@ semrec
 
 
 /* Line 264 of yacc.c  */
-#line 285 "yacc2.tab.c"
+#line 301 "yacc2.tab.c"
 
 #ifdef short
 # undef short
@@ -496,16 +512,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  6
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   313
+#define YYLAST   326
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  64
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  11
+#define YYNNTS  12
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  50
+#define YYNRULES  54
 /* YYNRULES -- Number of states.  */
-#define YYNSTATES  115
+#define YYNSTATES  120
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
@@ -556,12 +572,12 @@ static const yytype_uint8 yytranslate[] =
    YYRHS.  */
 static const yytype_uint8 yyprhs[] =
 {
-       0,     0,     3,     7,    11,    16,    18,    20,    25,    26,
-      28,    32,    34,    38,    42,    45,    49,    53,    57,    61,
-      65,    69,    73,    77,    80,    82,    86,    90,    94,    98,
-     100,   102,   104,   106,   108,   112,   117,   124,   129,   134,
-     139,   144,   149,   154,   159,   164,   169,   171,   173,   175,
-     177
+       0,     0,     3,     7,    11,    16,    18,    20,    22,    27,
+      28,    30,    34,    36,    40,    44,    47,    51,    55,    59,
+      63,    67,    71,    75,    79,    82,    84,    88,    92,    96,
+     100,   102,   104,   106,   108,   110,   112,   114,   118,   123,
+     130,   135,   140,   145,   150,   155,   160,   165,   170,   175,
+     178,   180,   182,   184,   186
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
@@ -569,33 +585,34 @@ static const yytype_int8 yyrhs[] =
 {
       65,     0,    -1,    22,    66,    23,    -1,    69,    67,    21,
       -1,    66,    69,    67,    21,    -1,    70,    -1,    68,    -1,
-      15,     3,    16,    74,    -1,    -1,    20,    -1,     3,    45,
-      71,    -1,    72,    -1,    71,    51,    72,    -1,    71,    50,
-      72,    -1,    50,    72,    -1,    71,    43,    72,    -1,    71,
-      44,    72,    -1,    71,    41,    72,    -1,    71,    42,    72,
-      -1,    71,    40,    72,    -1,    71,    39,    72,    -1,    71,
-      38,    72,    -1,    71,    37,    72,    -1,    63,    72,    -1,
-      73,    -1,    72,    49,    73,    -1,    72,    48,    73,    -1,
-      72,    47,    73,    -1,    72,    46,    73,    -1,     3,    -1,
-       7,    -1,     6,    -1,     4,    -1,     5,    -1,    17,    71,
-      18,    -1,    59,    17,    71,    18,    -1,    60,    17,    71,
-      19,    71,    18,    -1,    52,    17,    71,    18,    -1,    58,
-      17,    71,    18,    -1,    57,    17,    71,    18,    -1,    56,
-      17,    71,    18,    -1,    62,    17,    71,    18,    -1,    61,
-      17,    71,    18,    -1,    55,    17,    71,    18,    -1,    54,
-      17,    71,    18,    -1,    53,    17,    71,    18,    -1,    10,
-      -1,    11,    -1,    12,    -1,    13,    -1,    14,    -1
+      74,    -1,    15,     3,    16,    75,    -1,    -1,    20,    -1,
+       3,    45,    71,    -1,    72,    -1,    71,    51,    72,    -1,
+      71,    50,    72,    -1,    50,    72,    -1,    71,    43,    72,
+      -1,    71,    44,    72,    -1,    71,    41,    72,    -1,    71,
+      42,    72,    -1,    71,    40,    72,    -1,    71,    39,    72,
+      -1,    71,    38,    72,    -1,    71,    37,    72,    -1,    63,
+      72,    -1,    73,    -1,    72,    49,    73,    -1,    72,    48,
+      73,    -1,    72,    47,    73,    -1,    72,    46,    73,    -1,
+       3,    -1,     7,    -1,     6,    -1,     4,    -1,     5,    -1,
+       8,    -1,     9,    -1,    17,    71,    18,    -1,    59,    17,
+      71,    18,    -1,    60,    17,    71,    19,    71,    18,    -1,
+      52,    17,    71,    18,    -1,    58,    17,    71,    18,    -1,
+      57,    17,    71,    18,    -1,    56,    17,    71,    18,    -1,
+      62,    17,    71,    18,    -1,    61,    17,    71,    18,    -1,
+      55,    17,    71,    18,    -1,    54,    17,    71,    18,    -1,
+      53,    17,    71,    18,    -1,    34,    71,    -1,    10,    -1,
+      11,    -1,    12,    -1,    13,    -1,    14,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   126,   126,   137,   138,   141,   142,   149,   151,   152,
-     155,   162,   163,   164,   165,   166,   167,   168,   169,   170,
-     171,   172,   173,   174,   177,   178,   179,   180,   181,   184,
-     185,   186,   187,   188,   189,   190,   191,   192,   193,   194,
-     195,   196,   197,   198,   199,   200,   262,   263,   264,   265,
-     266
+       0,   142,   142,   153,   154,   157,   158,   159,   166,   168,
+     169,   172,   179,   180,   181,   182,   183,   184,   185,   186,
+     187,   188,   189,   190,   191,   194,   195,   196,   197,   198,
+     201,   202,   203,   204,   205,   206,   207,   208,   209,   210,
+     211,   212,   213,   214,   215,   216,   217,   218,   219,   223,
+     285,   286,   287,   288,   289
 };
 #endif
 
@@ -613,7 +630,7 @@ static const char *const yytname[] =
   "MOD", "DIV", "DIVOP", "MULOP", "MINOP", "ADDOP", "SQRT", "TAN", "SIN",
   "COS", "LN", "LOG", "EXP", "ABS", "POW", "CEIL", "FLOOR", "NOT",
   "$accept", "program", "stmts", "stmt", "declaration", "comment",
-  "assignexpr", "expr", "factor", "term", "type", 0
+  "assignexpr", "expr", "factor", "term", "write", "type", 0
 };
 #endif
 
@@ -635,23 +652,23 @@ static const yytype_uint16 yytoknum[] =
 /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,    64,    65,    66,    66,    67,    67,    68,    69,    69,
-      70,    71,    71,    71,    71,    71,    71,    71,    71,    71,
-      71,    71,    71,    71,    72,    72,    72,    72,    72,    73,
+       0,    64,    65,    66,    66,    67,    67,    67,    68,    69,
+      69,    70,    71,    71,    71,    71,    71,    71,    71,    71,
+      71,    71,    71,    71,    71,    72,    72,    72,    72,    72,
       73,    73,    73,    73,    73,    73,    73,    73,    73,    73,
-      73,    73,    73,    73,    73,    73,    74,    74,    74,    74,
-      74
+      73,    73,    73,    73,    73,    73,    73,    73,    73,    74,
+      75,    75,    75,    75,    75
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     3,     3,     4,     1,     1,     4,     0,     1,
-       3,     1,     3,     3,     2,     3,     3,     3,     3,     3,
-       3,     3,     3,     2,     1,     3,     3,     3,     3,     1,
-       1,     1,     1,     1,     3,     4,     6,     4,     4,     4,
-       4,     4,     4,     4,     4,     4,     1,     1,     1,     1,
-       1
+       0,     2,     3,     3,     4,     1,     1,     1,     4,     0,
+       1,     3,     1,     3,     3,     2,     3,     3,     3,     3,
+       3,     3,     3,     3,     2,     1,     3,     3,     3,     3,
+       1,     1,     1,     1,     1,     1,     1,     3,     4,     6,
+       4,     4,     4,     4,     4,     4,     4,     4,     4,     2,
+       1,     1,     1,     1,     1
 };
 
 /* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
@@ -659,51 +676,51 @@ static const yytype_uint8 yyr2[] =
    means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       0,     8,     0,     9,     8,     0,     1,     2,     0,     0,
-       0,     0,     6,     5,     0,     0,     0,     3,     4,    29,
-      32,    33,    31,    30,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,    10,    11,
-      24,     0,     0,    14,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,    23,     0,     0,     0,     0,
+       0,     9,     0,    10,     9,     0,     1,     2,     0,     0,
+       0,     0,     0,     6,     5,     7,     0,     0,     0,    30,
+      33,    34,    32,    31,    35,    36,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-      46,    47,    48,    49,    50,     7,    34,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,    22,    21,
-      20,    19,    17,    18,    15,    16,    13,    12,    28,    27,
-      26,    25,    37,    45,    44,    43,    40,    39,    38,    35,
-       0,    42,    41,     0,    36
+      49,    12,    25,     3,     4,    11,     0,     0,    15,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+      24,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,    50,    51,    52,    53,    54,
+       8,    37,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,    23,    22,    21,    20,    18,    19,    16,
+      17,    14,    13,    29,    28,    27,    26,    40,    48,    47,
+      46,    43,    42,    41,    38,     0,    45,    44,     0,    39
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     2,     4,    11,    12,     5,    13,    38,    39,    40,
-      75
+      -1,     2,     4,    12,    13,     5,    14,    40,    41,    42,
+      15,    80
 };
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
-#define YYPACT_NINF -25
+#define YYPACT_NINF -28
 static const yytype_int16 yypact[] =
 {
-     -14,    -4,    35,   -25,    -6,     4,   -25,   -25,     4,    -9,
-      44,    46,   -25,   -25,    57,    -2,    63,   -25,   -25,   -25,
-     -25,   -25,   -25,   -25,    -2,    59,    66,    67,    68,    74,
-      75,    76,    77,    87,    88,    89,    90,    59,   262,   -15,
-     -25,    -1,    31,   -15,    -2,    -2,    -2,    -2,    -2,    -2,
-      -2,    -2,    -2,    -2,    -2,   -15,    59,    59,    59,    59,
-      59,    59,    59,    59,    59,    59,    59,    59,    59,    59,
-     -25,   -25,   -25,   -25,   -25,   -25,   -25,    85,   112,   127,
-     142,   157,   172,   187,   202,    58,   217,   232,   -15,   -15,
-     -15,   -15,   -15,   -15,   -15,   -15,   -15,   -15,   -25,   -25,
-     -25,   -25,   -25,   -25,   -25,   -25,   -25,   -25,   -25,   -25,
-      -2,   -25,   -25,   247,   -25
+      -9,   -10,    14,   -28,   -12,     9,   -28,   -28,     9,   -22,
+      28,    -2,    42,   -28,   -28,   -28,    57,    -2,    33,   -28,
+     -28,   -28,   -28,   -28,   -28,   -28,    -2,    13,    47,    60,
+      62,    72,    73,    74,    75,    78,    79,    80,    82,    13,
+     275,    56,   -28,   -28,   -28,   275,    15,    83,    56,    -2,
+      -2,    -2,    -2,    -2,    -2,    -2,    -2,    -2,    -2,    -2,
+      56,    13,    13,    13,    13,    13,    13,    13,    13,    13,
+      13,    13,    13,    13,    13,   -28,   -28,   -28,   -28,   -28,
+     -28,   -28,   110,   125,   140,   155,   170,   185,   200,   215,
+      43,   230,   245,    56,    56,    56,    56,    56,    56,    56,
+      56,    56,    56,   -28,   -28,   -28,   -28,   -28,   -28,   -28,
+     -28,   -28,   -28,   -28,   -28,    -2,   -28,   -28,   260,   -28
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -25,   -25,   -25,    72,   -25,   106,   -25,   -24,   -19,    21,
-     -25
+     -28,   -28,   -28,    92,   -28,   102,   -28,   -17,    49,   -27,
+     -28,   -28
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -713,74 +730,76 @@ static const yytype_int8 yypgoto[] =
 #define YYTABLE_NINF -1
 static const yytype_uint8 yytable[] =
 {
-      42,    19,    20,    21,    22,    23,    43,     9,     1,    70,
-      71,    72,    73,    74,     3,    24,     3,     7,    55,    10,
-      77,    78,    79,    80,    81,    82,    83,    84,    85,    86,
-      87,    66,    67,    68,    69,     6,    15,    88,    89,    90,
-      91,    92,    93,    94,    95,    96,    97,    16,    25,    76,
-      26,    27,    28,    29,    30,    31,    32,    33,    34,    35,
-      36,    37,    19,    20,    21,    22,    23,    17,    56,    57,
-      58,    59,    60,    61,    62,    63,    24,   110,    18,    41,
-      14,    64,    65,    44,    45,    46,   113,    98,    99,   100,
-     101,    47,    48,    49,    50,    56,    57,    58,    59,    60,
-      61,    62,    63,   102,    51,    52,    53,    54,    64,    65,
-       8,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-      35,    36,    56,    57,    58,    59,    60,    61,    62,    63,
-     103,     0,     0,     0,     0,    64,    65,     0,     0,     0,
-       0,     0,     0,     0,     0,   104,     0,     0,     0,    56,
-      57,    58,    59,    60,    61,    62,    63,     0,     0,     0,
-     105,     0,    64,    65,    56,    57,    58,    59,    60,    61,
-      62,    63,     0,     0,     0,   106,     0,    64,    65,    56,
-      57,    58,    59,    60,    61,    62,    63,     0,     0,     0,
-     107,     0,    64,    65,    56,    57,    58,    59,    60,    61,
-      62,    63,     0,     0,     0,   108,     0,    64,    65,    56,
-      57,    58,    59,    60,    61,    62,    63,     0,     0,     0,
-     109,     0,    64,    65,    56,    57,    58,    59,    60,    61,
-      62,    63,     0,     0,     0,   111,     0,    64,    65,    56,
-      57,    58,    59,    60,    61,    62,    63,     0,     0,     0,
-     112,     0,    64,    65,    56,    57,    58,    59,    60,    61,
-      62,    63,     0,     0,     0,   114,     0,    64,    65,    56,
-      57,    58,    59,    60,    61,    62,    63,     0,     0,     0,
-       0,     0,    64,    65,    56,    57,    58,    59,    60,    61,
-      62,    63,     0,     0,     0,     0,     0,    64,    65,    56,
-      57,    58,    59,    60,    61,    62,    63,     0,     0,     0,
-       0,     0,    64,    65
+      45,    19,    20,    21,    22,    23,    24,    25,     3,    47,
+       3,     7,     9,     1,     6,    26,    19,    20,    21,    22,
+      23,    24,    25,    17,    10,    75,    76,    77,    78,    79,
+      26,    18,    82,    83,    84,    85,    86,    87,    88,    89,
+      90,    91,    92,    11,   103,   104,   105,   106,    27,    46,
+      28,    29,    30,    31,    32,    33,    34,    35,    36,    37,
+      38,    39,   115,    43,    49,    28,    29,    30,    31,    32,
+      33,    34,    35,    36,    37,    38,    48,    50,    44,    51,
+      61,    62,    63,    64,    65,    66,    67,    68,    60,    52,
+      53,    54,    55,    69,    70,    56,    57,    58,   118,    59,
+      16,    81,    71,    72,    73,    74,     8,     0,     0,     0,
+      93,    94,    95,    96,    97,    98,    99,   100,   101,   102,
+      61,    62,    63,    64,    65,    66,    67,    68,   107,     0,
+       0,     0,     0,    69,    70,     0,     0,     0,     0,     0,
+       0,     0,     0,   108,     0,     0,     0,    61,    62,    63,
+      64,    65,    66,    67,    68,     0,     0,     0,   109,     0,
+      69,    70,    61,    62,    63,    64,    65,    66,    67,    68,
+       0,     0,     0,   110,     0,    69,    70,    61,    62,    63,
+      64,    65,    66,    67,    68,     0,     0,     0,   111,     0,
+      69,    70,    61,    62,    63,    64,    65,    66,    67,    68,
+       0,     0,     0,   112,     0,    69,    70,    61,    62,    63,
+      64,    65,    66,    67,    68,     0,     0,     0,   113,     0,
+      69,    70,    61,    62,    63,    64,    65,    66,    67,    68,
+       0,     0,     0,   114,     0,    69,    70,    61,    62,    63,
+      64,    65,    66,    67,    68,     0,     0,     0,   116,     0,
+      69,    70,    61,    62,    63,    64,    65,    66,    67,    68,
+       0,     0,     0,   117,     0,    69,    70,    61,    62,    63,
+      64,    65,    66,    67,    68,     0,     0,     0,   119,     0,
+      69,    70,    61,    62,    63,    64,    65,    66,    67,    68,
+       0,     0,     0,     0,     0,    69,    70,    61,    62,    63,
+      64,    65,    66,    67,    68,     0,     0,     0,     0,     0,
+      69,    70,    61,    62,    63,    64,    65,    66,    67,    68,
+       0,     0,     0,     0,     0,    69,    70
 };
 
 static const yytype_int8 yycheck[] =
 {
-      24,     3,     4,     5,     6,     7,    25,     3,    22,    10,
-      11,    12,    13,    14,    20,    17,    20,    23,    37,    15,
-      44,    45,    46,    47,    48,    49,    50,    51,    52,    53,
-      54,    46,    47,    48,    49,     0,    45,    56,    57,    58,
-      59,    60,    61,    62,    63,    64,    65,     3,    50,    18,
+      17,     3,     4,     5,     6,     7,     8,     9,    20,    26,
+      20,    23,     3,    22,     0,    17,     3,     4,     5,     6,
+       7,     8,     9,    45,    15,    10,    11,    12,    13,    14,
+      17,     3,    49,    50,    51,    52,    53,    54,    55,    56,
+      57,    58,    59,    34,    71,    72,    73,    74,    50,    16,
       52,    53,    54,    55,    56,    57,    58,    59,    60,    61,
-      62,    63,     3,     4,     5,     6,     7,    21,    37,    38,
-      39,    40,    41,    42,    43,    44,    17,    19,    21,    16,
-       8,    50,    51,    17,    17,    17,   110,    66,    67,    68,
-      69,    17,    17,    17,    17,    37,    38,    39,    40,    41,
-      42,    43,    44,    18,    17,    17,    17,    17,    50,    51,
-       4,    52,    53,    54,    55,    56,    57,    58,    59,    60,
-      61,    62,    37,    38,    39,    40,    41,    42,    43,    44,
-      18,    -1,    -1,    -1,    -1,    50,    51,    -1,    -1,    -1,
-      -1,    -1,    -1,    -1,    -1,    18,    -1,    -1,    -1,    37,
-      38,    39,    40,    41,    42,    43,    44,    -1,    -1,    -1,
-      18,    -1,    50,    51,    37,    38,    39,    40,    41,    42,
-      43,    44,    -1,    -1,    -1,    18,    -1,    50,    51,    37,
-      38,    39,    40,    41,    42,    43,    44,    -1,    -1,    -1,
-      18,    -1,    50,    51,    37,    38,    39,    40,    41,    42,
-      43,    44,    -1,    -1,    -1,    18,    -1,    50,    51,    37,
-      38,    39,    40,    41,    42,    43,    44,    -1,    -1,    -1,
-      18,    -1,    50,    51,    37,    38,    39,    40,    41,    42,
-      43,    44,    -1,    -1,    -1,    18,    -1,    50,    51,    37,
-      38,    39,    40,    41,    42,    43,    44,    -1,    -1,    -1,
-      18,    -1,    50,    51,    37,    38,    39,    40,    41,    42,
-      43,    44,    -1,    -1,    -1,    18,    -1,    50,    51,    37,
-      38,    39,    40,    41,    42,    43,    44,    -1,    -1,    -1,
-      -1,    -1,    50,    51,    37,    38,    39,    40,    41,    42,
-      43,    44,    -1,    -1,    -1,    -1,    -1,    50,    51,    37,
-      38,    39,    40,    41,    42,    43,    44,    -1,    -1,    -1,
-      -1,    -1,    50,    51
+      62,    63,    19,    21,    17,    52,    53,    54,    55,    56,
+      57,    58,    59,    60,    61,    62,    27,    17,    21,    17,
+      37,    38,    39,    40,    41,    42,    43,    44,    39,    17,
+      17,    17,    17,    50,    51,    17,    17,    17,   115,    17,
+       8,    18,    46,    47,    48,    49,     4,    -1,    -1,    -1,
+      61,    62,    63,    64,    65,    66,    67,    68,    69,    70,
+      37,    38,    39,    40,    41,    42,    43,    44,    18,    -1,
+      -1,    -1,    -1,    50,    51,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    18,    -1,    -1,    -1,    37,    38,    39,
+      40,    41,    42,    43,    44,    -1,    -1,    -1,    18,    -1,
+      50,    51,    37,    38,    39,    40,    41,    42,    43,    44,
+      -1,    -1,    -1,    18,    -1,    50,    51,    37,    38,    39,
+      40,    41,    42,    43,    44,    -1,    -1,    -1,    18,    -1,
+      50,    51,    37,    38,    39,    40,    41,    42,    43,    44,
+      -1,    -1,    -1,    18,    -1,    50,    51,    37,    38,    39,
+      40,    41,    42,    43,    44,    -1,    -1,    -1,    18,    -1,
+      50,    51,    37,    38,    39,    40,    41,    42,    43,    44,
+      -1,    -1,    -1,    18,    -1,    50,    51,    37,    38,    39,
+      40,    41,    42,    43,    44,    -1,    -1,    -1,    18,    -1,
+      50,    51,    37,    38,    39,    40,    41,    42,    43,    44,
+      -1,    -1,    -1,    18,    -1,    50,    51,    37,    38,    39,
+      40,    41,    42,    43,    44,    -1,    -1,    -1,    18,    -1,
+      50,    51,    37,    38,    39,    40,    41,    42,    43,    44,
+      -1,    -1,    -1,    -1,    -1,    50,    51,    37,    38,    39,
+      40,    41,    42,    43,    44,    -1,    -1,    -1,    -1,    -1,
+      50,    51,    37,    38,    39,    40,    41,    42,    43,    44,
+      -1,    -1,    -1,    -1,    -1,    50,    51
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -788,17 +807,17 @@ static const yytype_int8 yycheck[] =
 static const yytype_uint8 yystos[] =
 {
        0,    22,    65,    20,    66,    69,     0,    23,    69,     3,
-      15,    67,    68,    70,    67,    45,     3,    21,    21,     3,
-       4,     5,     6,     7,    17,    50,    52,    53,    54,    55,
-      56,    57,    58,    59,    60,    61,    62,    63,    71,    72,
-      73,    16,    71,    72,    17,    17,    17,    17,    17,    17,
-      17,    17,    17,    17,    17,    72,    37,    38,    39,    40,
-      41,    42,    43,    44,    50,    51,    46,    47,    48,    49,
-      10,    11,    12,    13,    14,    74,    18,    71,    71,    71,
-      71,    71,    71,    71,    71,    71,    71,    71,    72,    72,
-      72,    72,    72,    72,    72,    72,    72,    72,    73,    73,
-      73,    73,    18,    18,    18,    18,    18,    18,    18,    18,
-      19,    18,    18,    71,    18
+      15,    34,    67,    68,    70,    74,    67,    45,     3,     3,
+       4,     5,     6,     7,     8,     9,    17,    50,    52,    53,
+      54,    55,    56,    57,    58,    59,    60,    61,    62,    63,
+      71,    72,    73,    21,    21,    71,    16,    71,    72,    17,
+      17,    17,    17,    17,    17,    17,    17,    17,    17,    17,
+      72,    37,    38,    39,    40,    41,    42,    43,    44,    50,
+      51,    46,    47,    48,    49,    10,    11,    12,    13,    14,
+      75,    18,    71,    71,    71,    71,    71,    71,    71,    71,
+      71,    71,    71,    72,    72,    72,    72,    72,    72,    72,
+      72,    72,    72,    73,    73,    73,    73,    18,    18,    18,
+      18,    18,    18,    18,    18,    19,    18,    18,    71,    18
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1609,304 +1628,325 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 7:
+        case 8:
 
 /* Line 1455 of yacc.c  */
-#line 149 "yacc2.y"
-    { printf("curr_scope = %d\n", curr_scope); install((yyvsp[(2) - (4)].id), (yyvsp[(4) - (4)].intval), 0, 0, 0, curr_scope); printf("DECLARATION %s, %d \n", (yyvsp[(2) - (4)].id), (yyvsp[(4) - (4)].intval));;}
-    break;
-
-  case 10:
-
-/* Line 1455 of yacc.c  */
-#line 155 "yacc2.y"
-    { context_check((yyvsp[(1) - (3)].id), curr_scope); if((yyvsp[(3) - (3)].val).type == INT_TYPE) {if(get_type((yyvsp[(1) - (3)].id), curr_scope) == INT_TYPE) { set_int_value((yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].val).ival, curr_scope); } else if(get_type((yyvsp[(1) - (3)].id), curr_scope) == REAL_TYPE) {set_real_value((yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].val).rval, curr_scope);} else {yyerror("Error assignment: bad type"); exit(1);}} else if((yyvsp[(3) - (3)].val).type == REAL_TYPE) {check_type((yyvsp[(1) - (3)].id), REAL_TYPE, curr_scope); set_real_value((yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].val).rval, curr_scope);} else if((yyvsp[(3) - (3)].val).type == BOOL_TYPE) {check_type((yyvsp[(1) - (3)].id), BOOL_TYPE, curr_scope); set_bool_value((yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].val).bval, curr_scope);} printf("ASSIGNED TO ID %s BOOL = %d\n",(yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].val).bval); ;}
+#line 166 "yacc2.y"
+    { printf("curr_scope = %d\n", curr_scope); install((yyvsp[(2) - (4)].id), (yyvsp[(4) - (4)].intval), 0, 0, 0, "N", "null", curr_scope); printf("DECLARATION %s, %d \n", (yyvsp[(2) - (4)].id), (yyvsp[(4) - (4)].intval));;}
     break;
 
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 162 "yacc2.y"
-    {(yyval.val).type = (yyvsp[(1) - (1)].val).type;  if((yyvsp[(1) - (1)].val).type == INT_TYPE) {(yyval.val).ival = (yyvsp[(1) - (1)].val).ival;} else if((yyvsp[(1) - (1)].val).type == REAL_TYPE) {(yyval.val).rval = (yyvsp[(1) - (1)].val).rval;} else if((yyvsp[(1) - (1)].val).type == BOOL_TYPE) {(yyval.val).bval = (yyvsp[(1) - (1)].val).bval;} ;}
+#line 172 "yacc2.y"
+    { context_check((yyvsp[(1) - (3)].id), curr_scope); if((yyvsp[(3) - (3)].val).type == INT_TYPE) {if(get_type((yyvsp[(1) - (3)].id), curr_scope) == INT_TYPE) { set_int_value((yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].val).ival, curr_scope); } else if(get_type((yyvsp[(1) - (3)].id), curr_scope) == REAL_TYPE) {set_real_value((yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].val).rval, curr_scope);} else {yyerror("Error assignment: bad type"); exit(1);}} else if((yyvsp[(3) - (3)].val).type == REAL_TYPE) {check_type((yyvsp[(1) - (3)].id), REAL_TYPE, curr_scope); set_real_value((yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].val).rval, curr_scope);} else if((yyvsp[(3) - (3)].val).type == BOOL_TYPE) {check_type((yyvsp[(1) - (3)].id), BOOL_TYPE, curr_scope); set_bool_value((yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].val).bval, curr_scope);} else if((yyvsp[(3) - (3)].val).type == CHAR_TYPE) {check_type((yyvsp[(1) - (3)].id), CHAR_TYPE, curr_scope); set_char_value((yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].val).cval, curr_scope);} else if((yyvsp[(3) - (3)].val).type == STRING_TYPE) {check_type((yyvsp[(1) - (3)].id), STRING_TYPE, curr_scope); set_string_value((yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].val).sval, curr_scope);} printf("ASSIGNED TO ID %s\n",(yyvsp[(1) - (3)].id)); ;}
     break;
 
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 163 "yacc2.y"
-    { if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = INT_TYPE; (yyval.val).ival = (yyvsp[(1) - (3)].val).ival+(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (yyvsp[(1) - (3)].val).rval+(float)(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (float)(yyvsp[(1) - (3)].val).ival+(yyvsp[(3) - (3)].val).rval;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (yyvsp[(1) - (3)].val).rval+(yyvsp[(3) - (3)].val).rval;} else { yyerror("Must add numbers"); exit(1);} ;}
+#line 179 "yacc2.y"
+    {(yyval.val).type = (yyvsp[(1) - (1)].val).type;  if((yyvsp[(1) - (1)].val).type == INT_TYPE) {(yyval.val).ival = (yyvsp[(1) - (1)].val).ival;} else if((yyvsp[(1) - (1)].val).type == REAL_TYPE) {(yyval.val).rval = (yyvsp[(1) - (1)].val).rval;} else if((yyvsp[(1) - (1)].val).type == BOOL_TYPE) {(yyval.val).bval = (yyvsp[(1) - (1)].val).bval;} else if((yyvsp[(1) - (1)].val).type == CHAR_TYPE) {(yyval.val).cval = (yyvsp[(1) - (1)].val).cval;} else if((yyvsp[(1) - (1)].val).type == STRING_TYPE) {(yyval.val).sval = (yyvsp[(1) - (1)].val).sval;};}
     break;
 
   case 13:
 
 /* Line 1455 of yacc.c  */
-#line 164 "yacc2.y"
-    { if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = INT_TYPE; (yyval.val).ival = (yyvsp[(1) - (3)].val).ival-(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (yyvsp[(1) - (3)].val).rval-(float)(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (float)(yyvsp[(1) - (3)].val).ival-(yyvsp[(3) - (3)].val).rval;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (yyvsp[(1) - (3)].val).rval-(yyvsp[(3) - (3)].val).rval;} else { yyerror("Must substract numbers"); exit(1);} ;}
+#line 180 "yacc2.y"
+    { if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = INT_TYPE; (yyval.val).ival = (yyvsp[(1) - (3)].val).ival+(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (yyvsp[(1) - (3)].val).rval+(float)(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (float)(yyvsp[(1) - (3)].val).ival+(yyvsp[(3) - (3)].val).rval;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (yyvsp[(1) - (3)].val).rval+(yyvsp[(3) - (3)].val).rval;} else { yyerror("Must add numbers"); exit(1);} ;}
     break;
 
   case 14:
 
 /* Line 1455 of yacc.c  */
-#line 165 "yacc2.y"
-    { (yyval.val).type = (yyvsp[(2) - (2)].val).type; if((yyvsp[(2) - (2)].val).type == INT_TYPE) {(yyval.val).ival = -(yyvsp[(2) - (2)].val).ival;} else if((yyvsp[(2) - (2)].val).type == REAL_TYPE) {(yyval.val).rval = -(yyvsp[(2) - (2)].val).rval;} else {yyerror("- must be on number only"); exit(1);} ;}
+#line 181 "yacc2.y"
+    { if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = INT_TYPE; (yyval.val).ival = (yyvsp[(1) - (3)].val).ival-(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (yyvsp[(1) - (3)].val).rval-(float)(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (float)(yyvsp[(1) - (3)].val).ival-(yyvsp[(3) - (3)].val).rval;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (yyvsp[(1) - (3)].val).rval-(yyvsp[(3) - (3)].val).rval;} else { yyerror("Must substract numbers"); exit(1);} ;}
     break;
 
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 166 "yacc2.y"
-    { (yyval.val).type = BOOL_TYPE; if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival >= (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval >= (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival >= (yyvsp[(3) - (3)].val).rval; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval >= (yyvsp[(3) - (3)].val).rval; } else {yyerror("Must make boolean op on numbers"); exit(1);};}
+#line 182 "yacc2.y"
+    { (yyval.val).type = (yyvsp[(2) - (2)].val).type; if((yyvsp[(2) - (2)].val).type == INT_TYPE) {(yyval.val).ival = -(yyvsp[(2) - (2)].val).ival;} else if((yyvsp[(2) - (2)].val).type == REAL_TYPE) {(yyval.val).rval = -(yyvsp[(2) - (2)].val).rval;} else {yyerror("- must be on number only"); exit(1);} ;}
     break;
 
   case 16:
 
 /* Line 1455 of yacc.c  */
-#line 167 "yacc2.y"
-    { (yyval.val).type = BOOL_TYPE; if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival <= (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval <= (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival <= (yyvsp[(3) - (3)].val).rval; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval <= (yyvsp[(3) - (3)].val).rval; } else {yyerror("Must make boolean op on numbers"); exit(1);};}
+#line 183 "yacc2.y"
+    { (yyval.val).type = BOOL_TYPE; if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival >= (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval >= (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival >= (yyvsp[(3) - (3)].val).rval; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval >= (yyvsp[(3) - (3)].val).rval; } else {yyerror("Must make boolean op on numbers"); exit(1);};}
     break;
 
   case 17:
 
 /* Line 1455 of yacc.c  */
-#line 168 "yacc2.y"
-    { (yyval.val).type = BOOL_TYPE; if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival > (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval > (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival > (yyvsp[(3) - (3)].val).rval; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval > (yyvsp[(3) - (3)].val).rval; } else {yyerror("Must make boolean op on numbers"); exit(1);};}
+#line 184 "yacc2.y"
+    { (yyval.val).type = BOOL_TYPE; if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival <= (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval <= (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival <= (yyvsp[(3) - (3)].val).rval; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval <= (yyvsp[(3) - (3)].val).rval; } else {yyerror("Must make boolean op on numbers"); exit(1);};}
     break;
 
   case 18:
 
 /* Line 1455 of yacc.c  */
-#line 169 "yacc2.y"
-    { (yyval.val).type = BOOL_TYPE; if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival < (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval < (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival < (yyvsp[(3) - (3)].val).rval; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval < (yyvsp[(3) - (3)].val).rval; } else {yyerror("Must make boolean op on numbers"); exit(1);};}
+#line 185 "yacc2.y"
+    { (yyval.val).type = BOOL_TYPE; if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival > (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval > (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival > (yyvsp[(3) - (3)].val).rval; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval > (yyvsp[(3) - (3)].val).rval; } else {yyerror("Must make boolean op on numbers"); exit(1);};}
     break;
 
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 170 "yacc2.y"
-    { (yyval.val).type = BOOL_TYPE; if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival == (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval == (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival == (yyvsp[(3) - (3)].val).rval; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval == (yyvsp[(3) - (3)].val).rval; } else {yyerror("Must make boolean op on numbers"); exit(1);};}
+#line 186 "yacc2.y"
+    { (yyval.val).type = BOOL_TYPE; if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival < (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval < (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival < (yyvsp[(3) - (3)].val).rval; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval < (yyvsp[(3) - (3)].val).rval; } else {yyerror("Must make boolean op on numbers"); exit(1);};}
     break;
 
   case 20:
 
 /* Line 1455 of yacc.c  */
-#line 171 "yacc2.y"
-    { (yyval.val).type = BOOL_TYPE; if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival != (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval != (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival != (yyvsp[(3) - (3)].val).rval; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval != (yyvsp[(3) - (3)].val).rval; } else {yyerror("Must make boolean op on numbers"); exit(1);};}
+#line 187 "yacc2.y"
+    { (yyval.val).type = BOOL_TYPE; if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival == (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval == (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival == (yyvsp[(3) - (3)].val).rval; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval == (yyvsp[(3) - (3)].val).rval; } else {yyerror("Must make boolean op on numbers"); exit(1);};}
     break;
 
   case 21:
 
 /* Line 1455 of yacc.c  */
-#line 172 "yacc2.y"
-    { (yyval.val).type = BOOL_TYPE; if((yyvsp[(1) - (3)].val).type == BOOL_TYPE && (yyvsp[(3) - (3)].val).type == BOOL_TYPE) {(yyval.val).bval = (yyvsp[(1) - (3)].val).bval && (yyvsp[(3) - (3)].val).bval;} else {yyerror("Must make AND operation on boolean");};}
+#line 188 "yacc2.y"
+    { (yyval.val).type = BOOL_TYPE; if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival != (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval != (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival != (yyvsp[(3) - (3)].val).rval; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval != (yyvsp[(3) - (3)].val).rval; } else {yyerror("Must make boolean op on numbers"); exit(1);};}
     break;
 
   case 22:
 
 /* Line 1455 of yacc.c  */
-#line 173 "yacc2.y"
-    { (yyval.val).type = BOOL_TYPE; if((yyvsp[(1) - (3)].val).type == BOOL_TYPE && (yyvsp[(3) - (3)].val).type == BOOL_TYPE) {(yyval.val).bval = (yyvsp[(1) - (3)].val).bval || (yyvsp[(3) - (3)].val).bval;} else {yyerror("Must make OR operation on boolean");};}
+#line 189 "yacc2.y"
+    { (yyval.val).type = BOOL_TYPE; if((yyvsp[(1) - (3)].val).type == BOOL_TYPE && (yyvsp[(3) - (3)].val).type == BOOL_TYPE) {(yyval.val).bval = (yyvsp[(1) - (3)].val).bval && (yyvsp[(3) - (3)].val).bval;} else {yyerror("Must make AND operation on boolean");};}
     break;
 
   case 23:
 
 /* Line 1455 of yacc.c  */
-#line 174 "yacc2.y"
-    { (yyval.val).type = BOOL_TYPE; if((yyvsp[(2) - (2)].val).type == BOOL_TYPE) {(yyval.val).bval = (!(yyvsp[(2) - (2)].val).bval); } else {yyerror("Must make NOT operation on boolean");};}
+#line 190 "yacc2.y"
+    { (yyval.val).type = BOOL_TYPE; if((yyvsp[(1) - (3)].val).type == BOOL_TYPE && (yyvsp[(3) - (3)].val).type == BOOL_TYPE) {(yyval.val).bval = (yyvsp[(1) - (3)].val).bval || (yyvsp[(3) - (3)].val).bval;} else {yyerror("Must make OR operation on boolean");};}
     break;
 
   case 24:
 
 /* Line 1455 of yacc.c  */
-#line 177 "yacc2.y"
-    {(yyval.val).type = (yyvsp[(1) - (1)].val).type;  if((yyvsp[(1) - (1)].val).type == INT_TYPE) {(yyval.val).ival = (yyvsp[(1) - (1)].val).ival;} else if((yyvsp[(1) - (1)].val).type == REAL_TYPE) {(yyval.val).rval = (yyvsp[(1) - (1)].val).rval;} else if((yyvsp[(1) - (1)].val).type == BOOL_TYPE) {(yyval.val).bval = (yyvsp[(1) - (1)].val).bval;} ;}
+#line 191 "yacc2.y"
+    { (yyval.val).type = BOOL_TYPE; if((yyvsp[(2) - (2)].val).type == BOOL_TYPE) {(yyval.val).bval = (!(yyvsp[(2) - (2)].val).bval); } else {yyerror("Must make NOT operation on boolean");};}
     break;
 
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 178 "yacc2.y"
-    { if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = INT_TYPE; (yyval.val).ival = (yyvsp[(1) - (3)].val).ival*(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (yyvsp[(1) - (3)].val).rval*(float)(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (float)(yyvsp[(1) - (3)].val).ival*(yyvsp[(3) - (3)].val).rval;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (yyvsp[(1) - (3)].val).rval*(yyvsp[(3) - (3)].val).rval;} else { yyerror("Must multiply numbers"); exit(1);} ;}
+#line 194 "yacc2.y"
+    {(yyval.val).type = (yyvsp[(1) - (1)].val).type;  if((yyvsp[(1) - (1)].val).type == INT_TYPE) {(yyval.val).ival = (yyvsp[(1) - (1)].val).ival;} else if((yyvsp[(1) - (1)].val).type == REAL_TYPE) {(yyval.val).rval = (yyvsp[(1) - (1)].val).rval;} else if((yyvsp[(1) - (1)].val).type == BOOL_TYPE) {(yyval.val).bval = (yyvsp[(1) - (1)].val).bval;} else if((yyvsp[(1) - (1)].val).type == CHAR_TYPE) {(yyval.val).cval = (yyvsp[(1) - (1)].val).cval;} else if((yyvsp[(1) - (1)].val).type == STRING_TYPE) {(yyval.val).sval = (yyvsp[(1) - (1)].val).sval;} ;}
     break;
 
   case 26:
 
 /* Line 1455 of yacc.c  */
-#line 179 "yacc2.y"
-    { if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = INT_TYPE; (yyval.val).ival = (yyvsp[(1) - (3)].val).ival/(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (yyvsp[(1) - (3)].val).rval/(float)(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (float)(yyvsp[(1) - (3)].val).ival/(yyvsp[(3) - (3)].val).rval;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (float) (yyvsp[(1) - (3)].val).rval/(yyvsp[(3) - (3)].val).rval;} else { yyerror("Must divide numbers"); exit(1);} ;}
+#line 195 "yacc2.y"
+    { if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = INT_TYPE; (yyval.val).ival = (yyvsp[(1) - (3)].val).ival*(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (yyvsp[(1) - (3)].val).rval*(float)(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (float)(yyvsp[(1) - (3)].val).ival*(yyvsp[(3) - (3)].val).rval;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (yyvsp[(1) - (3)].val).rval*(yyvsp[(3) - (3)].val).rval;} else { yyerror("Must multiply numbers"); exit(1);} ;}
     break;
 
   case 27:
 
 /* Line 1455 of yacc.c  */
-#line 180 "yacc2.y"
-    { (yyval.val).type = INT_TYPE; if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).ival = (yyvsp[(1) - (3)].val).ival/(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).ival = (int) (yyvsp[(1) - (3)].val).rval/(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).ival = (int)(yyvsp[(1) - (3)].val).ival/(yyvsp[(3) - (3)].val).rval;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).ival = (int) (yyvsp[(1) - (3)].val).rval/(yyvsp[(3) - (3)].val).rval;} else { yyerror("Must divide numbers"); exit(1);} ;}
+#line 196 "yacc2.y"
+    { if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = INT_TYPE; (yyval.val).ival = (yyvsp[(1) - (3)].val).ival/(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (yyvsp[(1) - (3)].val).rval/(float)(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (float)(yyvsp[(1) - (3)].val).ival/(yyvsp[(3) - (3)].val).rval;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (float) (yyvsp[(1) - (3)].val).rval/(yyvsp[(3) - (3)].val).rval;} else { yyerror("Must divide numbers"); exit(1);} ;}
     break;
 
   case 28:
 
 /* Line 1455 of yacc.c  */
-#line 181 "yacc2.y"
-    { if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = INT_TYPE; (yyval.val).ival = (int)fmod((yyvsp[(1) - (3)].val).ival, (yyvsp[(3) - (3)].val).ival);} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = fmod((yyvsp[(1) - (3)].val).rval, (float)(yyvsp[(3) - (3)].val).ival);} else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = fmod((float)(yyvsp[(1) - (3)].val).ival, (yyvsp[(3) - (3)].val).rval);} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = fmod((yyvsp[(1) - (3)].val).rval, (yyvsp[(3) - (3)].val).rval);} else { yyerror("Must divide numbers"); exit(1);};}
+#line 197 "yacc2.y"
+    { (yyval.val).type = INT_TYPE; if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).ival = (yyvsp[(1) - (3)].val).ival/(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).ival = (int) (yyvsp[(1) - (3)].val).rval/(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).ival = (int)(yyvsp[(1) - (3)].val).ival/(yyvsp[(3) - (3)].val).rval;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).ival = (int) (yyvsp[(1) - (3)].val).rval/(yyvsp[(3) - (3)].val).rval;} else { yyerror("Must divide numbers"); exit(1);} ;}
     break;
 
   case 29:
 
 /* Line 1455 of yacc.c  */
-#line 184 "yacc2.y"
-    { (yyval.val).type = get_type((yyvsp[(1) - (1)].id), curr_scope); if(get_type((yyvsp[(1) - (1)].id), curr_scope) == INT_TYPE) { (yyval.val).ival = get_int_value((yyvsp[(1) - (1)].id), curr_scope);} else if(get_type((yyvsp[(1) - (1)].id), curr_scope) == REAL_TYPE) {(yyval.val).rval = get_real_value((yyvsp[(1) - (1)].id), curr_scope);} else if(get_type((yyvsp[(1) - (1)].id), curr_scope) == BOOL_TYPE) {(yyval.val).bval = get_bool_value((yyvsp[(1) - (1)].id), curr_scope);};}
+#line 198 "yacc2.y"
+    { if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = INT_TYPE; (yyval.val).ival = (int)fmod((yyvsp[(1) - (3)].val).ival, (yyvsp[(3) - (3)].val).ival);} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = fmod((yyvsp[(1) - (3)].val).rval, (float)(yyvsp[(3) - (3)].val).ival);} else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = fmod((float)(yyvsp[(1) - (3)].val).ival, (yyvsp[(3) - (3)].val).rval);} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = fmod((yyvsp[(1) - (3)].val).rval, (yyvsp[(3) - (3)].val).rval);} else { yyerror("Must divide numbers"); exit(1);};}
     break;
 
   case 30:
 
 /* Line 1455 of yacc.c  */
-#line 185 "yacc2.y"
-    {(yyval.val).type = (yyvsp[(1) - (1)].val).type; (yyval.val).ival = (yyvsp[(1) - (1)].val).ival;;}
+#line 201 "yacc2.y"
+    { (yyval.val).type = get_type((yyvsp[(1) - (1)].id), curr_scope); if(get_type((yyvsp[(1) - (1)].id), curr_scope) == INT_TYPE) { (yyval.val).ival = get_int_value((yyvsp[(1) - (1)].id), curr_scope);} else if(get_type((yyvsp[(1) - (1)].id), curr_scope) == REAL_TYPE) {(yyval.val).rval = get_real_value((yyvsp[(1) - (1)].id), curr_scope);} else if(get_type((yyvsp[(1) - (1)].id), curr_scope) == BOOL_TYPE) {(yyval.val).bval = get_bool_value((yyvsp[(1) - (1)].id), curr_scope);} else if(get_type((yyvsp[(1) - (1)].id), curr_scope) == CHAR_TYPE) {(yyval.val).cval = get_char_value((yyvsp[(1) - (1)].id), curr_scope);} else if(get_type((yyvsp[(1) - (1)].id), curr_scope) == STRING_TYPE) {(yyval.val).sval = get_string_value((yyvsp[(1) - (1)].id), curr_scope);};}
     break;
 
   case 31:
 
 /* Line 1455 of yacc.c  */
-#line 186 "yacc2.y"
-    {(yyval.val).type = (yyvsp[(1) - (1)].val).type; (yyval.val).rval = (yyvsp[(1) - (1)].val).rval;;}
+#line 202 "yacc2.y"
+    {(yyval.val).type = (yyvsp[(1) - (1)].val).type; (yyval.val).ival = (yyvsp[(1) - (1)].val).ival;;}
     break;
 
   case 32:
 
 /* Line 1455 of yacc.c  */
-#line 187 "yacc2.y"
-    {(yyval.val).type = (yyvsp[(1) - (1)].val).type; (yyval.val).bval = 1;;}
+#line 203 "yacc2.y"
+    {(yyval.val).type = (yyvsp[(1) - (1)].val).type; (yyval.val).rval = (yyvsp[(1) - (1)].val).rval;;}
     break;
 
   case 33:
 
 /* Line 1455 of yacc.c  */
-#line 188 "yacc2.y"
-    {(yyval.val).type = (yyvsp[(1) - (1)].val).type; (yyval.val).bval = 0;;}
+#line 204 "yacc2.y"
+    {(yyval.val).type = (yyvsp[(1) - (1)].val).type; (yyval.val).bval = 1;;}
     break;
 
   case 34:
 
 /* Line 1455 of yacc.c  */
-#line 189 "yacc2.y"
-    {(yyval.val) = (yyvsp[(2) - (3)].val); ;}
+#line 205 "yacc2.y"
+    {(yyval.val).type = (yyvsp[(1) - (1)].val).type; (yyval.val).bval = 0;;}
     break;
 
   case 35:
 
 /* Line 1455 of yacc.c  */
-#line 190 "yacc2.y"
-    {(yyval.val).type = (yyvsp[(3) - (4)].val).type; if((yyvsp[(3) - (4)].val).type == INT_TYPE) {(yyval.val).ival = (int)abs((yyvsp[(3) - (4)].val).ival);} else if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {(yyval.val).rval = abs((yyvsp[(3) - (4)].val).rval);} ;}
+#line 206 "yacc2.y"
+    {(yyval.val).type = (yyvsp[(1) - (1)].val).type; (yyval.val).cval = (yyvsp[(1) - (1)].val).cval;;}
     break;
 
   case 36:
 
 /* Line 1455 of yacc.c  */
-#line 191 "yacc2.y"
-    { if((yyvsp[(3) - (6)].val).type == INT_TYPE && (yyvsp[(5) - (6)].val).type == INT_TYPE) {(yyval.val).type = INT_TYPE; (yyval.val).ival = pow((yyvsp[(3) - (6)].val).ival, (yyvsp[(5) - (6)].val).ival);} else if((yyvsp[(3) - (6)].val).type == REAL_TYPE && (yyvsp[(5) - (6)].val).type == INT_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = pow((yyvsp[(3) - (6)].val).rval, (float)(yyvsp[(5) - (6)].val).ival);} else if((yyvsp[(3) - (6)].val).type == INT_TYPE && (yyvsp[(5) - (6)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = pow((float)(yyvsp[(3) - (6)].val).ival, (yyvsp[(5) - (6)].val).rval);} else if((yyvsp[(3) - (6)].val).type == REAL_TYPE && (yyvsp[(5) - (6)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = pow((yyvsp[(3) - (6)].val).rval, (yyvsp[(5) - (6)].val).rval);} else { yyerror("Must power numbers"); exit(1);} ;}
+#line 207 "yacc2.y"
+    {(yyval.val).type = (yyvsp[(1) - (1)].val).type; (yyval.val).sval = (yyvsp[(1) - (1)].val).sval;;}
     break;
 
   case 37:
 
 /* Line 1455 of yacc.c  */
-#line 192 "yacc2.y"
-    {(yyval.val).type = (yyvsp[(3) - (4)].val).type; if((yyvsp[(3) - (4)].val).type == INT_TYPE) {if((yyvsp[(3) - (4)].val).ival >= 0) {(yyval.val).ival = (int)sqrt((yyvsp[(3) - (4)].val).ival);}} else if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {if((yyvsp[(3) - (4)].val).rval >= 0) {(yyval.val).rval = sqrt((yyvsp[(3) - (4)].val).rval);}} else{yyerror("Cannot make sqrt on negative number");exit(1);};}
+#line 208 "yacc2.y"
+    {(yyval.val) = (yyvsp[(2) - (3)].val); ;}
     break;
 
   case 38:
 
 /* Line 1455 of yacc.c  */
-#line 193 "yacc2.y"
-    {(yyval.val).type = (yyvsp[(3) - (4)].val).type; if((yyvsp[(3) - (4)].val).type == INT_TYPE) {(yyval.val).ival = (int)exp((yyvsp[(3) - (4)].val).ival);} else if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {(yyval.val).rval = exp((yyvsp[(3) - (4)].val).rval);} ;}
+#line 209 "yacc2.y"
+    {(yyval.val).type = (yyvsp[(3) - (4)].val).type; if((yyvsp[(3) - (4)].val).type == INT_TYPE) {(yyval.val).ival = (int)abs((yyvsp[(3) - (4)].val).ival);} else if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {(yyval.val).rval = abs((yyvsp[(3) - (4)].val).rval);} ;}
     break;
 
   case 39:
 
 /* Line 1455 of yacc.c  */
-#line 194 "yacc2.y"
-    {(yyval.val).type = (yyvsp[(3) - (4)].val).type; if((yyvsp[(3) - (4)].val).type == INT_TYPE) {if((yyvsp[(3) - (4)].val).ival >= 0) {(yyval.val).ival = (int)log10((yyvsp[(3) - (4)].val).ival);}} else if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {if((yyvsp[(3) - (4)].val).rval >= 0) {(yyval.val).rval = log10((yyvsp[(3) - (4)].val).rval);}} else{yyerror("Cannot make log on negative number");exit(1);};}
+#line 210 "yacc2.y"
+    { if((yyvsp[(3) - (6)].val).type == INT_TYPE && (yyvsp[(5) - (6)].val).type == INT_TYPE) {(yyval.val).type = INT_TYPE; (yyval.val).ival = pow((yyvsp[(3) - (6)].val).ival, (yyvsp[(5) - (6)].val).ival);} else if((yyvsp[(3) - (6)].val).type == REAL_TYPE && (yyvsp[(5) - (6)].val).type == INT_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = pow((yyvsp[(3) - (6)].val).rval, (float)(yyvsp[(5) - (6)].val).ival);} else if((yyvsp[(3) - (6)].val).type == INT_TYPE && (yyvsp[(5) - (6)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = pow((float)(yyvsp[(3) - (6)].val).ival, (yyvsp[(5) - (6)].val).rval);} else if((yyvsp[(3) - (6)].val).type == REAL_TYPE && (yyvsp[(5) - (6)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = pow((yyvsp[(3) - (6)].val).rval, (yyvsp[(5) - (6)].val).rval);} else { yyerror("Must power numbers"); exit(1);} ;}
     break;
 
   case 40:
 
 /* Line 1455 of yacc.c  */
-#line 195 "yacc2.y"
-    {(yyval.val).type = (yyvsp[(3) - (4)].val).type; if((yyvsp[(3) - (4)].val).type == INT_TYPE) {if((yyvsp[(3) - (4)].val).ival >= 0) {(yyval.val).ival = (int)log((yyvsp[(3) - (4)].val).ival);}} else if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {if((yyvsp[(3) - (4)].val).rval >= 0) {(yyval.val).rval = log((yyvsp[(3) - (4)].val).rval);}} else{yyerror("Cannot make ln on negative number");exit(1);};}
+#line 211 "yacc2.y"
+    {(yyval.val).type = (yyvsp[(3) - (4)].val).type; if((yyvsp[(3) - (4)].val).type == INT_TYPE) {if((yyvsp[(3) - (4)].val).ival >= 0) {(yyval.val).ival = (int)sqrt((yyvsp[(3) - (4)].val).ival);}} else if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {if((yyvsp[(3) - (4)].val).rval >= 0) {(yyval.val).rval = sqrt((yyvsp[(3) - (4)].val).rval);}} else{yyerror("Cannot make sqrt on negative number");exit(1);};}
     break;
 
   case 41:
 
 /* Line 1455 of yacc.c  */
-#line 196 "yacc2.y"
-    {(yyval.val).type = INT_TYPE; if((yyvsp[(3) - (4)].val).type == INT_TYPE) {(yyval.val).ival = (yyvsp[(3) - (4)].val).ival;} else if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {(yyval.val).ival = (int)floor((yyvsp[(3) - (4)].val).rval);} else {yyerror("Must floor on number");} ;}
+#line 212 "yacc2.y"
+    {(yyval.val).type = (yyvsp[(3) - (4)].val).type; if((yyvsp[(3) - (4)].val).type == INT_TYPE) {(yyval.val).ival = (int)exp((yyvsp[(3) - (4)].val).ival);} else if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {(yyval.val).rval = exp((yyvsp[(3) - (4)].val).rval);} ;}
     break;
 
   case 42:
 
 /* Line 1455 of yacc.c  */
-#line 197 "yacc2.y"
-    {(yyval.val).type = INT_TYPE; if((yyvsp[(3) - (4)].val).type == INT_TYPE) {(yyval.val).ival = (yyvsp[(3) - (4)].val).ival;} else if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {(yyval.val).ival = (int)ceil((yyvsp[(3) - (4)].val).rval);} else {yyerror("Must ceil on number");} ;}
+#line 213 "yacc2.y"
+    {(yyval.val).type = (yyvsp[(3) - (4)].val).type; if((yyvsp[(3) - (4)].val).type == INT_TYPE) {if((yyvsp[(3) - (4)].val).ival >= 0) {(yyval.val).ival = (int)log10((yyvsp[(3) - (4)].val).ival);}} else if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {if((yyvsp[(3) - (4)].val).rval >= 0) {(yyval.val).rval = log10((yyvsp[(3) - (4)].val).rval);}} else{yyerror("Cannot make log on negative number");exit(1);};}
     break;
 
   case 43:
 
 /* Line 1455 of yacc.c  */
-#line 198 "yacc2.y"
-    {(yyval.val).type = REAL_TYPE; if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {(yyval.val).rval = cos((yyvsp[(3) - (4)].val).rval);} else {yyerror("Must make cos on real");};}
+#line 214 "yacc2.y"
+    {(yyval.val).type = (yyvsp[(3) - (4)].val).type; if((yyvsp[(3) - (4)].val).type == INT_TYPE) {if((yyvsp[(3) - (4)].val).ival >= 0) {(yyval.val).ival = (int)log((yyvsp[(3) - (4)].val).ival);}} else if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {if((yyvsp[(3) - (4)].val).rval >= 0) {(yyval.val).rval = log((yyvsp[(3) - (4)].val).rval);}} else{yyerror("Cannot make ln on negative number");exit(1);};}
     break;
 
   case 44:
 
 /* Line 1455 of yacc.c  */
-#line 199 "yacc2.y"
-    {(yyval.val).type = REAL_TYPE; if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {(yyval.val).rval = sin((yyvsp[(3) - (4)].val).rval);} else {yyerror("Must make sin on real");};}
+#line 215 "yacc2.y"
+    {(yyval.val).type = INT_TYPE; if((yyvsp[(3) - (4)].val).type == INT_TYPE) {(yyval.val).ival = (yyvsp[(3) - (4)].val).ival;} else if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {(yyval.val).ival = (int)floor((yyvsp[(3) - (4)].val).rval);} else {yyerror("Must floor on number");} ;}
     break;
 
   case 45:
 
 /* Line 1455 of yacc.c  */
-#line 200 "yacc2.y"
-    {(yyval.val).type = REAL_TYPE; if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {(yyval.val).rval = tan((yyvsp[(3) - (4)].val).rval);} else {yyerror("Must make tan on real");};}
+#line 216 "yacc2.y"
+    {(yyval.val).type = INT_TYPE; if((yyvsp[(3) - (4)].val).type == INT_TYPE) {(yyval.val).ival = (yyvsp[(3) - (4)].val).ival;} else if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {(yyval.val).ival = (int)ceil((yyvsp[(3) - (4)].val).rval);} else {yyerror("Must ceil on number");} ;}
     break;
 
   case 46:
 
 /* Line 1455 of yacc.c  */
-#line 262 "yacc2.y"
-    {(yyval.intval) = INT_TYPE;;}
+#line 217 "yacc2.y"
+    {(yyval.val).type = REAL_TYPE; if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {(yyval.val).rval = cos((yyvsp[(3) - (4)].val).rval);} else {yyerror("Must make cos on real");};}
     break;
 
   case 47:
 
 /* Line 1455 of yacc.c  */
-#line 263 "yacc2.y"
-    {(yyval.intval) = REAL_TYPE;;}
+#line 218 "yacc2.y"
+    {(yyval.val).type = REAL_TYPE; if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {(yyval.val).rval = sin((yyvsp[(3) - (4)].val).rval);} else {yyerror("Must make sin on real");};}
     break;
 
   case 48:
 
 /* Line 1455 of yacc.c  */
-#line 264 "yacc2.y"
-    {(yyval.intval) = CHAR_TYPE;;}
+#line 219 "yacc2.y"
+    {(yyval.val).type = REAL_TYPE; if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {(yyval.val).rval = tan((yyvsp[(3) - (4)].val).rval);} else {yyerror("Must make tan on real");};}
     break;
 
   case 49:
 
 /* Line 1455 of yacc.c  */
-#line 265 "yacc2.y"
-    {(yyval.intval) = STRING_TYPE;;}
+#line 223 "yacc2.y"
+    {if((yyvsp[(2) - (2)].val).type == CHAR_TYPE) {printf("WRITE: %s\n", (yyvsp[(2) - (2)].val).cval);} else if((yyvsp[(2) - (2)].val).type == STRING_TYPE) {printf("WRITE: %s\n", (yyvsp[(2) - (2)].val).sval);} else if((yyvsp[(2) - (2)].val).type == REAL_TYPE) {printf("WRITE: %f\n", (yyvsp[(2) - (2)].val).rval);} else if((yyvsp[(2) - (2)].val).type == INT_TYPE) {printf("WRITE: %d\n", (yyvsp[(2) - (2)].val).ival);} else if((yyvsp[(2) - (2)].val).type == BOOL_TYPE) {printf("WRITE: %d\n", (yyvsp[(2) - (2)].val).bval);} ;}
     break;
 
   case 50:
 
 /* Line 1455 of yacc.c  */
-#line 266 "yacc2.y"
+#line 285 "yacc2.y"
+    {(yyval.intval) = INT_TYPE;;}
+    break;
+
+  case 51:
+
+/* Line 1455 of yacc.c  */
+#line 286 "yacc2.y"
+    {(yyval.intval) = REAL_TYPE;;}
+    break;
+
+  case 52:
+
+/* Line 1455 of yacc.c  */
+#line 287 "yacc2.y"
+    {(yyval.intval) = CHAR_TYPE;;}
+    break;
+
+  case 53:
+
+/* Line 1455 of yacc.c  */
+#line 288 "yacc2.y"
+    {(yyval.intval) = STRING_TYPE;;}
+    break;
+
+  case 54:
+
+/* Line 1455 of yacc.c  */
+#line 289 "yacc2.y"
     {(yyval.intval) = BOOL_TYPE;;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1910 "yacc2.tab.c"
+#line 1950 "yacc2.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2118,7 +2158,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 317 "yacc2.y"
+#line 338 "yacc2.y"
 
 void yyerror(char *s) {
     fprintf(stderr, "%s\n", s);
