@@ -93,6 +93,10 @@ endwhile    return ENDWHILE;
 return return RETURN;
 write return WRITE;
 
+"DECLARATIONS"  return DECLARATIONS;
+"STATEMENTS"    return STATEMENTS;
+"FUNCTIONS"     return FUNCTIONS;
+
 ":="        return ASSIGNMENT;    
 {identifier}    yylval.id = (char *) strdup(yytext); return(ID); 
 {WS}						;

@@ -51,55 +51,58 @@
      CHAR_TYPE = 267,
      STRING_TYPE = 268,
      BOOL_TYPE = 269,
-     VAR = 270,
-     COLON = 271,
-     OPENPAR = 272,
-     CLOSEPAR = 273,
-     COMMA = 274,
-     COMMENT = 275,
-     SEMICOLON = 276,
-     STARTPRGM = 277,
-     ENDPRGM = 278,
-     BEGSTMT = 279,
-     ENDSTMT = 280,
-     IF = 281,
-     THEN = 282,
-     ELIF = 283,
-     ELSE = 284,
-     ENDIF = 285,
-     WHILE = 286,
-     DO = 287,
-     ENDWHILE = 288,
-     WRITE = 289,
-     FCT = 290,
-     RETURN = 291,
-     OR = 292,
-     AND = 293,
-     NE = 294,
-     EQ = 295,
-     GT = 296,
-     LT = 297,
-     GE = 298,
-     LE = 299,
-     ASSIGNMENT = 300,
-     MOD = 301,
-     DIV = 302,
-     DIVOP = 303,
-     MULOP = 304,
-     MINOP = 305,
-     ADDOP = 306,
-     SQRT = 307,
-     TAN = 308,
-     SIN = 309,
-     COS = 310,
-     LN = 311,
-     LOG = 312,
-     EXP = 313,
-     ABS = 314,
-     POW = 315,
-     CEIL = 316,
-     FLOOR = 317,
-     NOT = 318
+     DECLARATIONS = 270,
+     FUNCTIONS = 271,
+     STATEMENTS = 272,
+     VAR = 273,
+     COLON = 274,
+     OPENPAR = 275,
+     CLOSEPAR = 276,
+     COMMA = 277,
+     COMMENT = 278,
+     SEMICOLON = 279,
+     STARTPRGM = 280,
+     ENDPRGM = 281,
+     BEGSTMT = 282,
+     ENDSTMT = 283,
+     IF = 284,
+     THEN = 285,
+     ELIF = 286,
+     ELSE = 287,
+     ENDIF = 288,
+     WHILE = 289,
+     DO = 290,
+     ENDWHILE = 291,
+     WRITE = 292,
+     FCT = 293,
+     RETURN = 294,
+     OR = 295,
+     AND = 296,
+     NE = 297,
+     EQ = 298,
+     GT = 299,
+     LT = 300,
+     GE = 301,
+     LE = 302,
+     ASSIGNMENT = 303,
+     MOD = 304,
+     DIV = 305,
+     DIVOP = 306,
+     MULOP = 307,
+     MINOP = 308,
+     ADDOP = 309,
+     SQRT = 310,
+     TAN = 311,
+     SIN = 312,
+     COS = 313,
+     LN = 314,
+     LOG = 315,
+     EXP = 316,
+     ABS = 317,
+     POW = 318,
+     CEIL = 319,
+     FLOOR = 320,
+     NOT = 321
    };
 #endif
 
@@ -108,12 +111,12 @@
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union 
 /* Line 1676 of yacc.c  */
-#line 104 "yacc2.y"
+#line 105 "yacc2.y"
 semrec
 {
 
 /* Line 1676 of yacc.c  */
-#line 105 "yacc2.y"
+#line 106 "yacc2.y"
  
   struct Value val;
   double doubleval;
@@ -125,7 +128,7 @@ semrec
 
 
 /* Line 1676 of yacc.c  */
-#line 129 "yacc2.tab.h"
+#line 132 "yacc2.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

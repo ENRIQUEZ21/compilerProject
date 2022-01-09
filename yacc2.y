@@ -25,6 +25,7 @@
       putsym (sym_name, type, int_val, real_val, bool_val, char_val, string_val, current_scope);   
     } else { 
       printf( "%s is already defined\n", sym_name );
+      exit(1);
     }
   }
 
@@ -124,7 +125,7 @@
 
 
 
-
+%token DECLARATIONS FUNCTIONS STATEMENTS
 
 %token VAR COLON OPENPAR CLOSEPAR COMMA COMMENT SEMICOLON 
 %token STARTPRGM ENDPRGM BEGSTMT ENDSTMT
@@ -137,30 +138,28 @@
 
 
 %%
-// VERIFIER LE TYPE DES ARGUMENTS DANS UN APPEL DE FONCTION ET CELUI DE L'ID QUI RECOIT
-// reaexpr reafactor reaterm booexpr boofactor booterm %type <doubleval> REAL; %type <intval> TRUE FALSE boolean
-program: STARTPRGM stmts ENDPRGM; // STARTPRGM declarations fcts stmts ENDPRGM; 
+// CREER UN PARAMETRE POUR LES PARAM DE FONCTIONS
+program: STARTPRGM DECLARATIONS declarations FUNCTIONS fcts STATEMENTS stmts ENDPRGM; 
 // %type <intval> headfct;
-// %type <chstval> CHAR STRING charsandstrings 
 // %type <id> returnfct;
-/*groupstmts: BEGSTMT stmts ENDSTMT
-;*/
 
-/*declarations: 
+groupstmts: BEGSTMT stmts ENDSTMT
+;
+
+declarations: 
 |     declarations declaration SEMICOLON
-;*/
+;
 
-stmts: comment stmt SEMICOLON
+stmts: 
 |   stmts comment stmt SEMICOLON
 ;
 
 stmt:  assignexpr  
 |   declaration 
 |   write    
-/*|   IF booexpr THEN groupstmts elifstmt elsestmt ENDIF    {printf("CONDITIONAL STATEMENT");}
-|   WHILE booexpr DO groupstmts ENDWHILE       {printf("LOOP STATEMENT");}
-|   write
-|   callfct*/
+|   conditionalstmt    {printf("CONDITIONAL STATEMENT");}
+|   loopstmt       {printf("LOOP STATEMENT");}
+/*|   callfct*/
 ;
 
 declaration: VAR ID COLON type    { printf("curr_scope = %d\n", curr_scope); install($2, $4, 0, 0, 0, "N", "null", curr_scope); printf("DECLARATION %s, %d \n", $2, $4);}
@@ -198,7 +197,7 @@ factor: term              {$$.type = $1.type;  if($1.type == INT_TYPE) {$$.ival 
 |   factor MOD term      { if($1.type == INT_TYPE && $3.type == INT_TYPE) {$$.type = INT_TYPE; $$.ival = (int)fmod($1.ival, $3.ival);} else if($1.type == REAL_TYPE && $3.type == INT_TYPE) {$$.type = REAL_TYPE; $$.rval = fmod($1.rval, (float)$3.ival);} else if($1.type == INT_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = fmod((float)$1.ival, $3.rval);} else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = fmod($1.rval, $3.rval);} else { yyerror("Must divide numbers"); exit(1);}}
 ;
 
-term: ID          { $$.type = get_type($1, curr_scope); if(get_type($1, curr_scope) == INT_TYPE) { $$.ival = get_int_value($1, curr_scope);} else if(get_type($1, curr_scope) == REAL_TYPE) {$$.rval = get_real_value($1, curr_scope);} else if(get_type($1, curr_scope) == BOOL_TYPE) {$$.bval = get_bool_value($1, curr_scope);} else if(get_type($1, curr_scope) == CHAR_TYPE) {$$.cval = get_char_value($1, curr_scope);} else if(get_type($1, curr_scope) == STRING_TYPE) {$$.sval = get_string_value($1, curr_scope);}}
+term: ID          { context_check($1, curr_scope); $$.type = get_type($1, curr_scope); if(get_type($1, curr_scope) == INT_TYPE) { $$.ival = get_int_value($1, curr_scope);} else if(get_type($1, curr_scope) == REAL_TYPE) {$$.rval = get_real_value($1, curr_scope);} else if(get_type($1, curr_scope) == BOOL_TYPE) {$$.bval = get_bool_value($1, curr_scope);} else if(get_type($1, curr_scope) == CHAR_TYPE) {$$.cval = get_char_value($1, curr_scope);} else if(get_type($1, curr_scope) == STRING_TYPE) {$$.sval = get_string_value($1, curr_scope);}}
 |      INTEGER             {$$.type = $1.type; $$.ival = $1.ival;}
 |     REAL                  {$$.type = $1.type; $$.rval = $1.rval;}
 |     TRUE                  {$$.type = $1.type; $$.bval = 1;}
@@ -289,22 +288,39 @@ type: INT_TYPE   {$$ = INT_TYPE;}
 |   BOOL_TYPE     {$$ = BOOL_TYPE;}
 ;
 
-/*elifstmt: 
-|   elifstmt ELIF booexpr THEN groupstmts
+conditionalstmt: IF expr THEN groupstmts elifstmt elsestmt ENDIF    {if($2.type != BOOL_TYPE) {yyerror("You must have a boolean condition with if statement"); exit(1);}}
+;
+
+elifstmt: 
+|   elifstmt ELIF expr THEN groupstmts  {if($3.type != BOOL_TYPE) { yyerror("You must have a boolean condition with elif statement"); exit(1);}}
 ;
 
 elsestmt:
-|   ELSE groupstmts
+|   ELSE stmts
+;
+
+loopstmt: WHILE expr DO groupstmts ENDWHILE   {if($2.type != BOOL_TYPE) {yyerror("You must choose a boolean condition with loop statement"); exit(1);}}
+;
+
+fcts: 
+|     fcts fct
+;
+
+fct: headfct groupstmts returnfct    { printf("curr_scope finishing = %d\n", curr_scope);}
+;
+
+headfct: FCT ID OPENPAR ID CLOSEPAR COLON type  { context_check($4, curr_scope); install($2, $7, 0, 0, 0, "N", "null", curr_scope); curr_scope++; printf("%d\n", curr_scope); }
+;
+
+returnfct: RETURN ID   {curr_scope--; }
 ;
 
 
+/*
 charsandstrings: CHAR    { $$ = $1; printf("OUR CHAR IS %s\n", $$);}
 |      STRING            { $$ = $1; printf("OUR STRING IS %s\n", $$);}
 ;
 
-fcts:  SEMICOLON
-|   fcts fct
-;
 
 fct:  headfct groupstmts returnfct    { printf("curr_scope finishing = %d\n", curr_scope); check_type($3, $1, curr_scope+1); }
 ;
