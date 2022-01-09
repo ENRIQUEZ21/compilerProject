@@ -1,11 +1,14 @@
 start
 
+DECLARATIONS
 var id2:real  ;
 
 var id3:integer  ;
 
 
+FUNCTIONS
 
+STATEMENTS
 var a:real;
 var b:real;
 
