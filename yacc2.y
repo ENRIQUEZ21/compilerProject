@@ -56,6 +56,11 @@
   int get_type(char *sym_name, int scope) {
     symrec *identifier;
     identifier = getsym(sym_name, scope);
+    if (identifier == 0) { 
+      printf( "%s", sym_name );
+      printf( "%s\n", " is an undeclared identifier" );
+      exit(1);
+    }
     return identifier->type;
   }
 
@@ -130,9 +135,7 @@
   struct Value val;
   double doubleval;
   int intval; 
-  char *chstval;
   char *id;
-  struct lbs *lbls; 
 }
 
 

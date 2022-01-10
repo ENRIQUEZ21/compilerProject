@@ -31,12 +31,10 @@ symrec * putsym (char *sym_name, int type, int int_val, double real_val, int boo
     ptr->char_val = (char *) char_val;
     ptr->string_val = (char *) string_val;
     ptr->scope = curr_scope;
-    printf("SALUT, C4EST ISI");
     printf("PUT AN ID\n He has %s NAME \n", ptr->name);
     /*ptr->offset = data_location();*/
     ptr->next = (struct symrec *)sym_table;
     sym_table = ptr;
-    printf("OK, PUT THIS ID = %s\n", ptr->name);
     return ptr;
 }
 symrec * getsym (char *sym_name, int curr_scope)
