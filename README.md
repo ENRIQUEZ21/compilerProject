@@ -20,7 +20,7 @@ To install Bison on Windows, follow the instructions of the following video: htt
 
 # Run the code
 - Clone the project in your PC with the following command : git clone https://github.com/ENRIQUEZ21/compilerProject.git 
-- with your Terminal go to the compilerProject foder and launch the command `bison -d yacc.y` to generate yacc.tab.h file and yacc.tab.c file.
-- with your Terminal go to the compilerProject folder, and run the command `flex lexer.l` to generate the lex.yy.c C file 
-- Then, run the command `gcc -o a yacc.tab.c lex.yy.c` to create an a.exe executable file 
+- with your Terminal go to the compilerProject foder and launch the command `bison -d yacc2.y` to generate yacc.tab.h file and yacc2.tab.c file.
+- with your Terminal go to the compilerProject folder, and run the command `flex lexer2.l` to generate the lex.yy.c C file 
+- Then, run the command `gcc -o a yacc2.tab.c lex.yy.c` to create an a.exe executable file 
 - After that launch `a.exe input.txt` in your Terminal to parse the pseudo-code in the input.txt text file
