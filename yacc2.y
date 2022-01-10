@@ -170,10 +170,8 @@
 
 
 %%
-// CREER UN PARAMETRE POUR LES PARAM DE FONCTIONS
+
 program: STARTPRGM DECLARATIONS declarations FUNCTIONS fcts STATEMENTS stmts ENDPRGM; 
-// %type <intval> headfct;
-// %type <id> returnfct;
 
 groupstmts: BEGSTMT stmts ENDSTMT
 ;
