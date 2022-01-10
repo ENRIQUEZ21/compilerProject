@@ -125,6 +125,11 @@
       exit(1);
     }
   }
+
+  int get_param_nb(char *ref) {
+    return getParamNb(ref);
+
+  }
   
 
 %}
@@ -184,12 +189,12 @@ stmts:
 stmt:  assignexpr  
 |   declaration 
 |   write    
-|   conditionalstmt    {printf("CONDITIONAL STATEMENT");}
-|   loopstmt       {printf("LOOP STATEMENT");}
-|   callfct         { printf("CALL FUNCTION");}
+|   conditionalstmt    {}
+|   loopstmt       {}
+|   callfct         { }
 ;
 
-declaration: VAR ID COLON type    { printf("curr_scope = %d\n", curr_scope); install($2, $4, 0, 0, 0, "N", "null", curr_scope); printf("DECLARATION %s, %d \n", $2, $4);}
+declaration: VAR ID COLON type    { install($2, $4, 0, 0, 0, "N", "null", curr_scope); printf("DECLARATION %s, %d \n", $2, $4);}
 
 comment: 
 |   COMMENT
@@ -198,8 +203,6 @@ comment:
 assignexpr: ID ASSIGNMENT expr { context_check($1, curr_scope); if($3.type == INT_TYPE) {if(get_type($1, curr_scope) == INT_TYPE) { set_int_value($1, $3.ival, curr_scope); } else if(get_type($1, curr_scope) == REAL_TYPE) {set_real_value($1, $3.rval, curr_scope);} else {yyerror("Error assignment: bad type"); exit(1);}} else if($3.type == REAL_TYPE) {check_type($1, REAL_TYPE, curr_scope); set_real_value($1, $3.rval, curr_scope);} else if($3.type == BOOL_TYPE) {check_type($1, BOOL_TYPE, curr_scope); set_bool_value($1, $3.bval, curr_scope);} else if($3.type == CHAR_TYPE) {check_type($1, CHAR_TYPE, curr_scope); set_char_value($1, $3.cval, curr_scope);} else if($3.type == STRING_TYPE) {check_type($1, STRING_TYPE, curr_scope); set_string_value($1, $3.sval, curr_scope);} printf("ASSIGNED TO ID %s\n",$1); }
 ;
 
-/*assignintexpr: ID ASSIGNMENT INT_TYPE intexpr { context_check($1, curr_scope); check_type($1, INT_TYPE, curr_scope); set_int_value($1, $4, curr_scope); printf("INTEGER %d ASSIGNED TO %s\n", $4, $1);}
-;*/
 
 
 expr: factor              {$$.type = $1.type;  if($1.type == INT_TYPE) {$$.ival = $1.ival;} else if($1.type == REAL_TYPE) {$$.rval = $1.rval;} else if($1.type == BOOL_TYPE) {$$.bval = $1.bval;} else if($1.type == CHAR_TYPE) {$$.cval = $1.cval;} else if($1.type == STRING_TYPE) {$$.sval = $1.sval;}}
@@ -249,64 +252,6 @@ term: ID          { context_check($1, curr_scope); $$.type = get_type($1, curr_s
 write: WRITE expr   {if($2.type == CHAR_TYPE) {printf("WRITE: %s\n", $2.cval);} else if($2.type == STRING_TYPE) {printf("WRITE: %s\n", $2.sval);} else if($2.type == REAL_TYPE) {printf("WRITE: %f\n", $2.rval);} else if($2.type == INT_TYPE) {printf("WRITE: %d\n", $2.ival);} else if($2.type == BOOL_TYPE) {printf("WRITE: %d\n", $2.bval);} }
 ;
 
-/*reaexpr: reafactor        {$$ = $1; printf("MY REAL FACTOR = %f\n", $$);}
-|   reaexpr ADDOP reafactor   {$$ = $1+$3;}
-|   reaexpr MINOP reafactor   {$$ = $1-$3;}
-|   MINOP reafactor           {$$ = -$2;}
-;
-
-reafactor: reaterm            {$$ = $1;}
-|   reafactor MULOP reaterm    {$$ = $1*$3;}
-|   reafactor DIVOP reaterm    {$$ = $1/$3;}
-|   reafactor DIV reaterm      {$$ = floor($1/$3);}
-|   reafactor MOD reaterm      {$$ = fmod($1, $3);}
-;
-
-reaterm: REAL_TYPE ID       { check_type($2, REAL_TYPE, curr_scope); $$ = get_real_value($2, curr_scope); printf("MY REAL = %f\n", $$); }
-|       number              {$$ = $1;}
-|    OPENPAR reaexpr CLOSEPAR  {$$ = $2;}
-|   ABS OPENPAR reaexpr CLOSEPAR {$$ = abs($3);}
-|   POW OPENPAR reaexpr COMMA reaexpr CLOSEPAR    {$$ = pow($3, $5);}
-|   SQRT OPENPAR reaexpr CLOSEPAR { if($3 >= 0) {$$ = sqrt($3); printf("result = %f\n", $$);} else{yyerror("Cannot make sqrt on negative number");exit(1);}}
-|   EXP OPENPAR reaexpr CLOSEPAR {$$ = exp($3); printf("result = %f\n", $$);}
-|   LOG OPENPAR reaexpr CLOSEPAR {if($3 >= 0) {$$ = log10($3); printf("result = %f\n", $$);} else {yyerror("Cannot make log on negative number");exit(1);}}
-|   LN OPENPAR reaexpr CLOSEPAR  {if($3 >= 0) {$$ = log($3); printf("result = %f\n", $$);} else {yyerror("Cannot make ln on negative number");exit(1);}}
-|   FLOOR OPENPAR reaexpr CLOSEPAR {$$ = floor($3); printf("result = %f\n", $$);}
-|   CEIL OPENPAR reaexpr CLOSEPAR  {$$ = ceil($3); printf("result = %f\n", $$);}
-|   COS OPENPAR reaexpr CLOSEPAR  {$$ = cos($3); printf("result = %f\n", $$);}
-|   SIN OPENPAR reaexpr CLOSEPAR  {$$ = sin($3); printf("result = %f\n", $$);}
-|   TAN OPENPAR reaexpr CLOSEPAR  {$$ = tan($3); printf("result = %f\n", $$);} 
-;
-
-
-number: INTEGER   {$$ = (float)$1; printf("MY INTEGER IS IN REAL = %f", $$);}
-|   REAL          {$$ = $1; printf("MY REAL = %f", $$);}
-;
-
-booexpr: boofactor             {$$ = $1; printf("MY BOOL EXPR = %d\n", $$);}  
-|   reaexpr GE reafactor      { $$ = $1 >= $3; printf("result = %d\n", $$);};  
-|   reaexpr LE reafactor      { $$ = $1 <= $3; printf("result = %d\n", $$);};
-|   reaexpr GT reafactor     { $$ = $1 > $3; printf("result = %d\n", $$);};
-|   reaexpr LT reafactor      { $$ = $1 < $3; printf("result = %d\n", $$);};
-|   reaexpr EQ reafactor     { $$ = $1 == $3; printf("result = %d\n", $$);};
-|   reaexpr NE reafactor   { $$ = $1 != $3; printf("result = %d\n", $$);};
-|   booexpr AND boofactor   { $$ = $1 && $3; printf("result = %d\n", $$);};
-|   booexpr OR boofactor    { $$ = $1 || $3; printf("result = %d\n", $$);};
-|   NOT boofactor            { $$ = (!$2); printf("result = %d\n", $$);};
-;
-
-boofactor:  booterm                     {$$ = $1; printf("result = %d\n", $$);}
-;
-
-booterm: BOOL_TYPE ID          { check_type($2, BOOL_TYPE, curr_scope); $$ = get_bool_value($2, curr_scope); printf("MY BOOL = %d\n", $$); }
-|     boolean                   {$$ = $1; printf("IT IS A BOOLEAN \n");}
-|     OPENPAR booexpr CLOSEPAR    {$$ = $2; printf("result = %d\n", $$);}
-;
-
-boolean: TRUE               { $$ = 1; printf("BOOL VALUE = %d\n", $$);}
-|       FALSE               { $$ = 0; printf("BOOL VALUE = %d\n", $$);}
-;*/
-
 
 type: INT_TYPE   {$$ = INT_TYPE;}
 |   REAL_TYPE     {$$ = REAL_TYPE;}
@@ -349,7 +294,7 @@ parameters: ID       { context_check($1, curr_scope); put_param($1, get_type($1,
 |   ID COMMA parameters     { context_check($1, curr_scope); put_param($1, get_type($1, curr_scope), curr_fct);}
 ;
 
-returnfct: RETURN ID   {check_type($2, get_type(curr_fct, curr_scope), curr_scope); curr_scope--; }
+returnfct: RETURN ID   {check_type($2, get_type(curr_fct, curr_scope), curr_scope); if(get_type(curr_fct, curr_scope) == INT_TYPE) {set_int_value(curr_fct, get_int_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == REAL_TYPE) {set_real_value(curr_fct, get_real_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == BOOL_TYPE) {set_bool_value(curr_fct, get_bool_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == CHAR_TYPE) {set_char_value(curr_fct, get_char_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == STRING_TYPE) {set_string_value(curr_fct, get_string_value($2, curr_scope), curr_scope);} curr_scope--; }
 ;
 
 instances: ID       { $$.type = get_type($1, curr_scope); printf("ID");}
@@ -365,57 +310,20 @@ instances: ID       { $$.type = get_type($1, curr_scope); printf("ID");}
 callfct: startcall endcall
 ;
 
-startcall: ID ASSIGNMENT ID          { check_type($1, get_type($3, curr_scope), curr_scope); curr_call = $3;  printf("curr_call = %s\n", curr_call); }
+startcall: ID ASSIGNMENT ID          { check_type($1, get_type($3, curr_scope), curr_scope); curr_call = $3; if(get_type($1, curr_scope) == INT_TYPE) {set_int_value($1, get_int_value($3, curr_scope), curr_scope);} else if(get_type($1, curr_scope) == REAL_TYPE) {set_real_value($1, get_real_value($3, curr_scope), curr_scope);} else if(get_type($1, curr_scope) == BOOL_TYPE) {set_bool_value($1, get_bool_value($3, curr_scope), curr_scope);} else if(get_type($1, curr_scope) == CHAR_TYPE) {set_char_value($1, get_char_value($3, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == STRING_TYPE) {set_string_value($1, get_string_value($3, curr_scope), curr_scope);}  printf("curr_call = %s\n", curr_call); }
 ;
 
 endcall: OPENPAR paramcallfct CLOSEPAR 
 ;
 
-paramcallfct:  
+paramcallfct:     { if(get_param_nb(curr_call) != 0) { yyerror("Wrong number of parameters in the function call"); exit(1); } }
 |     parametersinstances
 ;
 
-parametersinstances: instances            {num_param++; param_check(num_param, curr_call); param_check_type(num_param, curr_call, $1.type); }
-|    instances COMMA parametersinstances {num_param++; param_check(num_param, curr_call); param_check_type(num_param, curr_call, $1.type);}
+parametersinstances: instances            {num_param++; param_check(num_param, curr_call); param_check_type(num_param, curr_call, $1.type);  }
+|    instances COMMA parametersinstances {num_param++; param_check(num_param, curr_call); param_check_type(num_param, curr_call, $1.type); printf("PARAM NB = %d AND NUM_PARAM = %d\n", get_param_nb(curr_call), num_param); if(get_param_nb(curr_call) != num_param) { yyerror("Wrong number of parameters in the function call"); exit(1); }}
 ;
 
-
-/* 
-
-
-
-
-charsandstrings: CHAR    { $$ = $1; printf("OUR CHAR IS %s\n", $$);}
-|      STRING            { $$ = $1; printf("OUR STRING IS %s\n", $$);}
-;
-
-
-fct:  headfct groupstmts returnfct    { printf("curr_scope finishing = %d\n", curr_scope); check_type($3, $1, curr_scope+1); }
-;
-
-headfct: FCT ID OPENPAR parameters CLOSEPAR COLON type  { printf("%d\n", curr_scope); install($2, $7, 0, 0, 0, curr_scope); printf("FUNTCION DECLARED"); curr_scope++; printf("curr_scope = %d\n", curr_scope); $$ = $7; }
-;
-
-returnfct: RETURN ID   {curr_scope--;  $$ = $2;}
-;
-
-
-
-
-instances: ID
-|   INTEGER
-|   REAL
-|   CHAR
-|   STRING
-|   boolean
-;
-
-parametersinstances: instances 
-|    instances COMMA parametersinstances
-; 
-
-callfct: ID ASSIGNMENT ID OPENPAR parametersinstances CLOSEPAR        
-;*/
 
 %%
 void yyerror(char *s) {

@@ -40,3 +40,14 @@ Param * getParamByNumber(int number, char *ref) {
         }
     return 0;
 }
+
+int getParamNb(char *ref) {
+    int cnt = 0;
+    Param *ptr;
+    for ( ptr = param_list; ptr != (Param *) 0; ptr = (Param *)ptr->next ) {
+        if (strcmp(ptr->reference, ref) == 0) {
+             cnt++;
+        }
+    }
+    return cnt;
+}
