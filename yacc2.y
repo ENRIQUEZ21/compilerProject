@@ -5,8 +5,8 @@
   #include <math.h>
   #include <ctype.h>
   #include "variables.h"
-  #include "ST.h"
   #include "ast.h"
+  #include "ST.h"
   #define YYDEBUG 1
   int yylex(void);
   void yyerror(char *);
@@ -14,6 +14,9 @@
   
 
   int curr_scope = 0;
+  char *curr_fct = "N";
+  char *curr_call = "N";
+  int num_param = 0; 
 
 
   void install ( char *sym_name, int type, int int_val, double real_val, int bool_val, char *char_val, char *string_val, int current_scope)
@@ -32,7 +35,7 @@
   void context_check( char *sym_name, int scope ) { 
     symrec *identifier;
     identifier = getsym( sym_name, scope );
-    if ( identifier == 0 ) { 
+    if (identifier == 0) { 
       printf( "%s", sym_name );
       printf( "%s\n", " is an undeclared identifier" );
       exit(1);
@@ -48,7 +51,6 @@
       printf( "%s\n", " hasn't the right type" );
       exit(1);
     }
-    
   }
 
   int get_type(char *sym_name, int scope) {
@@ -96,7 +98,28 @@
   char * get_string_value(char *sym_name, int current_scope) {
     return getstringval(sym_name, current_scope);
   }
-  
+
+  void put_param(char *name, int type, char *reference) {
+      putParam(name, type, reference);
+  }
+
+  void param_check(int num_param, char *name_param) {
+    Param *parameter;
+    parameter = getParamByNumber(num_param, name_param);
+    if(parameter == 0) {
+      printf("Your function %s doesn't contain parameter number %d\n", name_param, num_param);
+      exit(1);
+    }
+  }
+
+  void param_check_type(int num_param, char *name_param, int type) {
+    Param *parameter;
+    parameter = getParamByNumber(num_param, name_param);
+    if(parameter->type != type) {
+      printf("Your call function parameter number %d has wrong type\n", num_param);
+      exit(1);
+    }
+  }
   
 
 %}
@@ -123,6 +146,7 @@
 
 %type <val> expr factor term;
 
+%type <val> instances;
 
 
 %token DECLARATIONS FUNCTIONS STATEMENTS
@@ -159,7 +183,7 @@ stmt:  assignexpr
 |   write    
 |   conditionalstmt    {printf("CONDITIONAL STATEMENT");}
 |   loopstmt       {printf("LOOP STATEMENT");}
-/*|   callfct*/
+|   callfct         { printf("CALL FUNCTION");}
 ;
 
 declaration: VAR ID COLON type    { printf("curr_scope = %d\n", curr_scope); install($2, $4, 0, 0, 0, "N", "null", curr_scope); printf("DECLARATION %s, %d \n", $2, $4);}
@@ -306,17 +330,58 @@ fcts:
 |     fcts fct
 ;
 
-fct: headfct groupstmts returnfct    { printf("curr_scope finishing = %d\n", curr_scope);}
+fct: declfct headfct groupstmts returnfct    { }
 ;
 
-headfct: FCT ID OPENPAR ID CLOSEPAR COLON type  { context_check($4, curr_scope); install($2, $7, 0, 0, 0, "N", "null", curr_scope); curr_scope++; printf("%d\n", curr_scope); }
+declfct: FCT  ID { curr_fct = $2; }
 ;
 
-returnfct: RETURN ID   {curr_scope--; }
+headfct: OPENPAR paramfcts CLOSEPAR COLON type { install(curr_fct, $5, 0, 0, 0, "N", "null", curr_scope); printf("curr_fct %s", curr_fct); curr_scope++; }
+
+paramfcts: 
+|     parameters
+;
+
+parameters: ID       { context_check($1, curr_scope); put_param($1, get_type($1, curr_scope), curr_fct); }
+|   ID COMMA parameters     { context_check($1, curr_scope); put_param($1, get_type($1, curr_scope), curr_fct);}
+;
+
+returnfct: RETURN ID   {check_type($2, get_type(curr_fct, curr_scope), curr_scope); curr_scope--; }
+;
+
+instances: ID       { $$.type = get_type($1, curr_scope); printf("ID");}
+|   INTEGER         {$$.type = INT_TYPE;}
+|   REAL            {$$.type = REAL_TYPE;}
+|   CHAR            {$$.type = CHAR_TYPE;}
+|   STRING          {$$.type = STRING_TYPE;}
+|   TRUE            {$$.type = BOOL_TYPE;}
+|   FALSE           {$$.type = BOOL_TYPE;}
 ;
 
 
-/*
+callfct: startcall endcall
+;
+
+startcall: ID ASSIGNMENT ID          { check_type($1, get_type($3, curr_scope), curr_scope); curr_call = $3;  printf("curr_call = %s\n", curr_call); }
+;
+
+endcall: OPENPAR paramcallfct CLOSEPAR 
+;
+
+paramcallfct:  
+|     parametersinstances
+;
+
+parametersinstances: instances            {num_param++; param_check(num_param, curr_call); param_check_type(num_param, curr_call, $1.type); }
+|    instances COMMA parametersinstances {num_param++; param_check(num_param, curr_call); param_check_type(num_param, curr_call, $1.type);}
+;
+
+
+/* 
+
+
+
+
 charsandstrings: CHAR    { $$ = $1; printf("OUR CHAR IS %s\n", $$);}
 |      STRING            { $$ = $1; printf("OUR STRING IS %s\n", $$);}
 ;
@@ -332,9 +397,7 @@ returnfct: RETURN ID   {curr_scope--;  $$ = $2;}
 ;
 
 
-parameters: ID       { context_check($1, curr_scope); }
-|   ID COMMA parameters     { context_check($1, curr_scope);}
-;
+
 
 instances: ID
 |   INTEGER

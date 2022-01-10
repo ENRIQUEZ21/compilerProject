@@ -1,8 +1,9 @@
 %{
-#include "variables.h"
-#include "yacc2.tab.h"
+    
 #include <string.h>
 #include <stdlib.h>
+#include "variables.h"
+#include "yacc2.tab.h"
 void yyerror(char *);
 
 
