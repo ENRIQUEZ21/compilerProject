@@ -32,7 +32,6 @@ symrec * putsym (char *sym_name, int type, int int_val, double real_val, int boo
     ptr->char_val = (char *) char_val;
     ptr->string_val = (char *) string_val;
     ptr->scope = curr_scope;
-    printf("PUT AN ID\n He has %s NAME \n", ptr->name);
     /*ptr->offset = data_location();*/
     ptr->next = (struct symrec *)sym_table;
     sym_table = ptr;
@@ -47,17 +46,26 @@ symrec * getsym (char *sym_name, int curr_scope)
     return 0;
 }
 
+void hidescope(int curr_scope) {
+    symrec *ptr;
+    for ( ptr = sym_table; ptr != (symrec *) 0; ptr = (symrec *)ptr->next ) {
+        if(ptr->scope == curr_scope) {
+            ptr = ptr->next;
+        } else {
+            sym_table = ptr;
+        }
+    }
+}
+
 void setrealval(char * sym_name, double real_val, int scope) {
     symrec *ptr;
     ptr = getsym(sym_name, scope);
     ptr->real_val = real_val;
-    printf("PUT A REAL VAL TO AN ID \n He has %d type %f real\n", ptr->type, ptr->real_val);
 }
 
 double getrealval(char * sym_name, int scope) {
     symrec *ptr;
     ptr = getsym(sym_name, scope);
-    printf("WE SEARCH A REAL VALUE");
     return ptr->real_val;
 
 }

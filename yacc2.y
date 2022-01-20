@@ -129,6 +129,10 @@
     return getParamNb(ref);
 
   }
+
+  void hide_scope(int curr_scope) {
+    hidescope(curr_scope);
+  }
   
 
 %}
@@ -192,14 +196,14 @@ stmt:  assignexpr
 
 comma: COMMA        {generate_code(" , ");};
 
-declaration: VAR ID COLON type    { generate_decl($2, $4); install($2, $4, 0, 0, 0, "N", "null", curr_scope); printf("DECLARATION %s, %d \n", $2, $4);}
+declaration: VAR ID COLON type    { generate_decl($2, $4); install($2, $4, 0, 0, 0, "N", "null", curr_scope);}
 
 comment: 
 |   COMMENT
 ;
 
 assignment: ASSIGNMENT  {generate_code(" = ");};
-assignexpr: id  assignment expr { context_check($1, curr_scope); if($3.type == INT_TYPE) {if(get_type($1, curr_scope) == INT_TYPE) { set_int_value($1, $3.ival, curr_scope); } else if(get_type($1, curr_scope) == REAL_TYPE) {set_real_value($1, $3.rval, curr_scope);} else {yyerror("Error assignment: bad type"); exit(1);}} else if($3.type == REAL_TYPE) {check_type($1, REAL_TYPE, curr_scope); set_real_value($1, $3.rval, curr_scope);} else if($3.type == BOOL_TYPE) {check_type($1, BOOL_TYPE, curr_scope); set_bool_value($1, $3.bval, curr_scope);} else if($3.type == CHAR_TYPE) {check_type($1, CHAR_TYPE, curr_scope); set_char_value($1, $3.cval, curr_scope);} else if($3.type == STRING_TYPE) {check_type($1, STRING_TYPE, curr_scope); set_string_value($1, $3.sval, curr_scope);} printf("ASSIGNED TO ID %s\n",$1); }
+assignexpr: id  assignment expr { context_check($1, curr_scope); if($3.type == INT_TYPE) {if(get_type($1, curr_scope) == INT_TYPE) { set_int_value($1, $3.ival, curr_scope); } else if(get_type($1, curr_scope) == REAL_TYPE) {set_real_value($1, $3.rval, curr_scope);} else {yyerror("Error assignment: bad type"); exit(1);}} else if($3.type == REAL_TYPE) {check_type($1, REAL_TYPE, curr_scope); set_real_value($1, $3.rval, curr_scope);} else if($3.type == BOOL_TYPE) {check_type($1, BOOL_TYPE, curr_scope); set_bool_value($1, $3.bval, curr_scope);} else if($3.type == CHAR_TYPE) {check_type($1, CHAR_TYPE, curr_scope); set_char_value($1, $3.cval, curr_scope);} else if($3.type == STRING_TYPE) {check_type($1, STRING_TYPE, curr_scope); set_string_value($1, $3.sval, curr_scope);} }
 ;
 
 addop: ADDOP        {generate_code(" + "); } ;
@@ -288,11 +292,11 @@ type: INT_TYPE   {$$ = INT_TYPE;}
 |   BOOL_TYPE     {$$ = BOOL_TYPE;}
 ;
 
-if: IF        {generate_code("\nif( ");};
+if: IF        {generate_code("\nif( "); curr_scope++;};
 then: THEN      {generate_code(" {\n");};
 elif: ELIF      {generate_code(" } else if(");};
 else: ELSE      {generate_code("} else {\n")}
-endif: ENDIF    {generate_code("}");};
+endif: ENDIF    {generate_code("}"); hide_scope(curr_scope); curr_scope--;};
 
 conditionalstmt: if expr {generate_code(")"); if($2.type != BOOL_TYPE) {yyerror("You must have a boolean condition with if statement"); exit(1);}} then groupstmts elifstmt elsestmt endif    
 ;
@@ -305,11 +309,11 @@ elsestmt:
 |   else groupstmts
 ;
 
-while: WHILE        {generate_code("while (");};
+while: WHILE        {generate_code("while ("); curr_scope++;};
 do: DO              {generate_code(" {\n");};
-endwhile: ENDWHILE  {generate_code(" }");};
+endwhile: ENDWHILE  {generate_code(" }"); hide_scope(curr_scope); curr_scope--;};
 
-loopstmt: while expr {generate_code(")"); if($2.type != BOOL_TYPE) {yyerror("You must choose a boolean condition with loop statement"); exit(1);}} do groupstmts endwhile  
+loopstmt: while expr {generate_code(")"); if($2.type != BOOL_TYPE) {yyerror("You must choose a boolean condition with loop statement"); exit(1);} } do groupstmts endwhile  
 ;
 
 fcts: 
@@ -322,7 +326,7 @@ fct: declfct headfct groupstmts returnfct    { }
 declfct: FCT  ID { curr_fct = $2; }
 ;
 
-headfct: COLON type { generate_fct(curr_fct, $2); install(curr_fct, $2, 0, 0, 0, "N", "null", curr_scope); printf("curr_fct %s", curr_fct); curr_scope++; } openpar paramfcts closepar { generate_code(" {\n");} 
+headfct: COLON type { generate_fct(curr_fct, $2); install(curr_fct, $2, 0, 0, 0, "N", "null", curr_scope); curr_scope++; } openpar paramfcts closepar { generate_code(" {\n");} 
 
 paramfcts: 
 |     parameters
@@ -334,11 +338,11 @@ parameters: param     { }
 |   param comma parameters     { }
 ;
 
-return: RETURN        {generate_code(" return ");};
-returnfct: return id   {generate_code(";\n}"); check_type($2, get_type(curr_fct, curr_scope), curr_scope); if(get_type(curr_fct, curr_scope) == INT_TYPE) {set_int_value(curr_fct, get_int_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == REAL_TYPE) {set_real_value(curr_fct, get_real_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == BOOL_TYPE) {set_bool_value(curr_fct, get_bool_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == CHAR_TYPE) {set_char_value(curr_fct, get_char_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == STRING_TYPE) {set_string_value(curr_fct, get_string_value($2, curr_scope), curr_scope);} curr_scope--; }
+return: RETURN        {generate_code("return ");};
+returnfct: return id   {generate_code(";\n}"); check_type($2, get_type(curr_fct, curr_scope), curr_scope); if(get_type(curr_fct, curr_scope) == INT_TYPE) {set_int_value(curr_fct, get_int_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == REAL_TYPE) {set_real_value(curr_fct, get_real_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == BOOL_TYPE) {set_bool_value(curr_fct, get_bool_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == CHAR_TYPE) {set_char_value(curr_fct, get_char_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == STRING_TYPE) {set_string_value(curr_fct, get_string_value($2, curr_scope), curr_scope);} hide_scope(curr_scope); curr_scope--;  }
 ;
 
-instances: id       { generate_code($1); $$.type = get_type($1, curr_scope); printf("ID");}
+instances: id       { generate_code($1); $$.type = get_type($1, curr_scope); }
 |   INTEGER         {generate_int($1.ival); $$.type = INT_TYPE;}
 |   REAL            {generate_real($1.rval); $$.type = REAL_TYPE;}
 |   CHAR            {generate_code($1.cval); $$.type = CHAR_TYPE;}
@@ -351,7 +355,7 @@ instances: id       { generate_code($1); $$.type = get_type($1, curr_scope); pri
 callfct: startcall endcall
 ;
 
-startcall: id assignment id          { check_type($1, get_type($3, curr_scope), curr_scope); curr_call = $3; if(get_type($1, curr_scope) == INT_TYPE) {set_int_value($1, get_int_value($3, curr_scope), curr_scope);} else if(get_type($1, curr_scope) == REAL_TYPE) {set_real_value($1, get_real_value($3, curr_scope), curr_scope);} else if(get_type($1, curr_scope) == BOOL_TYPE) {set_bool_value($1, get_bool_value($3, curr_scope), curr_scope);} else if(get_type($1, curr_scope) == CHAR_TYPE) {set_char_value($1, get_char_value($3, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == STRING_TYPE) {set_string_value($1, get_string_value($3, curr_scope), curr_scope);}  printf("curr_call = %s\n", curr_call); }
+startcall: id assignment id          { check_type($1, get_type($3, curr_scope), curr_scope); curr_call = $3; if(get_type($1, curr_scope) == INT_TYPE) {set_int_value($1, get_int_value($3, curr_scope), curr_scope);} else if(get_type($1, curr_scope) == REAL_TYPE) {set_real_value($1, get_real_value($3, curr_scope), curr_scope);} else if(get_type($1, curr_scope) == BOOL_TYPE) {set_bool_value($1, get_bool_value($3, curr_scope), curr_scope);} else if(get_type($1, curr_scope) == CHAR_TYPE) {set_char_value($1, get_char_value($3, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == STRING_TYPE) {set_string_value($1, get_string_value($3, curr_scope), curr_scope);} }
 ;
 
 endcall: openpar paramcallfct closepar 
@@ -362,7 +366,7 @@ paramcallfct:     { if(get_param_nb(curr_call) != 0) { yyerror("Wrong number of 
 ;
 
 parametersinstances: instances            {num_param++; param_check(num_param, curr_call); param_check_type(num_param, curr_call, $1.type);  }
-|    instances comma parametersinstances {num_param++; param_check(num_param, curr_call); param_check_type(num_param, curr_call, $1.type); printf("PARAM NB = %d AND NUM_PARAM = %d\n", get_param_nb(curr_call), num_param); if(get_param_nb(curr_call) != num_param) { yyerror("Wrong number of parameters in the function call"); exit(1); }}
+|    instances comma parametersinstances {num_param++; param_check(num_param, curr_call); param_check_type(num_param, curr_call, $1.type); if(get_param_nb(curr_call) != num_param) { yyerror("Wrong number of parameters in the function call"); exit(1); }}
 ;
 
 

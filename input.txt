@@ -6,7 +6,7 @@ beginstmt
 var c:real;
 id2 := 2.;
 id3 := 9;
-c := abs(id2-id3);
+c := abs(id2-id3); 
 endstmt
 return c
 
@@ -21,28 +21,40 @@ return c1
 
 STATEMENTS
 var d:real;
-d := sum(56, 34.);
+d := 1.;
 if d < 34 then 
     beginstmt
+    d := sum(3, 34.5);
     write d;
     endstmt
 elif d == 35 then 
     beginstmt
     write 35;
+    var id4:real;
     endstmt
 else
     beginstmt
     write 52;
+    var i:integer;
+    i := 2;
     endstmt
 endif;
 
 var i:integer;
-i := 2;
+i := 9;
 while i < 45 do 
     beginstmt 
+    var o:integer;
     write i;
+    d := 90;
+    var id4:integer;
     i := i+1;
     endstmt
 endwhile;
+
+
+
+
+var o:real;
 
 end
