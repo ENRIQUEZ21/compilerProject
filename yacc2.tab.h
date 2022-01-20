@@ -86,23 +86,22 @@
      LE = 302,
      ASSIGNMENT = 303,
      MOD = 304,
-     DIV = 305,
-     DIVOP = 306,
-     MULOP = 307,
-     MINOP = 308,
-     ADDOP = 309,
-     SQRT = 310,
-     TAN = 311,
-     SIN = 312,
-     COS = 313,
-     LN = 314,
-     LOG = 315,
-     EXP = 316,
-     ABS = 317,
-     POW = 318,
-     CEIL = 319,
-     FLOOR = 320,
-     NOT = 321
+     DIVOP = 305,
+     MULOP = 306,
+     MINOP = 307,
+     ADDOP = 308,
+     SQRT = 309,
+     TAN = 310,
+     SIN = 311,
+     COS = 312,
+     LN = 313,
+     LOG = 314,
+     EXP = 315,
+     ABS = 316,
+     POW = 317,
+     CEIL = 318,
+     FLOOR = 319,
+     NOT = 320
    };
 #endif
 
@@ -111,12 +110,12 @@
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union 
 /* Line 1676 of yacc.c  */
-#line 138 "yacc2.y"
+#line 137 "yacc2.y"
 semrec
 {
 
 /* Line 1676 of yacc.c  */
-#line 139 "yacc2.y"
+#line 138 "yacc2.y"
  
   struct Value val;
   double doubleval;
@@ -126,7 +125,7 @@ semrec
 
 
 /* Line 1676 of yacc.c  */
-#line 130 "yacc2.tab.h"
+#line 129 "yacc2.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

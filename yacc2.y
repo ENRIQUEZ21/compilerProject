@@ -4,8 +4,7 @@
   #include <string.h>
   #include <math.h>
   #include <ctype.h>
-  #include "variables.h"
-  #include "ast.h"
+  #include "CG.h"
   #include "ST.h"
   #define YYDEBUG 1
   int yylex(void);
@@ -150,6 +149,7 @@
 %token TRUE FALSE REAL INTEGER CHAR STRING INT_TYPE REAL_TYPE CHAR_TYPE STRING_TYPE BOOL_TYPE;
 %type <intval> type INT_TYPE REAL_TYPE CHAR_TYPE STRING_TYPE BOOL_TYPE;
 
+%type <id> id;
 %type <val> INTEGER REAL TRUE FALSE CHAR STRING;
 
 %type <val> expr factor term;
@@ -165,23 +165,21 @@
 %token WRITE FCT RETURN
 %token OR AND
 
-%left ADDOP MINOP MULOP DIVOP DIV MOD ASSIGNMENT LE GE LT GT EQ NE 
+%left ADDOP MINOP MULOP DIVOP MOD ASSIGNMENT LE GE LT GT EQ NE 
 %right NOT FLOOR CEIL POW ABS EXP LOG LN COS SIN TAN SQRT
 
 
 %%
 
-program: STARTPRGM DECLARATIONS declarations FUNCTIONS fcts STATEMENTS stmts ENDPRGM; 
+program: STARTPRGM {generate_code("import java.lang.Math;\npublic class out{ \n"); } FUNCTIONS fcts STATEMENTS { generate_code("\npublic static void main(String args[]){\n");} stmts ENDPRGM {generate_code("}\n}");} 
+;
 
 groupstmts: BEGSTMT stmts ENDSTMT
 ;
 
-declarations: 
-|     declarations declaration SEMICOLON
-;
 
-stmts: 
-|   stmts comment stmt SEMICOLON
+stmts:                            
+|   stmts comment stmt SEMICOLON {generate_code(";\n");}
 ;
 
 stmt:  assignexpr  
@@ -192,62 +190,94 @@ stmt:  assignexpr
 |   callfct         { }
 ;
 
-declaration: VAR ID COLON type    { install($2, $4, 0, 0, 0, "N", "null", curr_scope); printf("DECLARATION %s, %d \n", $2, $4);}
+comma: COMMA        {generate_code(" , ");};
+
+declaration: VAR ID COLON type    { generate_decl($2, $4); install($2, $4, 0, 0, 0, "N", "null", curr_scope); printf("DECLARATION %s, %d \n", $2, $4);}
 
 comment: 
 |   COMMENT
 ;
 
-assignexpr: ID ASSIGNMENT expr { context_check($1, curr_scope); if($3.type == INT_TYPE) {if(get_type($1, curr_scope) == INT_TYPE) { set_int_value($1, $3.ival, curr_scope); } else if(get_type($1, curr_scope) == REAL_TYPE) {set_real_value($1, $3.rval, curr_scope);} else {yyerror("Error assignment: bad type"); exit(1);}} else if($3.type == REAL_TYPE) {check_type($1, REAL_TYPE, curr_scope); set_real_value($1, $3.rval, curr_scope);} else if($3.type == BOOL_TYPE) {check_type($1, BOOL_TYPE, curr_scope); set_bool_value($1, $3.bval, curr_scope);} else if($3.type == CHAR_TYPE) {check_type($1, CHAR_TYPE, curr_scope); set_char_value($1, $3.cval, curr_scope);} else if($3.type == STRING_TYPE) {check_type($1, STRING_TYPE, curr_scope); set_string_value($1, $3.sval, curr_scope);} printf("ASSIGNED TO ID %s\n",$1); }
+assignment: ASSIGNMENT  {generate_code(" = ");};
+assignexpr: id  assignment expr { context_check($1, curr_scope); if($3.type == INT_TYPE) {if(get_type($1, curr_scope) == INT_TYPE) { set_int_value($1, $3.ival, curr_scope); } else if(get_type($1, curr_scope) == REAL_TYPE) {set_real_value($1, $3.rval, curr_scope);} else {yyerror("Error assignment: bad type"); exit(1);}} else if($3.type == REAL_TYPE) {check_type($1, REAL_TYPE, curr_scope); set_real_value($1, $3.rval, curr_scope);} else if($3.type == BOOL_TYPE) {check_type($1, BOOL_TYPE, curr_scope); set_bool_value($1, $3.bval, curr_scope);} else if($3.type == CHAR_TYPE) {check_type($1, CHAR_TYPE, curr_scope); set_char_value($1, $3.cval, curr_scope);} else if($3.type == STRING_TYPE) {check_type($1, STRING_TYPE, curr_scope); set_string_value($1, $3.sval, curr_scope);} printf("ASSIGNED TO ID %s\n",$1); }
 ;
 
-
+addop: ADDOP        {generate_code(" + "); } ;
+minop: MINOP       {generate_code(" - ");};
+ge: GE            {generate_code(" >= ");};
+le: LE            {generate_code(" <= ");};
+gt: GT            {generate_code(" > ");};
+lt: LT            {generate_code(" < ");};
+eq: EQ            {generate_code(" == ");};
+ne: NE            {generate_code(" != ");};
+and: AND            {generate_code(" && ");};
+or: OR            {generate_code(" || ");};
+not: NOT            {generate_code(" !");};
+mulop: MULOP            {generate_code(" * ");};
+divop: DIVOP          {generate_code(" / ");}
+mod: MOD            {generate_code(" % ");}
 
 expr: factor              {$$.type = $1.type;  if($1.type == INT_TYPE) {$$.ival = $1.ival;} else if($1.type == REAL_TYPE) {$$.rval = $1.rval;} else if($1.type == BOOL_TYPE) {$$.bval = $1.bval;} else if($1.type == CHAR_TYPE) {$$.cval = $1.cval;} else if($1.type == STRING_TYPE) {$$.sval = $1.sval;}}
-|   expr ADDOP factor     { if($1.type == INT_TYPE && $3.type == INT_TYPE) {$$.type = INT_TYPE; $$.ival = $1.ival+$3.ival;} else if($1.type == REAL_TYPE && $3.type == INT_TYPE) {$$.type = REAL_TYPE; $$.rval = $1.rval+(float)$3.ival;} else if($1.type == INT_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = (float)$1.ival+$3.rval;} else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = $1.rval+$3.rval;} else { yyerror("Must add numbers"); exit(1);} }
-|   expr MINOP factor      { if($1.type == INT_TYPE && $3.type == INT_TYPE) {$$.type = INT_TYPE; $$.ival = $1.ival-$3.ival;} else if($1.type == REAL_TYPE && $3.type == INT_TYPE) {$$.type = REAL_TYPE; $$.rval = $1.rval-(float)$3.ival;} else if($1.type == INT_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = (float)$1.ival-$3.rval;} else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = $1.rval-$3.rval;} else { yyerror("Must substract numbers"); exit(1);} }
-|   MINOP factor                { $$.type = $2.type; if($2.type == INT_TYPE) {$$.ival = -$2.ival;} else if($2.type == REAL_TYPE) {$$.rval = -$2.rval;} else {yyerror("- must be on number only"); exit(1);} }
-|   expr GE factor      { $$.type = BOOL_TYPE; if($1.type == INT_TYPE && $3.type == INT_TYPE) { $$.bval = $1.ival >= $3.ival; } else if($1.type == REAL_TYPE && $3.type == INT_TYPE) { $$.bval = $1.rval >= $3.ival; } else if($1.type == INT_TYPE && $3.type == REAL_TYPE) { $$.bval = $1.ival >= $3.rval; } else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) { $$.bval = $1.rval >= $3.rval; } else {yyerror("Must make boolean op on numbers"); exit(1);}}  
-|   expr LE factor      { $$.type = BOOL_TYPE; if($1.type == INT_TYPE && $3.type == INT_TYPE) { $$.bval = $1.ival <= $3.ival; } else if($1.type == REAL_TYPE && $3.type == INT_TYPE) { $$.bval = $1.rval <= $3.ival; } else if($1.type == INT_TYPE && $3.type == REAL_TYPE) { $$.bval = $1.ival <= $3.rval; } else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) { $$.bval = $1.rval <= $3.rval; } else {yyerror("Must make boolean op on numbers"); exit(1);}}  
-|   expr GT factor     { $$.type = BOOL_TYPE; if($1.type == INT_TYPE && $3.type == INT_TYPE) { $$.bval = $1.ival > $3.ival; } else if($1.type == REAL_TYPE && $3.type == INT_TYPE) { $$.bval = $1.rval > $3.ival; } else if($1.type == INT_TYPE && $3.type == REAL_TYPE) { $$.bval = $1.ival > $3.rval; } else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) { $$.bval = $1.rval > $3.rval; } else {yyerror("Must make boolean op on numbers"); exit(1);}}  
-|   expr LT factor     { $$.type = BOOL_TYPE; if($1.type == INT_TYPE && $3.type == INT_TYPE) { $$.bval = $1.ival < $3.ival; } else if($1.type == REAL_TYPE && $3.type == INT_TYPE) { $$.bval = $1.rval < $3.ival; } else if($1.type == INT_TYPE && $3.type == REAL_TYPE) { $$.bval = $1.ival < $3.rval; } else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) { $$.bval = $1.rval < $3.rval; } else {yyerror("Must make boolean op on numbers"); exit(1);}}  
-|   expr EQ factor     { $$.type = BOOL_TYPE; if($1.type == INT_TYPE && $3.type == INT_TYPE) { $$.bval = $1.ival == $3.ival; } else if($1.type == REAL_TYPE && $3.type == INT_TYPE) { $$.bval = $1.rval == $3.ival; } else if($1.type == INT_TYPE && $3.type == REAL_TYPE) { $$.bval = $1.ival == $3.rval; } else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) { $$.bval = $1.rval == $3.rval; } else {yyerror("Must make boolean op on numbers"); exit(1);}}  
-|   expr NE factor   { $$.type = BOOL_TYPE; if($1.type == INT_TYPE && $3.type == INT_TYPE) { $$.bval = $1.ival != $3.ival; } else if($1.type == REAL_TYPE && $3.type == INT_TYPE) { $$.bval = $1.rval != $3.ival; } else if($1.type == INT_TYPE && $3.type == REAL_TYPE) { $$.bval = $1.ival != $3.rval; } else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) { $$.bval = $1.rval != $3.rval; } else {yyerror("Must make boolean op on numbers"); exit(1);}}  
-|   expr AND factor   { $$.type = BOOL_TYPE; if($1.type == BOOL_TYPE && $3.type == BOOL_TYPE) {$$.bval = $1.bval && $3.bval;} else {yyerror("Must make AND operation on boolean");}}
-|   expr OR factor    { $$.type = BOOL_TYPE; if($1.type == BOOL_TYPE && $3.type == BOOL_TYPE) {$$.bval = $1.bval || $3.bval;} else {yyerror("Must make OR operation on boolean");}}
-|   NOT factor            { $$.type = BOOL_TYPE; if($2.type == BOOL_TYPE) {$$.bval = (!$2.bval); } else {yyerror("Must make NOT operation on boolean");}}
+|   expr addop factor     { if($1.type == INT_TYPE && $3.type == INT_TYPE) {$$.type = INT_TYPE; $$.ival = $1.ival+$3.ival; } else if($1.type == REAL_TYPE && $3.type == INT_TYPE) {$$.type = REAL_TYPE; $$.rval = $1.rval+(float)$3.ival; } else if($1.type == INT_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = (float)$1.ival+$3.rval;} else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = $1.rval+$3.rval; } else { yyerror("Must add numbers"); exit(1);} }
+|   expr minop factor      { if($1.type == INT_TYPE && $3.type == INT_TYPE) {$$.type = INT_TYPE; $$.ival = $1.ival-$3.ival;} else if($1.type == REAL_TYPE && $3.type == INT_TYPE) {$$.type = REAL_TYPE; $$.rval = $1.rval-(float)$3.ival;} else if($1.type == INT_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = (float)$1.ival-$3.rval;} else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = $1.rval-$3.rval; } else { yyerror("Must substract numbers"); exit(1);} }
+|   minop factor                { $$.type = $2.type; if($2.type == INT_TYPE) {$$.ival = -$2.ival; } else if($2.type == REAL_TYPE) {$$.rval = -$2.rval; } else {yyerror("- must be on number only"); exit(1);} }
+|   expr ge factor      { $$.type = BOOL_TYPE; if($1.type == INT_TYPE && $3.type == INT_TYPE) { $$.bval = $1.ival >= $3.ival; } else if($1.type == REAL_TYPE && $3.type == INT_TYPE) { $$.bval = $1.rval >= $3.ival; } else if($1.type == INT_TYPE && $3.type == REAL_TYPE) { $$.bval = $1.ival >= $3.rval; } else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) { $$.bval = $1.rval >= $3.rval; } else {yyerror("Must make boolean op on numbers"); exit(1);}}  
+|   expr le factor      { $$.type = BOOL_TYPE; if($1.type == INT_TYPE && $3.type == INT_TYPE) { $$.bval = $1.ival <= $3.ival; } else if($1.type == REAL_TYPE && $3.type == INT_TYPE) { $$.bval = $1.rval <= $3.ival; } else if($1.type == INT_TYPE && $3.type == REAL_TYPE) { $$.bval = $1.ival <= $3.rval; } else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) { $$.bval = $1.rval <= $3.rval; } else {yyerror("Must make boolean op on numbers"); exit(1);}}  
+|   expr gt factor     { $$.type = BOOL_TYPE; if($1.type == INT_TYPE && $3.type == INT_TYPE) { $$.bval = $1.ival > $3.ival; } else if($1.type == REAL_TYPE && $3.type == INT_TYPE) { $$.bval = $1.rval > $3.ival; } else if($1.type == INT_TYPE && $3.type == REAL_TYPE) { $$.bval = $1.ival > $3.rval; } else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) { $$.bval = $1.rval > $3.rval; } else {yyerror("Must make boolean op on numbers"); exit(1);}}  
+|   expr lt factor     { $$.type = BOOL_TYPE; if($1.type == INT_TYPE && $3.type == INT_TYPE) { $$.bval = $1.ival < $3.ival; } else if($1.type == REAL_TYPE && $3.type == INT_TYPE) { $$.bval = $1.rval < $3.ival; } else if($1.type == INT_TYPE && $3.type == REAL_TYPE) { $$.bval = $1.ival < $3.rval; } else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) { $$.bval = $1.rval < $3.rval; } else {yyerror("Must make boolean op on numbers"); exit(1);}}  
+|   expr eq factor     { $$.type = BOOL_TYPE; if($1.type == INT_TYPE && $3.type == INT_TYPE) { $$.bval = $1.ival == $3.ival; } else if($1.type == REAL_TYPE && $3.type == INT_TYPE) { $$.bval = $1.rval == $3.ival; } else if($1.type == INT_TYPE && $3.type == REAL_TYPE) { $$.bval = $1.ival == $3.rval; } else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) { $$.bval = $1.rval == $3.rval; } else {yyerror("Must make boolean op on numbers"); exit(1);}}  
+|   expr ne factor   { $$.type = BOOL_TYPE; if($1.type == INT_TYPE && $3.type == INT_TYPE) { $$.bval = $1.ival != $3.ival; } else if($1.type == REAL_TYPE && $3.type == INT_TYPE) { $$.bval = $1.rval != $3.ival; } else if($1.type == INT_TYPE && $3.type == REAL_TYPE) { $$.bval = $1.ival != $3.rval; } else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) { $$.bval = $1.rval != $3.rval; } else {yyerror("Must make boolean op on numbers"); exit(1);}}  
+|   expr and factor   { $$.type = BOOL_TYPE; if($1.type == BOOL_TYPE && $3.type == BOOL_TYPE) {$$.bval = $1.bval && $3.bval;} else {yyerror("Must make AND operation on boolean");}}
+|   expr or factor    { $$.type = BOOL_TYPE; if($1.type == BOOL_TYPE && $3.type == BOOL_TYPE) {$$.bval = $1.bval || $3.bval;} else {yyerror("Must make OR operation on boolean");}}
+|   not factor            { $$.type = BOOL_TYPE; if($2.type == BOOL_TYPE) {$$.bval = (!$2.bval); } else {yyerror("Must make NOT operation on boolean");}}
 ;
 
-factor: term              {$$.type = $1.type;  if($1.type == INT_TYPE) {$$.ival = $1.ival;} else if($1.type == REAL_TYPE) {$$.rval = $1.rval;} else if($1.type == BOOL_TYPE) {$$.bval = $1.bval;} else if($1.type == CHAR_TYPE) {$$.cval = $1.cval;} else if($1.type == STRING_TYPE) {$$.sval = $1.sval;} }
-|   factor MULOP term    { if($1.type == INT_TYPE && $3.type == INT_TYPE) {$$.type = INT_TYPE; $$.ival = $1.ival*$3.ival;} else if($1.type == REAL_TYPE && $3.type == INT_TYPE) {$$.type = REAL_TYPE; $$.rval = $1.rval*(float)$3.ival;} else if($1.type == INT_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = (float)$1.ival*$3.rval;} else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = $1.rval*$3.rval;} else { yyerror("Must multiply numbers"); exit(1);} }
-|   factor DIVOP term    { if($1.type == INT_TYPE && $3.type == INT_TYPE) {$$.type = INT_TYPE; $$.ival = $1.ival/$3.ival;} else if($1.type == REAL_TYPE && $3.type == INT_TYPE) {$$.type = REAL_TYPE; $$.rval = $1.rval/(float)$3.ival;} else if($1.type == INT_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = (float)$1.ival/$3.rval;} else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = (float) $1.rval/$3.rval;} else { yyerror("Must divide numbers"); exit(1);} }
-|   factor DIV term      { $$.type = INT_TYPE; if($1.type == INT_TYPE && $3.type == INT_TYPE) {$$.ival = $1.ival/$3.ival;} else if($1.type == REAL_TYPE && $3.type == INT_TYPE) {$$.ival = (int) $1.rval/$3.ival;} else if($1.type == INT_TYPE && $3.type == REAL_TYPE) {$$.ival = (int)$1.ival/$3.rval;} else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) {$$.ival = (int) $1.rval/$3.rval;} else { yyerror("Must divide numbers"); exit(1);} }
-|   factor MOD term      { if($1.type == INT_TYPE && $3.type == INT_TYPE) {$$.type = INT_TYPE; $$.ival = (int)fmod($1.ival, $3.ival);} else if($1.type == REAL_TYPE && $3.type == INT_TYPE) {$$.type = REAL_TYPE; $$.rval = fmod($1.rval, (float)$3.ival);} else if($1.type == INT_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = fmod((float)$1.ival, $3.rval);} else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = fmod($1.rval, $3.rval);} else { yyerror("Must divide numbers"); exit(1);}}
+factor: term              {$$.type = $1.type;  if($1.type == INT_TYPE) {$$.ival = $1.ival; } else if($1.type == REAL_TYPE) {$$.rval = $1.rval;} else if($1.type == BOOL_TYPE) {$$.bval = $1.bval;} else if($1.type == CHAR_TYPE) {$$.cval = $1.cval;} else if($1.type == STRING_TYPE) {$$.sval = $1.sval;} }
+|   factor mulop term    { if($1.type == INT_TYPE && $3.type == INT_TYPE) {$$.type = INT_TYPE; $$.ival = $1.ival*$3.ival;} else if($1.type == REAL_TYPE && $3.type == INT_TYPE) {$$.type = REAL_TYPE; $$.rval = $1.rval*(float)$3.ival;} else if($1.type == INT_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = (float)$1.ival*$3.rval;} else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = $1.rval*$3.rval;} else { yyerror("Must multiply numbers"); exit(1);} }
+|   factor divop term    {  if($1.type == INT_TYPE && $3.type == INT_TYPE) {$$.type = INT_TYPE; $$.ival = $1.ival/$3.ival;} else if($1.type == REAL_TYPE && $3.type == INT_TYPE) {$$.type = REAL_TYPE; $$.rval = $1.rval/(float)$3.ival;} else if($1.type == INT_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = (float)$1.ival/$3.rval;} else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = (float) $1.rval/$3.rval;} else { yyerror("Must divide numbers"); exit(1);} }
+|   factor mod term      { if($1.type == INT_TYPE && $3.type == INT_TYPE) {$$.type = INT_TYPE; $$.ival = (int)fmod($1.ival, $3.ival);} else if($1.type == REAL_TYPE && $3.type == INT_TYPE) {$$.type = REAL_TYPE; $$.rval = fmod($1.rval, (float)$3.ival);} else if($1.type == INT_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = fmod((float)$1.ival, $3.rval);} else if($1.type == REAL_TYPE && $3.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = fmod($1.rval, $3.rval);} else { yyerror("Must divide numbers"); exit(1);}}
 ;
 
-term: ID          { context_check($1, curr_scope); $$.type = get_type($1, curr_scope); if(get_type($1, curr_scope) == INT_TYPE) { $$.ival = get_int_value($1, curr_scope);} else if(get_type($1, curr_scope) == REAL_TYPE) {$$.rval = get_real_value($1, curr_scope);} else if(get_type($1, curr_scope) == BOOL_TYPE) {$$.bval = get_bool_value($1, curr_scope);} else if(get_type($1, curr_scope) == CHAR_TYPE) {$$.cval = get_char_value($1, curr_scope);} else if(get_type($1, curr_scope) == STRING_TYPE) {$$.sval = get_string_value($1, curr_scope);}}
-|      INTEGER             {$$.type = $1.type; $$.ival = $1.ival;}
-|     REAL                  {$$.type = $1.type; $$.rval = $1.rval;}
-|     TRUE                  {$$.type = $1.type; $$.bval = 1;}
-|     FALSE                 {$$.type = $1.type; $$.bval = 0;}
-|     CHAR                  {$$.type = $1.type; $$.cval = $1.cval;}
-|     STRING                {$$.type = $1.type; $$.sval = $1.sval;}
-|    OPENPAR expr CLOSEPAR  {$$ = $2; }
-|   ABS OPENPAR expr CLOSEPAR {$$.type = $3.type; if($3.type == INT_TYPE) {$$.ival = (int)abs($3.ival);} else if($3.type == REAL_TYPE) {$$.rval = abs($3.rval);} }
-|   POW OPENPAR expr COMMA expr CLOSEPAR      { if($3.type == INT_TYPE && $5.type == INT_TYPE) {$$.type = INT_TYPE; $$.ival = pow($3.ival, $5.ival);} else if($3.type == REAL_TYPE && $5.type == INT_TYPE) {$$.type = REAL_TYPE; $$.rval = pow($3.rval, (float)$5.ival);} else if($3.type == INT_TYPE && $5.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = pow((float)$3.ival, $5.rval);} else if($3.type == REAL_TYPE && $5.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = pow($3.rval, $5.rval);} else { yyerror("Must power numbers"); exit(1);} }
-|   SQRT OPENPAR expr CLOSEPAR {$$.type = $3.type; if($3.type == INT_TYPE) {if($3.ival >= 0) {$$.ival = (int)sqrt($3.ival);}} else if($3.type == REAL_TYPE) {if($3.rval >= 0) {$$.rval = sqrt($3.rval);}} else{yyerror("Cannot make sqrt on negative number");exit(1);}}
-|   EXP OPENPAR expr CLOSEPAR {$$.type = $3.type; if($3.type == INT_TYPE) {$$.ival = (int)exp($3.ival);} else if($3.type == REAL_TYPE) {$$.rval = exp($3.rval);} }
-|   LOG OPENPAR expr CLOSEPAR {$$.type = $3.type; if($3.type == INT_TYPE) {if($3.ival >= 0) {$$.ival = (int)log10($3.ival);}} else if($3.type == REAL_TYPE) {if($3.rval >= 0) {$$.rval = log10($3.rval);}} else{yyerror("Cannot make log on negative number");exit(1);}}
-|   LN OPENPAR expr CLOSEPAR  {$$.type = $3.type; if($3.type == INT_TYPE) {if($3.ival >= 0) {$$.ival = (int)log($3.ival);}} else if($3.type == REAL_TYPE) {if($3.rval >= 0) {$$.rval = log($3.rval);}} else{yyerror("Cannot make ln on negative number");exit(1);}}
-|   FLOOR OPENPAR expr CLOSEPAR {$$.type = INT_TYPE; if($3.type == INT_TYPE) {$$.ival = $3.ival;} else if($3.type == REAL_TYPE) {$$.ival = (int)floor($3.rval);} else {yyerror("Must floor on number");} }
-|   CEIL OPENPAR expr CLOSEPAR  {$$.type = INT_TYPE; if($3.type == INT_TYPE) {$$.ival = $3.ival;} else if($3.type == REAL_TYPE) {$$.ival = (int)ceil($3.rval);} else {yyerror("Must ceil on number");} }
-|   COS OPENPAR expr CLOSEPAR  {$$.type = REAL_TYPE; if($3.type == REAL_TYPE) {$$.rval = cos($3.rval);} else {yyerror("Must make cos on real");}}
-|   SIN OPENPAR expr CLOSEPAR  {$$.type = REAL_TYPE; if($3.type == REAL_TYPE) {$$.rval = sin($3.rval);} else {yyerror("Must make sin on real");}}
-|   TAN OPENPAR expr CLOSEPAR  {$$.type = REAL_TYPE; if($3.type == REAL_TYPE) {$$.rval = tan($3.rval);} else {yyerror("Must make tan on real");}}
+id: ID            { generate_code($1);};
+
+openpar: OPENPAR    {generate_code("(");};
+closepar: CLOSEPAR    {generate_code(")");};
+abs: ABS              {generate_code("Math.abs");};
+pow: POW              {generate_code("Math.pow");};
+sqrt:  SQRT            {generate_code("Math.sqrt");};
+exp: EXP              {generate_code("Math.exp");};
+log: LOG              {generate_code("Math.log10");};
+ln: LN                {generate_code("Math.log");};
+floor: FLOOR          {generate_code("Math.floor");};
+ceil: CEIL            {generate_code("Math.ceil");};
+cos:  COS             {generate_code("Math.cos");};
+sin: SIN              {generate_code("Math.sin");};
+tan: TAN              {generate_code("Math.tan");};
+
+term: id          { context_check($1, curr_scope); $$.type = get_type($1, curr_scope); if(get_type($1, curr_scope) == INT_TYPE) { $$.ival = get_int_value($1, curr_scope);} else if(get_type($1, curr_scope) == REAL_TYPE) {$$.rval = get_real_value($1, curr_scope);} else if(get_type($1, curr_scope) == BOOL_TYPE) {$$.bval = get_bool_value($1, curr_scope);} else if(get_type($1, curr_scope) == CHAR_TYPE) {$$.cval = get_char_value($1, curr_scope);} else if(get_type($1, curr_scope) == STRING_TYPE) {$$.sval = get_string_value($1, curr_scope);}}
+|      INTEGER             {generate_int($1.ival); $$.type = $1.type; $$.ival = $1.ival;}
+|     REAL                  {generate_real($1.rval); $$.type = $1.type; $$.rval = $1.rval;}
+|     TRUE                  {generate_code(" true "); $$.type = $1.type; $$.bval = 1;}
+|     FALSE                 {generate_code(" false "); $$.type = $1.type; $$.bval = 0;}
+|     CHAR                  {generate_code($1.cval); $$.type = $1.type; $$.cval = $1.cval;}
+|     STRING                {generate_code($1.sval); $$.type = $1.type; $$.sval = $1.sval;}
+|    openpar expr closepar  {$$ = $2; }
+|   abs openpar expr closepar {$$.type = $3.type; if($3.type == INT_TYPE) {$$.ival = (int)abs($3.ival);} else if($3.type == REAL_TYPE) {$$.rval = abs($3.rval);} }
+|   pow openpar expr comma expr closepar      { if($3.type == INT_TYPE && $5.type == INT_TYPE) {$$.type = INT_TYPE; $$.ival = pow($3.ival, $5.ival);} else if($3.type == REAL_TYPE && $5.type == INT_TYPE) {$$.type = REAL_TYPE; $$.rval = pow($3.rval, (float)$5.ival);} else if($3.type == INT_TYPE && $5.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = pow((float)$3.ival, $5.rval);} else if($3.type == REAL_TYPE && $5.type == REAL_TYPE) {$$.type = REAL_TYPE; $$.rval = pow($3.rval, $5.rval);} else { yyerror("Must power numbers"); exit(1);} }
+|   sqrt openpar expr closepar {$$.type = $3.type; if($3.type == INT_TYPE) {if($3.ival >= 0) {$$.ival = (int)sqrt($3.ival);}} else if($3.type == REAL_TYPE) {if($3.rval >= 0) {$$.rval = sqrt($3.rval);}} else{yyerror("Cannot make sqrt on negative number");exit(1);}}
+|   exp openpar expr closepar {$$.type = $3.type; if($3.type == INT_TYPE) {$$.ival = (int)exp($3.ival);} else if($3.type == REAL_TYPE) {$$.rval = exp($3.rval);} }
+|   log openpar expr closepar {$$.type = $3.type; if($3.type == INT_TYPE) {if($3.ival >= 0) {$$.ival = (int)log10($3.ival);}} else if($3.type == REAL_TYPE) {if($3.rval >= 0) {$$.rval = log10($3.rval);}} else{yyerror("Cannot make log on negative number");exit(1);}}
+|   ln openpar expr closepar  {$$.type = $3.type; if($3.type == INT_TYPE) {if($3.ival >= 0) {$$.ival = (int)log($3.ival);}} else if($3.type == REAL_TYPE) {if($3.rval >= 0) {$$.rval = log($3.rval);}} else{yyerror("Cannot make ln on negative number");exit(1);}}
+|   floor openpar expr closepar {$$.type = INT_TYPE; if($3.type == INT_TYPE) {$$.ival = $3.ival;} else if($3.type == REAL_TYPE) {$$.ival = (int)floor($3.rval);} else {yyerror("Must floor on number");} }
+|   ceil openpar expr closepar  {$$.type = INT_TYPE; if($3.type == INT_TYPE) {$$.ival = $3.ival;} else if($3.type == REAL_TYPE) {$$.ival = (int)ceil($3.rval);} else {yyerror("Must ceil on number");} }
+|   cos openpar expr closepar  {$$.type = REAL_TYPE; if($3.type == REAL_TYPE) {$$.rval = cos($3.rval);} else {yyerror("Must make cos on real");}}
+|   sin openpar expr closepar  {$$.type = REAL_TYPE; if($3.type == REAL_TYPE) {$$.rval = sin($3.rval);} else {yyerror("Must make sin on real");}}
+|   tan openpar expr closepar  {$$.type = REAL_TYPE; if($3.type == REAL_TYPE) {$$.rval = tan($3.rval);} else {yyerror("Must make tan on real");}}
 ;
 
+write_symb: WRITE {generate_code("System.out.println(");}
 
-write: WRITE expr   {if($2.type == CHAR_TYPE) {printf("WRITE: %s\n", $2.cval);} else if($2.type == STRING_TYPE) {printf("WRITE: %s\n", $2.sval);} else if($2.type == REAL_TYPE) {printf("WRITE: %f\n", $2.rval);} else if($2.type == INT_TYPE) {printf("WRITE: %d\n", $2.ival);} else if($2.type == BOOL_TYPE) {printf("WRITE: %d\n", $2.bval);} }
+write: write_symb expr   { generate_code(")"); if($2.type == CHAR_TYPE) {printf("WRITE: %s\n", $2.cval);} else if($2.type == STRING_TYPE) {printf("WRITE: %s\n", $2.sval);} else if($2.type == REAL_TYPE) {printf("WRITE: %f\n", $2.rval);} else if($2.type == INT_TYPE) {printf("WRITE: %d\n", $2.ival);} else if($2.type == BOOL_TYPE) {printf("WRITE: %d\n", $2.bval);} }
 ;
 
 
@@ -258,18 +288,28 @@ type: INT_TYPE   {$$ = INT_TYPE;}
 |   BOOL_TYPE     {$$ = BOOL_TYPE;}
 ;
 
-conditionalstmt: IF expr THEN groupstmts elifstmt elsestmt ENDIF    {if($2.type != BOOL_TYPE) {yyerror("You must have a boolean condition with if statement"); exit(1);}}
+if: IF        {generate_code("\nif( ");};
+then: THEN      {generate_code(" {\n");};
+elif: ELIF      {generate_code(" } else if(");};
+else: ELSE      {generate_code("} else {\n")}
+endif: ENDIF    {generate_code("}");};
+
+conditionalstmt: if expr {generate_code(")"); if($2.type != BOOL_TYPE) {yyerror("You must have a boolean condition with if statement"); exit(1);}} then groupstmts elifstmt elsestmt endif    
 ;
 
 elifstmt: 
-|   elifstmt ELIF expr THEN groupstmts  {if($3.type != BOOL_TYPE) { yyerror("You must have a boolean condition with elif statement"); exit(1);}}
+|   elifstmt elif expr {generate_code(")"); if($3.type != BOOL_TYPE) { yyerror("You must have a boolean condition with elif statement"); exit(1);}} then groupstmts  
 ;
 
 elsestmt:
-|   ELSE stmts
+|   else groupstmts
 ;
 
-loopstmt: WHILE expr DO groupstmts ENDWHILE   {if($2.type != BOOL_TYPE) {yyerror("You must choose a boolean condition with loop statement"); exit(1);}}
+while: WHILE        {generate_code("while (");};
+do: DO              {generate_code(" {\n");};
+endwhile: ENDWHILE  {generate_code(" }");};
+
+loopstmt: while expr {generate_code(")"); if($2.type != BOOL_TYPE) {yyerror("You must choose a boolean condition with loop statement"); exit(1);}} do groupstmts endwhile  
 ;
 
 fcts: 
@@ -282,36 +322,39 @@ fct: declfct headfct groupstmts returnfct    { }
 declfct: FCT  ID { curr_fct = $2; }
 ;
 
-headfct: OPENPAR paramfcts CLOSEPAR COLON type { install(curr_fct, $5, 0, 0, 0, "N", "null", curr_scope); printf("curr_fct %s", curr_fct); curr_scope++; }
+headfct: COLON type { generate_fct(curr_fct, $2); install(curr_fct, $2, 0, 0, 0, "N", "null", curr_scope); printf("curr_fct %s", curr_fct); curr_scope++; } openpar paramfcts closepar { generate_code(" {\n");} 
 
 paramfcts: 
 |     parameters
 ;
 
-parameters: ID       { context_check($1, curr_scope); put_param($1, get_type($1, curr_scope), curr_fct); }
-|   ID COMMA parameters     { context_check($1, curr_scope); put_param($1, get_type($1, curr_scope), curr_fct);}
+param: VAR ID COLON type    {generate_decl($2, $4); install($2, $4, 0, 0, 0, "N", "null", curr_scope); put_param($2, $4, curr_fct); }
+;
+parameters: param     { }
+|   param comma parameters     { }
 ;
 
-returnfct: RETURN ID   {check_type($2, get_type(curr_fct, curr_scope), curr_scope); if(get_type(curr_fct, curr_scope) == INT_TYPE) {set_int_value(curr_fct, get_int_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == REAL_TYPE) {set_real_value(curr_fct, get_real_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == BOOL_TYPE) {set_bool_value(curr_fct, get_bool_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == CHAR_TYPE) {set_char_value(curr_fct, get_char_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == STRING_TYPE) {set_string_value(curr_fct, get_string_value($2, curr_scope), curr_scope);} curr_scope--; }
+return: RETURN        {generate_code(" return ");};
+returnfct: return id   {generate_code(";\n}"); check_type($2, get_type(curr_fct, curr_scope), curr_scope); if(get_type(curr_fct, curr_scope) == INT_TYPE) {set_int_value(curr_fct, get_int_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == REAL_TYPE) {set_real_value(curr_fct, get_real_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == BOOL_TYPE) {set_bool_value(curr_fct, get_bool_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == CHAR_TYPE) {set_char_value(curr_fct, get_char_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == STRING_TYPE) {set_string_value(curr_fct, get_string_value($2, curr_scope), curr_scope);} curr_scope--; }
 ;
 
-instances: ID       { $$.type = get_type($1, curr_scope); printf("ID");}
-|   INTEGER         {$$.type = INT_TYPE;}
-|   REAL            {$$.type = REAL_TYPE;}
-|   CHAR            {$$.type = CHAR_TYPE;}
-|   STRING          {$$.type = STRING_TYPE;}
-|   TRUE            {$$.type = BOOL_TYPE;}
-|   FALSE           {$$.type = BOOL_TYPE;}
+instances: id       { generate_code($1); $$.type = get_type($1, curr_scope); printf("ID");}
+|   INTEGER         {generate_int($1.ival); $$.type = INT_TYPE;}
+|   REAL            {generate_real($1.rval); $$.type = REAL_TYPE;}
+|   CHAR            {generate_code($1.cval); $$.type = CHAR_TYPE;}
+|   STRING          {generate_code($1.sval); $$.type = STRING_TYPE;}
+|   TRUE            {generate_code(" true "); $$.type = BOOL_TYPE;}
+|   FALSE           {generate_code(" false "); $$.type = BOOL_TYPE;}
 ;
 
 
 callfct: startcall endcall
 ;
 
-startcall: ID ASSIGNMENT ID          { check_type($1, get_type($3, curr_scope), curr_scope); curr_call = $3; if(get_type($1, curr_scope) == INT_TYPE) {set_int_value($1, get_int_value($3, curr_scope), curr_scope);} else if(get_type($1, curr_scope) == REAL_TYPE) {set_real_value($1, get_real_value($3, curr_scope), curr_scope);} else if(get_type($1, curr_scope) == BOOL_TYPE) {set_bool_value($1, get_bool_value($3, curr_scope), curr_scope);} else if(get_type($1, curr_scope) == CHAR_TYPE) {set_char_value($1, get_char_value($3, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == STRING_TYPE) {set_string_value($1, get_string_value($3, curr_scope), curr_scope);}  printf("curr_call = %s\n", curr_call); }
+startcall: id assignment id          { check_type($1, get_type($3, curr_scope), curr_scope); curr_call = $3; if(get_type($1, curr_scope) == INT_TYPE) {set_int_value($1, get_int_value($3, curr_scope), curr_scope);} else if(get_type($1, curr_scope) == REAL_TYPE) {set_real_value($1, get_real_value($3, curr_scope), curr_scope);} else if(get_type($1, curr_scope) == BOOL_TYPE) {set_bool_value($1, get_bool_value($3, curr_scope), curr_scope);} else if(get_type($1, curr_scope) == CHAR_TYPE) {set_char_value($1, get_char_value($3, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == STRING_TYPE) {set_string_value($1, get_string_value($3, curr_scope), curr_scope);}  printf("curr_call = %s\n", curr_call); }
 ;
 
-endcall: OPENPAR paramcallfct CLOSEPAR 
+endcall: openpar paramcallfct closepar 
 ;
 
 paramcallfct:     { if(get_param_nb(curr_call) != 0) { yyerror("Wrong number of parameters in the function call"); exit(1); } }
@@ -319,7 +362,7 @@ paramcallfct:     { if(get_param_nb(curr_call) != 0) { yyerror("Wrong number of 
 ;
 
 parametersinstances: instances            {num_param++; param_check(num_param, curr_call); param_check_type(num_param, curr_call, $1.type);  }
-|    instances COMMA parametersinstances {num_param++; param_check(num_param, curr_call); param_check_type(num_param, curr_call, $1.type); printf("PARAM NB = %d AND NUM_PARAM = %d\n", get_param_nb(curr_call), num_param); if(get_param_nb(curr_call) != num_param) { yyerror("Wrong number of parameters in the function call"); exit(1); }}
+|    instances comma parametersinstances {num_param++; param_check(num_param, curr_call); param_check_type(num_param, curr_call, $1.type); printf("PARAM NB = %d AND NUM_PARAM = %d\n", get_param_nb(curr_call), num_param); if(get_param_nb(curr_call) != num_param) { yyerror("Wrong number of parameters in the function call"); exit(1); }}
 ;
 
 

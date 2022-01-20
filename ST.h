@@ -18,6 +18,7 @@ symrec *identifier;
 
 symrec *sym_table = (symrec *)0; 
 
+
 symrec * putsym (char *sym_name, int type, int int_val, double real_val, int bool_val, char *char_val, char *string_val, int curr_scope) 
 {
     symrec *ptr;
@@ -50,7 +51,7 @@ void setrealval(char * sym_name, double real_val, int scope) {
     symrec *ptr;
     ptr = getsym(sym_name, scope);
     ptr->real_val = real_val;
-    printf("PUT AREAL VAL TO AN ID \n He has %d type %f real\n", ptr->type, ptr->real_val);
+    printf("PUT A REAL VAL TO AN ID \n He has %d type %f real\n", ptr->type, ptr->real_val);
 }
 
 double getrealval(char * sym_name, int scope) {
@@ -111,4 +112,53 @@ char * getstringval(char * sym_name, int scope) {
     return ptr->string_val;
 }
 
+struct Param {
+	char *name;
+	int type;
+	char *reference;
+	struct Param *next;
+};
+typedef struct Param Param;
 
+Param *param;
+
+Param *param_list  = (Param *)0;
+
+
+Param * putParam(char *name_param, int type, char *ref) {
+	Param *ptr;
+    ptr = (Param *) malloc (sizeof(Param));
+    ptr->name = (char *) malloc (strlen(name_param)+1);
+    strcpy (ptr->name, name_param);
+    ptr->type = type;
+	ptr->reference = (char *) malloc (strlen(ref)+1);
+    strcpy (ptr->reference, ref);
+	ptr->next = (struct Param *)param_list;
+    param_list = ptr;
+    return ptr;
+}
+
+Param * getParamByNumber(int number, char *ref) {
+    int cnt = 0;
+    Param *ptr;
+    for ( ptr = param_list; ptr != (Param *) 0; ptr = (Param *)ptr->next )
+        if (strcmp(ptr->reference, ref) == 0) {
+            cnt++;
+            if(cnt == number)
+                return ptr;
+        } 
+    return 0;
+}
+
+
+
+int getParamNb(char *ref) {
+    int cnt = 0;
+    Param *ptr;
+    for ( ptr = param_list; ptr != (Param *) 0; ptr = (Param *)ptr->next ) {
+        if (strcmp(ptr->reference, ref) == 0) {
+             cnt++;
+        }
+    }
+    return cnt;
+}

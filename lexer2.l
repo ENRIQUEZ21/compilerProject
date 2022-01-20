@@ -43,7 +43,6 @@ endstmt     return ENDSTMT;
 "-"  return MINOP; 
 "*"  return MULOP;
 "/"  return DIVOP;
-div  return DIV;
 mod  return MOD;
 
 abs  return ABS;

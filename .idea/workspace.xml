@@ -3,11 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="b420a0e1-8149-4b48-ae11-ce43c3ad699a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/a.exe" beforeDir="false" afterPath="$PROJECT_DIR$/a.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lex.yy.c" beforeDir="false" afterPath="$PROJECT_DIR$/lex.yy.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lexer2.l" beforeDir="false" afterPath="$PROJECT_DIR$/lexer2.l" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ast.h" beforeDir="false" afterPath="$PROJECT_DIR$/ast.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/input.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/yacc2.tab.c" beforeDir="false" afterPath="$PROJECT_DIR$/yacc2.tab.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yacc2.tab.h" beforeDir="false" afterPath="$PROJECT_DIR$/yacc2.tab.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yacc2.y" beforeDir="false" afterPath="$PROJECT_DIR$/yacc2.y" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +25,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$USER_HOME$/nodejs/redis" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -38,6 +37,7 @@
       <option name="presentableId" value="Default" />
       <updated>1641396208020</updated>
       <workItem from="1641396212310" duration="65000" />
+      <workItem from="1642064132994" duration="106000" />
     </task>
     <servers />
   </component>
