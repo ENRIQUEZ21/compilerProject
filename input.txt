@@ -11,14 +11,14 @@ Function myabs:real(var id3:integer, var id2:real)
     endstmt
 return c
 
-Function myexp:real(var id31:integer, var id21:real)
+Function myexp:real(var id3:integer, var id2:real)
     beginstmt
-        var c1:real;
-        id21 := 45.;
-        id31 := 67;
-        c1 := exp(id21-id31);
+        var c:real;
+        id2 := 45.;
+        id3 := 67;
+        c := exp(id2-id3);
     endstmt
-return c1
+return c
 
 
 

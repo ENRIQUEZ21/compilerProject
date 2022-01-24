@@ -87,11 +87,7 @@
   char *curr_fct = "N";
   char *curr_call = "N";
   int num_param = 0; 
-
-  /* void hide_scope(int curr_scope) {
-    hidescope(curr_scope);
-  }
-  */
+  
 
 
   void install ( char *sym_name, int type, int int_val, double real_val, int bool_val, char *char_val, char *string_val, int current_scope)
@@ -206,13 +202,15 @@
 
   }
 
-  
+  void hide_scope(int curr_scope) {
+    hidescope(curr_scope);
+  }  
   
 
 
 
 /* Line 189 of yacc.c  */
-#line 216 "yacc2.tab.c"
+#line 214 "yacc2.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -310,12 +308,12 @@
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union 
 /* Line 214 of yacc.c  */
-#line 144 "yacc2.y"
+#line 142 "yacc2.y"
 semrec
 {
 
 /* Line 214 of yacc.c  */
-#line 145 "yacc2.y"
+#line 143 "yacc2.y"
  
   struct Value val;
   double doubleval;
@@ -325,7 +323,7 @@ semrec
 
 
 /* Line 214 of yacc.c  */
-#line 329 "yacc2.tab.c"
+#line 327 "yacc2.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -337,7 +335,7 @@ semrec
 
 
 /* Line 264 of yacc.c  */
-#line 341 "yacc2.tab.c"
+#line 339 "yacc2.tab.c"
 
 #ifdef short
 # undef short
@@ -676,20 +674,20 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   181,   181,   181,   181,   184,   188,   189,   192,   193,
-     194,   195,   196,   197,   200,   202,   204,   205,   208,   209,
-     212,   213,   214,   215,   216,   217,   218,   219,   220,   221,
-     222,   223,   224,   225,   227,   228,   229,   230,   231,   232,
-     233,   234,   235,   236,   237,   238,   239,   242,   243,   244,
-     245,   248,   250,   251,   252,   253,   254,   255,   256,   257,
-     258,   259,   260,   261,   262,   264,   265,   266,   267,   268,
-     269,   270,   271,   272,   273,   274,   275,   276,   277,   278,
-     279,   280,   281,   282,   285,   287,   291,   292,   293,   294,
-     295,   298,   299,   300,   301,   302,   304,   304,   307,   308,
-     308,   311,   312,   315,   316,   317,   319,   319,   322,   323,
-     326,   329,   332,   332,   332,   334,   335,   338,   340,   341,
-     344,   345,   348,   349,   350,   351,   352,   353,   354,   358,
-     361,   364,   367,   368,   371,   372
+       0,   179,   179,   179,   179,   182,   186,   187,   190,   191,
+     192,   193,   194,   195,   198,   200,   202,   203,   206,   207,
+     210,   211,   212,   213,   214,   215,   216,   217,   218,   219,
+     220,   221,   222,   223,   225,   226,   227,   228,   229,   230,
+     231,   232,   233,   234,   235,   236,   237,   240,   241,   242,
+     243,   246,   248,   249,   250,   251,   252,   253,   254,   255,
+     256,   257,   258,   259,   260,   262,   263,   264,   265,   266,
+     267,   268,   269,   270,   271,   272,   273,   274,   275,   276,
+     277,   278,   279,   280,   283,   285,   289,   290,   291,   292,
+     293,   296,   297,   298,   299,   300,   302,   302,   305,   306,
+     306,   309,   310,   313,   314,   315,   317,   317,   320,   321,
+     324,   327,   330,   330,   330,   332,   333,   336,   338,   339,
+     342,   343,   346,   347,   348,   349,   350,   351,   352,   356,
+     359,   362,   365,   366,   369,   370
 };
 #endif
 
@@ -1761,812 +1759,812 @@ yyreduce:
         case 2:
 
 /* Line 1455 of yacc.c  */
-#line 181 "yacc2.y"
+#line 179 "yacc2.y"
     {generate_code("import java.lang.Math;\npublic class out{ \n"); ;}
     break;
 
   case 3:
 
 /* Line 1455 of yacc.c  */
-#line 181 "yacc2.y"
+#line 179 "yacc2.y"
     { generate_code("\npublic static void main(String args[]){\n");;}
     break;
 
   case 4:
 
 /* Line 1455 of yacc.c  */
-#line 181 "yacc2.y"
+#line 179 "yacc2.y"
     {generate_code("}\n}");;}
     break;
 
   case 7:
 
 /* Line 1455 of yacc.c  */
-#line 189 "yacc2.y"
+#line 187 "yacc2.y"
     {generate_code(";\n");;}
     break;
 
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 195 "yacc2.y"
+#line 193 "yacc2.y"
     {;}
     break;
 
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 196 "yacc2.y"
+#line 194 "yacc2.y"
     {;}
     break;
 
   case 13:
 
 /* Line 1455 of yacc.c  */
-#line 197 "yacc2.y"
+#line 195 "yacc2.y"
     { ;}
     break;
 
   case 14:
 
 /* Line 1455 of yacc.c  */
-#line 200 "yacc2.y"
+#line 198 "yacc2.y"
     {generate_code(" , ");;}
     break;
 
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 202 "yacc2.y"
+#line 200 "yacc2.y"
     { generate_decl((yyvsp[(2) - (4)].id), (yyvsp[(4) - (4)].intval)); install((yyvsp[(2) - (4)].id), (yyvsp[(4) - (4)].intval), 0, 0, 0, "N", "null", curr_scope);;}
     break;
 
   case 18:
 
 /* Line 1455 of yacc.c  */
-#line 208 "yacc2.y"
+#line 206 "yacc2.y"
     {generate_code(" = ");;}
     break;
 
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 209 "yacc2.y"
+#line 207 "yacc2.y"
     { context_check((yyvsp[(1) - (3)].id), curr_scope); if((yyvsp[(3) - (3)].val).type == INT_TYPE) {if(get_type((yyvsp[(1) - (3)].id), curr_scope) == INT_TYPE) { set_int_value((yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].val).ival, curr_scope); } else if(get_type((yyvsp[(1) - (3)].id), curr_scope) == REAL_TYPE) {set_real_value((yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].val).rval, curr_scope);} else {yyerror("Error assignment: bad type"); exit(1);}} else if((yyvsp[(3) - (3)].val).type == REAL_TYPE) {check_type((yyvsp[(1) - (3)].id), REAL_TYPE, curr_scope); set_real_value((yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].val).rval, curr_scope);} else if((yyvsp[(3) - (3)].val).type == BOOL_TYPE) {check_type((yyvsp[(1) - (3)].id), BOOL_TYPE, curr_scope); set_bool_value((yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].val).bval, curr_scope);} else if((yyvsp[(3) - (3)].val).type == CHAR_TYPE) {check_type((yyvsp[(1) - (3)].id), CHAR_TYPE, curr_scope); set_char_value((yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].val).cval, curr_scope);} else if((yyvsp[(3) - (3)].val).type == STRING_TYPE) {check_type((yyvsp[(1) - (3)].id), STRING_TYPE, curr_scope); set_string_value((yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].val).sval, curr_scope);} ;}
     break;
 
   case 20:
 
 /* Line 1455 of yacc.c  */
-#line 212 "yacc2.y"
+#line 210 "yacc2.y"
     {generate_code(" + "); ;}
     break;
 
   case 21:
 
 /* Line 1455 of yacc.c  */
-#line 213 "yacc2.y"
+#line 211 "yacc2.y"
     {generate_code(" - ");;}
     break;
 
   case 22:
 
 /* Line 1455 of yacc.c  */
-#line 214 "yacc2.y"
+#line 212 "yacc2.y"
     {generate_code(" >= ");;}
     break;
 
   case 23:
 
 /* Line 1455 of yacc.c  */
-#line 215 "yacc2.y"
+#line 213 "yacc2.y"
     {generate_code(" <= ");;}
     break;
 
   case 24:
 
 /* Line 1455 of yacc.c  */
-#line 216 "yacc2.y"
+#line 214 "yacc2.y"
     {generate_code(" > ");;}
     break;
 
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 217 "yacc2.y"
+#line 215 "yacc2.y"
     {generate_code(" < ");;}
     break;
 
   case 26:
 
 /* Line 1455 of yacc.c  */
-#line 218 "yacc2.y"
+#line 216 "yacc2.y"
     {generate_code(" == ");;}
     break;
 
   case 27:
 
 /* Line 1455 of yacc.c  */
-#line 219 "yacc2.y"
+#line 217 "yacc2.y"
     {generate_code(" != ");;}
     break;
 
   case 28:
 
 /* Line 1455 of yacc.c  */
-#line 220 "yacc2.y"
+#line 218 "yacc2.y"
     {generate_code(" && ");;}
     break;
 
   case 29:
 
 /* Line 1455 of yacc.c  */
-#line 221 "yacc2.y"
+#line 219 "yacc2.y"
     {generate_code(" || ");;}
     break;
 
   case 30:
 
 /* Line 1455 of yacc.c  */
-#line 222 "yacc2.y"
+#line 220 "yacc2.y"
     {generate_code(" !");;}
     break;
 
   case 31:
 
 /* Line 1455 of yacc.c  */
-#line 223 "yacc2.y"
+#line 221 "yacc2.y"
     {generate_code(" * ");;}
     break;
 
   case 32:
 
 /* Line 1455 of yacc.c  */
-#line 224 "yacc2.y"
+#line 222 "yacc2.y"
     {generate_code(" / ");;}
     break;
 
   case 33:
 
 /* Line 1455 of yacc.c  */
-#line 225 "yacc2.y"
+#line 223 "yacc2.y"
     {generate_code(" % ");;}
     break;
 
   case 34:
 
 /* Line 1455 of yacc.c  */
-#line 227 "yacc2.y"
+#line 225 "yacc2.y"
     {(yyval.val).type = (yyvsp[(1) - (1)].val).type;  if((yyvsp[(1) - (1)].val).type == INT_TYPE) {(yyval.val).ival = (yyvsp[(1) - (1)].val).ival;} else if((yyvsp[(1) - (1)].val).type == REAL_TYPE) {(yyval.val).rval = (yyvsp[(1) - (1)].val).rval;} else if((yyvsp[(1) - (1)].val).type == BOOL_TYPE) {(yyval.val).bval = (yyvsp[(1) - (1)].val).bval;} else if((yyvsp[(1) - (1)].val).type == CHAR_TYPE) {(yyval.val).cval = (yyvsp[(1) - (1)].val).cval;} else if((yyvsp[(1) - (1)].val).type == STRING_TYPE) {(yyval.val).sval = (yyvsp[(1) - (1)].val).sval;};}
     break;
 
   case 35:
 
 /* Line 1455 of yacc.c  */
-#line 228 "yacc2.y"
+#line 226 "yacc2.y"
     { if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = INT_TYPE; (yyval.val).ival = (yyvsp[(1) - (3)].val).ival+(yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (yyvsp[(1) - (3)].val).rval+(float)(yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (float)(yyvsp[(1) - (3)].val).ival+(yyvsp[(3) - (3)].val).rval;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (yyvsp[(1) - (3)].val).rval+(yyvsp[(3) - (3)].val).rval; } else { yyerror("Must add numbers"); exit(1);} ;}
     break;
 
   case 36:
 
 /* Line 1455 of yacc.c  */
-#line 229 "yacc2.y"
+#line 227 "yacc2.y"
     { if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = INT_TYPE; (yyval.val).ival = (yyvsp[(1) - (3)].val).ival-(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (yyvsp[(1) - (3)].val).rval-(float)(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (float)(yyvsp[(1) - (3)].val).ival-(yyvsp[(3) - (3)].val).rval;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (yyvsp[(1) - (3)].val).rval-(yyvsp[(3) - (3)].val).rval; } else { yyerror("Must substract numbers"); exit(1);} ;}
     break;
 
   case 37:
 
 /* Line 1455 of yacc.c  */
-#line 230 "yacc2.y"
+#line 228 "yacc2.y"
     { (yyval.val).type = (yyvsp[(2) - (2)].val).type; if((yyvsp[(2) - (2)].val).type == INT_TYPE) {(yyval.val).ival = -(yyvsp[(2) - (2)].val).ival; } else if((yyvsp[(2) - (2)].val).type == REAL_TYPE) {(yyval.val).rval = -(yyvsp[(2) - (2)].val).rval; } else {yyerror("- must be on number only"); exit(1);} ;}
     break;
 
   case 38:
 
 /* Line 1455 of yacc.c  */
-#line 231 "yacc2.y"
+#line 229 "yacc2.y"
     { (yyval.val).type = BOOL_TYPE; if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival >= (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval >= (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival >= (yyvsp[(3) - (3)].val).rval; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval >= (yyvsp[(3) - (3)].val).rval; } else {yyerror("Must make boolean op on numbers"); exit(1);};}
     break;
 
   case 39:
 
 /* Line 1455 of yacc.c  */
-#line 232 "yacc2.y"
+#line 230 "yacc2.y"
     { (yyval.val).type = BOOL_TYPE; if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival <= (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval <= (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival <= (yyvsp[(3) - (3)].val).rval; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval <= (yyvsp[(3) - (3)].val).rval; } else {yyerror("Must make boolean op on numbers"); exit(1);};}
     break;
 
   case 40:
 
 /* Line 1455 of yacc.c  */
-#line 233 "yacc2.y"
+#line 231 "yacc2.y"
     { (yyval.val).type = BOOL_TYPE; if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival > (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval > (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival > (yyvsp[(3) - (3)].val).rval; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval > (yyvsp[(3) - (3)].val).rval; } else {yyerror("Must make boolean op on numbers"); exit(1);};}
     break;
 
   case 41:
 
 /* Line 1455 of yacc.c  */
-#line 234 "yacc2.y"
+#line 232 "yacc2.y"
     { (yyval.val).type = BOOL_TYPE; if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival < (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval < (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival < (yyvsp[(3) - (3)].val).rval; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval < (yyvsp[(3) - (3)].val).rval; } else {yyerror("Must make boolean op on numbers"); exit(1);};}
     break;
 
   case 42:
 
 /* Line 1455 of yacc.c  */
-#line 235 "yacc2.y"
+#line 233 "yacc2.y"
     { (yyval.val).type = BOOL_TYPE; if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival == (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval == (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival == (yyvsp[(3) - (3)].val).rval; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval == (yyvsp[(3) - (3)].val).rval; } else {yyerror("Must make boolean op on numbers"); exit(1);};}
     break;
 
   case 43:
 
 /* Line 1455 of yacc.c  */
-#line 236 "yacc2.y"
+#line 234 "yacc2.y"
     { (yyval.val).type = BOOL_TYPE; if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival != (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval != (yyvsp[(3) - (3)].val).ival; } else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).ival != (yyvsp[(3) - (3)].val).rval; } else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) { (yyval.val).bval = (yyvsp[(1) - (3)].val).rval != (yyvsp[(3) - (3)].val).rval; } else {yyerror("Must make boolean op on numbers"); exit(1);};}
     break;
 
   case 44:
 
 /* Line 1455 of yacc.c  */
-#line 237 "yacc2.y"
+#line 235 "yacc2.y"
     { (yyval.val).type = BOOL_TYPE; if((yyvsp[(1) - (3)].val).type == BOOL_TYPE && (yyvsp[(3) - (3)].val).type == BOOL_TYPE) {(yyval.val).bval = (yyvsp[(1) - (3)].val).bval && (yyvsp[(3) - (3)].val).bval;} else {yyerror("Must make AND operation on boolean");};}
     break;
 
   case 45:
 
 /* Line 1455 of yacc.c  */
-#line 238 "yacc2.y"
+#line 236 "yacc2.y"
     { (yyval.val).type = BOOL_TYPE; if((yyvsp[(1) - (3)].val).type == BOOL_TYPE && (yyvsp[(3) - (3)].val).type == BOOL_TYPE) {(yyval.val).bval = (yyvsp[(1) - (3)].val).bval || (yyvsp[(3) - (3)].val).bval;} else {yyerror("Must make OR operation on boolean");};}
     break;
 
   case 46:
 
 /* Line 1455 of yacc.c  */
-#line 239 "yacc2.y"
+#line 237 "yacc2.y"
     { (yyval.val).type = BOOL_TYPE; if((yyvsp[(2) - (2)].val).type == BOOL_TYPE) {(yyval.val).bval = (!(yyvsp[(2) - (2)].val).bval); } else {yyerror("Must make NOT operation on boolean");};}
     break;
 
   case 47:
 
 /* Line 1455 of yacc.c  */
-#line 242 "yacc2.y"
+#line 240 "yacc2.y"
     {(yyval.val).type = (yyvsp[(1) - (1)].val).type;  if((yyvsp[(1) - (1)].val).type == INT_TYPE) {(yyval.val).ival = (yyvsp[(1) - (1)].val).ival; } else if((yyvsp[(1) - (1)].val).type == REAL_TYPE) {(yyval.val).rval = (yyvsp[(1) - (1)].val).rval;} else if((yyvsp[(1) - (1)].val).type == BOOL_TYPE) {(yyval.val).bval = (yyvsp[(1) - (1)].val).bval;} else if((yyvsp[(1) - (1)].val).type == CHAR_TYPE) {(yyval.val).cval = (yyvsp[(1) - (1)].val).cval;} else if((yyvsp[(1) - (1)].val).type == STRING_TYPE) {(yyval.val).sval = (yyvsp[(1) - (1)].val).sval;} ;}
     break;
 
   case 48:
 
 /* Line 1455 of yacc.c  */
-#line 243 "yacc2.y"
+#line 241 "yacc2.y"
     { if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = INT_TYPE; (yyval.val).ival = (yyvsp[(1) - (3)].val).ival*(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (yyvsp[(1) - (3)].val).rval*(float)(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (float)(yyvsp[(1) - (3)].val).ival*(yyvsp[(3) - (3)].val).rval;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (yyvsp[(1) - (3)].val).rval*(yyvsp[(3) - (3)].val).rval;} else { yyerror("Must multiply numbers"); exit(1);} ;}
     break;
 
   case 49:
 
 /* Line 1455 of yacc.c  */
-#line 244 "yacc2.y"
+#line 242 "yacc2.y"
     {  if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = INT_TYPE; (yyval.val).ival = (yyvsp[(1) - (3)].val).ival/(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (yyvsp[(1) - (3)].val).rval/(float)(yyvsp[(3) - (3)].val).ival;} else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (float)(yyvsp[(1) - (3)].val).ival/(yyvsp[(3) - (3)].val).rval;} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = (float) (yyvsp[(1) - (3)].val).rval/(yyvsp[(3) - (3)].val).rval;} else { yyerror("Must divide numbers"); exit(1);} ;}
     break;
 
   case 50:
 
 /* Line 1455 of yacc.c  */
-#line 245 "yacc2.y"
+#line 243 "yacc2.y"
     { if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = INT_TYPE; (yyval.val).ival = (int)fmod((yyvsp[(1) - (3)].val).ival, (yyvsp[(3) - (3)].val).ival);} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == INT_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = fmod((yyvsp[(1) - (3)].val).rval, (float)(yyvsp[(3) - (3)].val).ival);} else if((yyvsp[(1) - (3)].val).type == INT_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = fmod((float)(yyvsp[(1) - (3)].val).ival, (yyvsp[(3) - (3)].val).rval);} else if((yyvsp[(1) - (3)].val).type == REAL_TYPE && (yyvsp[(3) - (3)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = fmod((yyvsp[(1) - (3)].val).rval, (yyvsp[(3) - (3)].val).rval);} else { yyerror("Must divide numbers"); exit(1);};}
     break;
 
   case 51:
 
 /* Line 1455 of yacc.c  */
-#line 248 "yacc2.y"
+#line 246 "yacc2.y"
     { generate_code((yyvsp[(1) - (1)].id));;}
     break;
 
   case 52:
 
 /* Line 1455 of yacc.c  */
-#line 250 "yacc2.y"
+#line 248 "yacc2.y"
     {generate_code("(");;}
     break;
 
   case 53:
 
 /* Line 1455 of yacc.c  */
-#line 251 "yacc2.y"
+#line 249 "yacc2.y"
     {generate_code(")");;}
     break;
 
   case 54:
 
 /* Line 1455 of yacc.c  */
-#line 252 "yacc2.y"
+#line 250 "yacc2.y"
     {generate_code("Math.abs");;}
     break;
 
   case 55:
 
 /* Line 1455 of yacc.c  */
-#line 253 "yacc2.y"
+#line 251 "yacc2.y"
     {generate_code("Math.pow");;}
     break;
 
   case 56:
 
 /* Line 1455 of yacc.c  */
-#line 254 "yacc2.y"
+#line 252 "yacc2.y"
     {generate_code("Math.sqrt");;}
     break;
 
   case 57:
 
 /* Line 1455 of yacc.c  */
-#line 255 "yacc2.y"
+#line 253 "yacc2.y"
     {generate_code("Math.exp");;}
     break;
 
   case 58:
 
 /* Line 1455 of yacc.c  */
-#line 256 "yacc2.y"
+#line 254 "yacc2.y"
     {generate_code("Math.log10");;}
     break;
 
   case 59:
 
 /* Line 1455 of yacc.c  */
-#line 257 "yacc2.y"
+#line 255 "yacc2.y"
     {generate_code("Math.log");;}
     break;
 
   case 60:
 
 /* Line 1455 of yacc.c  */
-#line 258 "yacc2.y"
+#line 256 "yacc2.y"
     {generate_code("Math.floor");;}
     break;
 
   case 61:
 
 /* Line 1455 of yacc.c  */
-#line 259 "yacc2.y"
+#line 257 "yacc2.y"
     {generate_code("Math.ceil");;}
     break;
 
   case 62:
 
 /* Line 1455 of yacc.c  */
-#line 260 "yacc2.y"
+#line 258 "yacc2.y"
     {generate_code("Math.cos");;}
     break;
 
   case 63:
 
 /* Line 1455 of yacc.c  */
-#line 261 "yacc2.y"
+#line 259 "yacc2.y"
     {generate_code("Math.sin");;}
     break;
 
   case 64:
 
 /* Line 1455 of yacc.c  */
-#line 262 "yacc2.y"
+#line 260 "yacc2.y"
     {generate_code("Math.tan");;}
     break;
 
   case 65:
 
 /* Line 1455 of yacc.c  */
-#line 264 "yacc2.y"
+#line 262 "yacc2.y"
     { context_check((yyvsp[(1) - (1)].id), curr_scope); (yyval.val).type = get_type((yyvsp[(1) - (1)].id), curr_scope); if(get_type((yyvsp[(1) - (1)].id), curr_scope) == INT_TYPE) { (yyval.val).ival = get_int_value((yyvsp[(1) - (1)].id), curr_scope);} else if(get_type((yyvsp[(1) - (1)].id), curr_scope) == REAL_TYPE) {(yyval.val).rval = get_real_value((yyvsp[(1) - (1)].id), curr_scope);} else if(get_type((yyvsp[(1) - (1)].id), curr_scope) == BOOL_TYPE) {(yyval.val).bval = get_bool_value((yyvsp[(1) - (1)].id), curr_scope);} else if(get_type((yyvsp[(1) - (1)].id), curr_scope) == CHAR_TYPE) {(yyval.val).cval = get_char_value((yyvsp[(1) - (1)].id), curr_scope);} else if(get_type((yyvsp[(1) - (1)].id), curr_scope) == STRING_TYPE) {(yyval.val).sval = get_string_value((yyvsp[(1) - (1)].id), curr_scope);};}
     break;
 
   case 66:
 
 /* Line 1455 of yacc.c  */
-#line 265 "yacc2.y"
+#line 263 "yacc2.y"
     {generate_int((yyvsp[(1) - (1)].val).ival); (yyval.val).type = (yyvsp[(1) - (1)].val).type; (yyval.val).ival = (yyvsp[(1) - (1)].val).ival;;}
     break;
 
   case 67:
 
 /* Line 1455 of yacc.c  */
-#line 266 "yacc2.y"
+#line 264 "yacc2.y"
     {generate_real((yyvsp[(1) - (1)].val).rval); (yyval.val).type = (yyvsp[(1) - (1)].val).type; (yyval.val).rval = (yyvsp[(1) - (1)].val).rval;;}
     break;
 
   case 68:
 
 /* Line 1455 of yacc.c  */
-#line 267 "yacc2.y"
+#line 265 "yacc2.y"
     {generate_code(" true "); (yyval.val).type = (yyvsp[(1) - (1)].val).type; (yyval.val).bval = 1;;}
     break;
 
   case 69:
 
 /* Line 1455 of yacc.c  */
-#line 268 "yacc2.y"
+#line 266 "yacc2.y"
     {generate_code(" false "); (yyval.val).type = (yyvsp[(1) - (1)].val).type; (yyval.val).bval = 0;;}
     break;
 
   case 70:
 
 /* Line 1455 of yacc.c  */
-#line 269 "yacc2.y"
+#line 267 "yacc2.y"
     {generate_code((yyvsp[(1) - (1)].val).cval); (yyval.val).type = (yyvsp[(1) - (1)].val).type; (yyval.val).cval = (yyvsp[(1) - (1)].val).cval;;}
     break;
 
   case 71:
 
 /* Line 1455 of yacc.c  */
-#line 270 "yacc2.y"
+#line 268 "yacc2.y"
     {generate_code((yyvsp[(1) - (1)].val).sval); (yyval.val).type = (yyvsp[(1) - (1)].val).type; (yyval.val).sval = (yyvsp[(1) - (1)].val).sval;;}
     break;
 
   case 72:
 
 /* Line 1455 of yacc.c  */
-#line 271 "yacc2.y"
+#line 269 "yacc2.y"
     {(yyval.val) = (yyvsp[(2) - (3)].val); ;}
     break;
 
   case 73:
 
 /* Line 1455 of yacc.c  */
-#line 272 "yacc2.y"
+#line 270 "yacc2.y"
     {(yyval.val).type = (yyvsp[(3) - (4)].val).type; if((yyvsp[(3) - (4)].val).type == INT_TYPE) {(yyval.val).ival = (int)abs((yyvsp[(3) - (4)].val).ival);} else if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {(yyval.val).rval = abs((yyvsp[(3) - (4)].val).rval);} ;}
     break;
 
   case 74:
 
 /* Line 1455 of yacc.c  */
-#line 273 "yacc2.y"
+#line 271 "yacc2.y"
     { if((yyvsp[(3) - (6)].val).type == INT_TYPE && (yyvsp[(5) - (6)].val).type == INT_TYPE) {(yyval.val).type = INT_TYPE; (yyval.val).ival = pow((yyvsp[(3) - (6)].val).ival, (yyvsp[(5) - (6)].val).ival);} else if((yyvsp[(3) - (6)].val).type == REAL_TYPE && (yyvsp[(5) - (6)].val).type == INT_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = pow((yyvsp[(3) - (6)].val).rval, (float)(yyvsp[(5) - (6)].val).ival);} else if((yyvsp[(3) - (6)].val).type == INT_TYPE && (yyvsp[(5) - (6)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = pow((float)(yyvsp[(3) - (6)].val).ival, (yyvsp[(5) - (6)].val).rval);} else if((yyvsp[(3) - (6)].val).type == REAL_TYPE && (yyvsp[(5) - (6)].val).type == REAL_TYPE) {(yyval.val).type = REAL_TYPE; (yyval.val).rval = pow((yyvsp[(3) - (6)].val).rval, (yyvsp[(5) - (6)].val).rval);} else { yyerror("Must power numbers"); exit(1);} ;}
     break;
 
   case 75:
 
 /* Line 1455 of yacc.c  */
-#line 274 "yacc2.y"
+#line 272 "yacc2.y"
     {(yyval.val).type = (yyvsp[(3) - (4)].val).type; if((yyvsp[(3) - (4)].val).type == INT_TYPE) {if((yyvsp[(3) - (4)].val).ival >= 0) {(yyval.val).ival = (int)sqrt((yyvsp[(3) - (4)].val).ival);}} else if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {if((yyvsp[(3) - (4)].val).rval >= 0) {(yyval.val).rval = sqrt((yyvsp[(3) - (4)].val).rval);}} else{yyerror("Cannot make sqrt on negative number");exit(1);};}
     break;
 
   case 76:
 
 /* Line 1455 of yacc.c  */
-#line 275 "yacc2.y"
+#line 273 "yacc2.y"
     {(yyval.val).type = (yyvsp[(3) - (4)].val).type; if((yyvsp[(3) - (4)].val).type == INT_TYPE) {(yyval.val).ival = (int)exp((yyvsp[(3) - (4)].val).ival);} else if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {(yyval.val).rval = exp((yyvsp[(3) - (4)].val).rval);} ;}
     break;
 
   case 77:
 
 /* Line 1455 of yacc.c  */
-#line 276 "yacc2.y"
+#line 274 "yacc2.y"
     {(yyval.val).type = (yyvsp[(3) - (4)].val).type; if((yyvsp[(3) - (4)].val).type == INT_TYPE) {if((yyvsp[(3) - (4)].val).ival >= 0) {(yyval.val).ival = (int)log10((yyvsp[(3) - (4)].val).ival);}} else if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {if((yyvsp[(3) - (4)].val).rval >= 0) {(yyval.val).rval = log10((yyvsp[(3) - (4)].val).rval);}} else{yyerror("Cannot make log on negative number");exit(1);};}
     break;
 
   case 78:
 
 /* Line 1455 of yacc.c  */
-#line 277 "yacc2.y"
+#line 275 "yacc2.y"
     {(yyval.val).type = (yyvsp[(3) - (4)].val).type; if((yyvsp[(3) - (4)].val).type == INT_TYPE) {if((yyvsp[(3) - (4)].val).ival >= 0) {(yyval.val).ival = (int)log((yyvsp[(3) - (4)].val).ival);}} else if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {if((yyvsp[(3) - (4)].val).rval >= 0) {(yyval.val).rval = log((yyvsp[(3) - (4)].val).rval);}} else{yyerror("Cannot make ln on negative number");exit(1);};}
     break;
 
   case 79:
 
 /* Line 1455 of yacc.c  */
-#line 278 "yacc2.y"
+#line 276 "yacc2.y"
     {(yyval.val).type = INT_TYPE; if((yyvsp[(3) - (4)].val).type == INT_TYPE) {(yyval.val).ival = (yyvsp[(3) - (4)].val).ival;} else if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {(yyval.val).ival = (int)floor((yyvsp[(3) - (4)].val).rval);} else {yyerror("Must floor on number");} ;}
     break;
 
   case 80:
 
 /* Line 1455 of yacc.c  */
-#line 279 "yacc2.y"
+#line 277 "yacc2.y"
     {(yyval.val).type = INT_TYPE; if((yyvsp[(3) - (4)].val).type == INT_TYPE) {(yyval.val).ival = (yyvsp[(3) - (4)].val).ival;} else if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {(yyval.val).ival = (int)ceil((yyvsp[(3) - (4)].val).rval);} else {yyerror("Must ceil on number");} ;}
     break;
 
   case 81:
 
 /* Line 1455 of yacc.c  */
-#line 280 "yacc2.y"
+#line 278 "yacc2.y"
     {(yyval.val).type = REAL_TYPE; if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {(yyval.val).rval = cos((yyvsp[(3) - (4)].val).rval);} else {yyerror("Must make cos on real");};}
     break;
 
   case 82:
 
 /* Line 1455 of yacc.c  */
-#line 281 "yacc2.y"
+#line 279 "yacc2.y"
     {(yyval.val).type = REAL_TYPE; if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {(yyval.val).rval = sin((yyvsp[(3) - (4)].val).rval);} else {yyerror("Must make sin on real");};}
     break;
 
   case 83:
 
 /* Line 1455 of yacc.c  */
-#line 282 "yacc2.y"
+#line 280 "yacc2.y"
     {(yyval.val).type = REAL_TYPE; if((yyvsp[(3) - (4)].val).type == REAL_TYPE) {(yyval.val).rval = tan((yyvsp[(3) - (4)].val).rval);} else {yyerror("Must make tan on real");};}
     break;
 
   case 84:
 
 /* Line 1455 of yacc.c  */
-#line 285 "yacc2.y"
+#line 283 "yacc2.y"
     {generate_code("System.out.println(");;}
     break;
 
   case 85:
 
 /* Line 1455 of yacc.c  */
-#line 287 "yacc2.y"
+#line 285 "yacc2.y"
     { generate_code(")"); if((yyvsp[(2) - (2)].val).type == CHAR_TYPE) {printf("WRITE: %s\n", (yyvsp[(2) - (2)].val).cval);} else if((yyvsp[(2) - (2)].val).type == STRING_TYPE) {printf("WRITE: %s\n", (yyvsp[(2) - (2)].val).sval);} else if((yyvsp[(2) - (2)].val).type == REAL_TYPE) {printf("WRITE: %f\n", (yyvsp[(2) - (2)].val).rval);} else if((yyvsp[(2) - (2)].val).type == INT_TYPE) {printf("WRITE: %d\n", (yyvsp[(2) - (2)].val).ival);} else if((yyvsp[(2) - (2)].val).type == BOOL_TYPE) {printf("WRITE: %d\n", (yyvsp[(2) - (2)].val).bval);} ;}
     break;
 
   case 86:
 
 /* Line 1455 of yacc.c  */
-#line 291 "yacc2.y"
+#line 289 "yacc2.y"
     {(yyval.intval) = INT_TYPE;;}
     break;
 
   case 87:
 
 /* Line 1455 of yacc.c  */
-#line 292 "yacc2.y"
+#line 290 "yacc2.y"
     {(yyval.intval) = REAL_TYPE;;}
     break;
 
   case 88:
 
 /* Line 1455 of yacc.c  */
-#line 293 "yacc2.y"
+#line 291 "yacc2.y"
     {(yyval.intval) = CHAR_TYPE;;}
     break;
 
   case 89:
 
 /* Line 1455 of yacc.c  */
-#line 294 "yacc2.y"
+#line 292 "yacc2.y"
     {(yyval.intval) = STRING_TYPE;;}
     break;
 
   case 90:
 
 /* Line 1455 of yacc.c  */
-#line 295 "yacc2.y"
+#line 293 "yacc2.y"
     {(yyval.intval) = BOOL_TYPE;;}
     break;
 
   case 91:
 
 /* Line 1455 of yacc.c  */
-#line 298 "yacc2.y"
+#line 296 "yacc2.y"
     {generate_code("\nif( "); curr_scope++;;}
     break;
 
   case 92:
 
 /* Line 1455 of yacc.c  */
-#line 299 "yacc2.y"
+#line 297 "yacc2.y"
     {generate_code(" {\n");;}
     break;
 
   case 93:
 
 /* Line 1455 of yacc.c  */
-#line 300 "yacc2.y"
+#line 298 "yacc2.y"
     {generate_code(" } else if(");;}
     break;
 
   case 94:
 
 /* Line 1455 of yacc.c  */
-#line 301 "yacc2.y"
+#line 299 "yacc2.y"
     {generate_code("} else {\n");}
     break;
 
   case 95:
 
 /* Line 1455 of yacc.c  */
-#line 302 "yacc2.y"
-    {generate_code("}"); curr_scope--;;}
+#line 300 "yacc2.y"
+    {generate_code("}"); hidescope(curr_scope); curr_scope--;;}
     break;
 
   case 96:
 
 /* Line 1455 of yacc.c  */
-#line 304 "yacc2.y"
+#line 302 "yacc2.y"
     {generate_code(")"); if((yyvsp[(2) - (2)].val).type != BOOL_TYPE) {yyerror("You must have a boolean condition with if statement"); exit(1);};}
     break;
 
   case 99:
 
 /* Line 1455 of yacc.c  */
-#line 308 "yacc2.y"
+#line 306 "yacc2.y"
     {generate_code(")"); if((yyvsp[(3) - (3)].val).type != BOOL_TYPE) { yyerror("You must have a boolean condition with elif statement"); exit(1);};}
     break;
 
   case 103:
 
 /* Line 1455 of yacc.c  */
-#line 315 "yacc2.y"
+#line 313 "yacc2.y"
     {generate_code("while ("); curr_scope++;;}
     break;
 
   case 104:
 
 /* Line 1455 of yacc.c  */
-#line 316 "yacc2.y"
+#line 314 "yacc2.y"
     {generate_code(" {\n");;}
     break;
 
   case 105:
 
 /* Line 1455 of yacc.c  */
-#line 317 "yacc2.y"
-    {generate_code(" }"); curr_scope--;;}
+#line 315 "yacc2.y"
+    {generate_code(" }"); hidescope(curr_scope); curr_scope--;;}
     break;
 
   case 106:
 
 /* Line 1455 of yacc.c  */
-#line 319 "yacc2.y"
+#line 317 "yacc2.y"
     {generate_code(")"); if((yyvsp[(2) - (2)].val).type != BOOL_TYPE) {yyerror("You must choose a boolean condition with loop statement"); exit(1);} ;}
     break;
 
   case 110:
 
 /* Line 1455 of yacc.c  */
-#line 326 "yacc2.y"
+#line 324 "yacc2.y"
     { ;}
     break;
 
   case 111:
 
 /* Line 1455 of yacc.c  */
-#line 329 "yacc2.y"
+#line 327 "yacc2.y"
     { curr_fct = (yyvsp[(2) - (2)].id); ;}
     break;
 
   case 112:
 
 /* Line 1455 of yacc.c  */
-#line 332 "yacc2.y"
+#line 330 "yacc2.y"
     { generate_fct(curr_fct, (yyvsp[(2) - (2)].intval)); install(curr_fct, (yyvsp[(2) - (2)].intval), 0, 0, 0, "N", "null", curr_scope); ;}
     break;
 
   case 113:
 
 /* Line 1455 of yacc.c  */
-#line 332 "yacc2.y"
+#line 330 "yacc2.y"
     {curr_scope++; ;}
     break;
 
   case 114:
 
 /* Line 1455 of yacc.c  */
-#line 332 "yacc2.y"
+#line 330 "yacc2.y"
     { generate_code(" {\n");;}
     break;
 
   case 117:
 
 /* Line 1455 of yacc.c  */
-#line 338 "yacc2.y"
+#line 336 "yacc2.y"
     {generate_decl((yyvsp[(2) - (4)].id), (yyvsp[(4) - (4)].intval)); install((yyvsp[(2) - (4)].id), (yyvsp[(4) - (4)].intval), 0, 0, 0, "N", "null", curr_scope); put_param((yyvsp[(2) - (4)].id), (yyvsp[(4) - (4)].intval), curr_fct); ;}
     break;
 
   case 118:
 
 /* Line 1455 of yacc.c  */
-#line 340 "yacc2.y"
+#line 338 "yacc2.y"
     { ;}
     break;
 
   case 119:
 
 /* Line 1455 of yacc.c  */
-#line 341 "yacc2.y"
+#line 339 "yacc2.y"
     { ;}
     break;
 
   case 120:
 
 /* Line 1455 of yacc.c  */
-#line 344 "yacc2.y"
+#line 342 "yacc2.y"
     {generate_code("return ");;}
     break;
 
   case 121:
 
 /* Line 1455 of yacc.c  */
-#line 345 "yacc2.y"
-    {generate_code(";\n}"); check_type((yyvsp[(2) - (2)].id), get_type(curr_fct, curr_scope), curr_scope); if(get_type(curr_fct, curr_scope) == INT_TYPE) {set_int_value(curr_fct, get_int_value((yyvsp[(2) - (2)].id), curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == REAL_TYPE) {set_real_value(curr_fct, get_real_value((yyvsp[(2) - (2)].id), curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == BOOL_TYPE) {set_bool_value(curr_fct, get_bool_value((yyvsp[(2) - (2)].id), curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == CHAR_TYPE) {set_char_value(curr_fct, get_char_value((yyvsp[(2) - (2)].id), curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == STRING_TYPE) {set_string_value(curr_fct, get_string_value((yyvsp[(2) - (2)].id), curr_scope), curr_scope);} printf("curr scope = %d", curr_scope); curr_scope--;  ;}
+#line 343 "yacc2.y"
+    {generate_code(";\n}"); check_type((yyvsp[(2) - (2)].id), get_type(curr_fct, curr_scope), curr_scope); if(get_type(curr_fct, curr_scope) == INT_TYPE) {set_int_value(curr_fct, get_int_value((yyvsp[(2) - (2)].id), curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == REAL_TYPE) {set_real_value(curr_fct, get_real_value((yyvsp[(2) - (2)].id), curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == BOOL_TYPE) {set_bool_value(curr_fct, get_bool_value((yyvsp[(2) - (2)].id), curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == CHAR_TYPE) {set_char_value(curr_fct, get_char_value((yyvsp[(2) - (2)].id), curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == STRING_TYPE) {set_string_value(curr_fct, get_string_value((yyvsp[(2) - (2)].id), curr_scope), curr_scope);} hidescope(curr_scope); printf("curr scope = %d", curr_scope); curr_scope--;  ;}
     break;
 
   case 122:
 
 /* Line 1455 of yacc.c  */
-#line 348 "yacc2.y"
+#line 346 "yacc2.y"
     { generate_code((yyvsp[(1) - (1)].id)); (yyval.val).type = get_type((yyvsp[(1) - (1)].id), curr_scope); ;}
     break;
 
   case 123:
 
 /* Line 1455 of yacc.c  */
-#line 349 "yacc2.y"
+#line 347 "yacc2.y"
     {generate_int((yyvsp[(1) - (1)].val).ival); (yyval.val).type = INT_TYPE;;}
     break;
 
   case 124:
 
 /* Line 1455 of yacc.c  */
-#line 350 "yacc2.y"
+#line 348 "yacc2.y"
     {generate_real((yyvsp[(1) - (1)].val).rval); (yyval.val).type = REAL_TYPE;;}
     break;
 
   case 125:
 
 /* Line 1455 of yacc.c  */
-#line 351 "yacc2.y"
+#line 349 "yacc2.y"
     {generate_code((yyvsp[(1) - (1)].val).cval); (yyval.val).type = CHAR_TYPE;;}
     break;
 
   case 126:
 
 /* Line 1455 of yacc.c  */
-#line 352 "yacc2.y"
+#line 350 "yacc2.y"
     {generate_code((yyvsp[(1) - (1)].val).sval); (yyval.val).type = STRING_TYPE;;}
     break;
 
   case 127:
 
 /* Line 1455 of yacc.c  */
-#line 353 "yacc2.y"
+#line 351 "yacc2.y"
     {generate_code(" true "); (yyval.val).type = BOOL_TYPE;;}
     break;
 
   case 128:
 
 /* Line 1455 of yacc.c  */
-#line 354 "yacc2.y"
+#line 352 "yacc2.y"
     {generate_code(" false "); (yyval.val).type = BOOL_TYPE;;}
     break;
 
   case 130:
 
 /* Line 1455 of yacc.c  */
-#line 361 "yacc2.y"
+#line 359 "yacc2.y"
     { check_type((yyvsp[(1) - (3)].id), get_type((yyvsp[(3) - (3)].id), curr_scope), curr_scope); curr_call = (yyvsp[(3) - (3)].id); if(get_type((yyvsp[(1) - (3)].id), curr_scope) == INT_TYPE) {set_int_value((yyvsp[(1) - (3)].id), get_int_value((yyvsp[(3) - (3)].id), curr_scope), curr_scope);} else if(get_type((yyvsp[(1) - (3)].id), curr_scope) == REAL_TYPE) {set_real_value((yyvsp[(1) - (3)].id), get_real_value((yyvsp[(3) - (3)].id), curr_scope), curr_scope);} else if(get_type((yyvsp[(1) - (3)].id), curr_scope) == BOOL_TYPE) {set_bool_value((yyvsp[(1) - (3)].id), get_bool_value((yyvsp[(3) - (3)].id), curr_scope), curr_scope);} else if(get_type((yyvsp[(1) - (3)].id), curr_scope) == CHAR_TYPE) {set_char_value((yyvsp[(1) - (3)].id), get_char_value((yyvsp[(3) - (3)].id), curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == STRING_TYPE) {set_string_value((yyvsp[(1) - (3)].id), get_string_value((yyvsp[(3) - (3)].id), curr_scope), curr_scope);} ;}
     break;
 
   case 132:
 
 /* Line 1455 of yacc.c  */
-#line 367 "yacc2.y"
+#line 365 "yacc2.y"
     { if(get_param_nb(curr_call) != 0) { yyerror("Wrong number of parameters in the function call"); exit(1); } ;}
     break;
 
   case 133:
 
 /* Line 1455 of yacc.c  */
-#line 368 "yacc2.y"
+#line 366 "yacc2.y"
     { num_param = 0;;}
     break;
 
   case 134:
 
 /* Line 1455 of yacc.c  */
-#line 371 "yacc2.y"
+#line 369 "yacc2.y"
     {num_param++; printf("param number = %d\n", num_param); param_check(num_param, curr_call); param_check_type(num_param, curr_call, (yyvsp[(1) - (1)].val).type);  ;}
     break;
 
   case 135:
 
 /* Line 1455 of yacc.c  */
-#line 372 "yacc2.y"
+#line 370 "yacc2.y"
     {num_param++; param_check(num_param, curr_call); printf("param number = %d\n", num_param); param_check_type(num_param, curr_call, (yyvsp[(1) - (3)].val).type); if(get_param_nb(curr_call) != num_param) { yyerror("Wrong number of parameters in the function call"); exit(1); };}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 2570 "yacc2.tab.c"
+#line 2568 "yacc2.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2778,15 +2776,16 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 376 "yacc2.y"
+#line 374 "yacc2.y"
 
 void yyerror(char *s) {
     fprintf(stderr, "%s\n", s);
 }
 int main( int argc, char *argv[] ){ 
-    extern FILE *yyin;
-    ++argv; argc = argc-1;
-    yyin = fopen( argv[0], "r" );
-    int errors = 0;
-    yyparse ();
+  init_hash_table();
+  extern FILE *yyin;
+  ++argv; argc = argc-1;
+  yyin = fopen( argv[0], "r" );
+  int errors = 0;
+  yyparse ();
 }

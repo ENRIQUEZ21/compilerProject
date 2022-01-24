@@ -18,10 +18,29 @@ symrec *identifier;
 
 symrec *sym_table = (symrec *)0; 
 
+#define SIZE 211
+
+static struct symrec **hash_table;
+
+void init_hash_table(){
+	int i; 
+	hash_table = malloc(SIZE * sizeof(symrec*));
+	for(i = 0; i < SIZE; i++) hash_table[i] = NULL;
+}
+
+unsigned int hash(char *key){
+	unsigned int hashval = 0;
+	for(;*key!='\0';key++) hashval += *key;
+	hashval += key[0] % 11 + (key[0] << 3) - key[0];
+	return hashval % SIZE;
+}
+
 
 symrec * putsym (char *sym_name, int type, int int_val, double real_val, int bool_val, char *char_val, char *string_val, int curr_scope) 
 {
-    symrec *ptr;
+    unsigned int hashval = hash(sym_name);
+	symrec *ptr = hash_table[hashval];
+    //symrec *ptr;
     ptr = (symrec *) malloc (sizeof(symrec));
     ptr->name = (char *) malloc (strlen(sym_name)+1);
     strcpy (ptr->name,sym_name);
@@ -33,21 +52,43 @@ symrec * putsym (char *sym_name, int type, int int_val, double real_val, int boo
     ptr->string_val = (char *) string_val;
     ptr->scope = curr_scope;
     /*ptr->offset = data_location();*/
-    ptr->next = (struct symrec *)sym_table;
-    sym_table = ptr;
+    ptr->next = hash_table[hashval];//(struct symrec *)sym_table;
+    hash_table[hashval] = ptr;
+    //sym_table = ptr;
     return ptr;
 }
 symrec * getsym (char *sym_name, int curr_scope)
 {
-    symrec *ptr;
-    for ( ptr = sym_table; ptr != (symrec *) 0; ptr = (symrec *)ptr->next )
+    unsigned int hashval = hash(sym_name);
+	symrec *ptr = hash_table[hashval];
+    //symrec *ptr;
+    while((ptr != NULL) && (strcmp(sym_name,ptr->name) != 0 || ptr->scope > curr_scope)) {
+        ptr = ptr->next;
+    }
+    /*for ( ptr = sym_table; ptr != (symrec *) 0; ptr = (symrec *)ptr->next )
         if (strcmp (ptr->name,sym_name) == 0 && ptr->scope <= curr_scope)
-            return ptr;
-    return 0;
+            return ptr;*/
+    return ptr;
 }
 
-/*void hidescope(int curr_scope) {
+void hidescope(int curr_scope) {
     symrec *ptr;
+    int i;
+	// printf("Hiding scope \'%d\':\n", cur_scope);
+	/* for all the lists */
+	for (i = 0; i < SIZE; i++){
+		if(hash_table[i] != NULL){
+			ptr = hash_table[i];
+			/* Find the first item that is from another scope */
+			while(ptr != NULL && ptr->scope == curr_scope){
+				printf("Hiding %s..\n", ptr->name);
+				ptr = ptr->next;
+			}
+			/* Set the list equal to that item */
+			hash_table[i] = ptr;
+		}
+	}
+    /*symrec *ptr;
     for ( ptr = sym_table; ptr != (symrec *) 0; ptr = (symrec *)ptr->next ) {
         while(ptr->scope == curr_scope) {
             ptr = ptr->next;
@@ -55,8 +96,8 @@ symrec * getsym (char *sym_name, int curr_scope)
         } 
         sym_table = ptr;
     }
-    printf("HIDDEN SCOPE\n");
-}*/
+    printf("HIDDEN SCOPE\n");*/
+}
 
 void setrealval(char * sym_name, double real_val, int scope) {
     symrec *ptr;

@@ -8,12 +8,12 @@ id3 =  9 ;
 c = Math.abs(id2 - id3);
 return c;
 }
-public static double myexp(Integer id31 , double id21) {
-double c1;
-id21 =  45.000000 ;
-id31 =  67 ;
-c1 = Math.exp(id21 - id31);
-return c1;
+public static double myexp(Integer id3 , double id2) {
+double c;
+id2 =  45.000000 ;
+id3 =  67 ;
+c = Math.exp(id2 - id3);
+return c;
 }
 public static void main(String args[]){
 double d;
