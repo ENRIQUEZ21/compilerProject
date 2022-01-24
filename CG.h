@@ -8,8 +8,6 @@ void generate_code(char *symbol) {
     fprintf(fp, "%s", symbol);
 }
 
-
-
 void generate_decl(char *id, int type) {
      FILE *fp;
 	fp = fopen("out.java", "a");

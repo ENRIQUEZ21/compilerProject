@@ -17,6 +17,11 @@
   char *curr_call = "N";
   int num_param = 0; 
 
+  /* void hide_scope(int curr_scope) {
+    hidescope(curr_scope);
+  }
+  */
+
 
   void install ( char *sym_name, int type, int int_val, double real_val, int bool_val, char *char_val, char *string_val, int current_scope)
   {
@@ -130,9 +135,7 @@
 
   }
 
-  void hide_scope(int curr_scope) {
-    hidescope(curr_scope);
-  }
+  
   
 
 %}
@@ -296,7 +299,7 @@ if: IF        {generate_code("\nif( "); curr_scope++;};
 then: THEN      {generate_code(" {\n");};
 elif: ELIF      {generate_code(" } else if(");};
 else: ELSE      {generate_code("} else {\n")}
-endif: ENDIF    {generate_code("}"); hide_scope(curr_scope); curr_scope--;};
+endif: ENDIF    {generate_code("}"); curr_scope--;};
 
 conditionalstmt: if expr {generate_code(")"); if($2.type != BOOL_TYPE) {yyerror("You must have a boolean condition with if statement"); exit(1);}} then groupstmts elifstmt elsestmt endif    
 ;
@@ -311,7 +314,7 @@ elsestmt:
 
 while: WHILE        {generate_code("while ("); curr_scope++;};
 do: DO              {generate_code(" {\n");};
-endwhile: ENDWHILE  {generate_code(" }"); hide_scope(curr_scope); curr_scope--;};
+endwhile: ENDWHILE  {generate_code(" }"); curr_scope--;};
 
 loopstmt: while expr {generate_code(")"); if($2.type != BOOL_TYPE) {yyerror("You must choose a boolean condition with loop statement"); exit(1);} } do groupstmts endwhile  
 ;
@@ -326,7 +329,7 @@ fct: declfct headfct groupstmts returnfct    { }
 declfct: FCT  ID { curr_fct = $2; }
 ;
 
-headfct: COLON type { generate_fct(curr_fct, $2); install(curr_fct, $2, 0, 0, 0, "N", "null", curr_scope); curr_scope++; } openpar paramfcts closepar { generate_code(" {\n");} 
+headfct: COLON type { generate_fct(curr_fct, $2); install(curr_fct, $2, 0, 0, 0, "N", "null", curr_scope); } openpar {curr_scope++; } paramfcts closepar { generate_code(" {\n");} 
 
 paramfcts: 
 |     parameters
@@ -339,7 +342,7 @@ parameters: param     { }
 ;
 
 return: RETURN        {generate_code("return ");};
-returnfct: return id   {generate_code(";\n}"); check_type($2, get_type(curr_fct, curr_scope), curr_scope); if(get_type(curr_fct, curr_scope) == INT_TYPE) {set_int_value(curr_fct, get_int_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == REAL_TYPE) {set_real_value(curr_fct, get_real_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == BOOL_TYPE) {set_bool_value(curr_fct, get_bool_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == CHAR_TYPE) {set_char_value(curr_fct, get_char_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == STRING_TYPE) {set_string_value(curr_fct, get_string_value($2, curr_scope), curr_scope);} hide_scope(curr_scope); curr_scope--;  }
+returnfct: return id   {generate_code(";\n}"); check_type($2, get_type(curr_fct, curr_scope), curr_scope); if(get_type(curr_fct, curr_scope) == INT_TYPE) {set_int_value(curr_fct, get_int_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == REAL_TYPE) {set_real_value(curr_fct, get_real_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == BOOL_TYPE) {set_bool_value(curr_fct, get_bool_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == CHAR_TYPE) {set_char_value(curr_fct, get_char_value($2, curr_scope), curr_scope);} else if(get_type(curr_fct, curr_scope) == STRING_TYPE) {set_string_value(curr_fct, get_string_value($2, curr_scope), curr_scope);} printf("curr scope = %d", curr_scope); curr_scope--;  }
 ;
 
 instances: id       { generate_code($1); $$.type = get_type($1, curr_scope); }
@@ -362,11 +365,11 @@ endcall: openpar paramcallfct closepar
 ;
 
 paramcallfct:     { if(get_param_nb(curr_call) != 0) { yyerror("Wrong number of parameters in the function call"); exit(1); } }
-|     parametersinstances
+|     parametersinstances         { num_param = 0;}
 ;
 
-parametersinstances: instances            {num_param++; param_check(num_param, curr_call); param_check_type(num_param, curr_call, $1.type);  }
-|    instances comma parametersinstances {num_param++; param_check(num_param, curr_call); param_check_type(num_param, curr_call, $1.type); if(get_param_nb(curr_call) != num_param) { yyerror("Wrong number of parameters in the function call"); exit(1); }}
+parametersinstances: instances            {num_param++; printf("param number = %d\n", num_param); param_check(num_param, curr_call); param_check_type(num_param, curr_call, $1.type);  }
+|    instances comma parametersinstances {num_param++; param_check(num_param, curr_call); printf("param number = %d\n", num_param); param_check_type(num_param, curr_call, $1.type); if(get_param_nb(curr_call) != num_param) { yyerror("Wrong number of parameters in the function call"); exit(1); }}
 ;
 
 

@@ -46,16 +46,17 @@ symrec * getsym (char *sym_name, int curr_scope)
     return 0;
 }
 
-void hidescope(int curr_scope) {
+/*void hidescope(int curr_scope) {
     symrec *ptr;
     for ( ptr = sym_table; ptr != (symrec *) 0; ptr = (symrec *)ptr->next ) {
-        if(ptr->scope == curr_scope) {
+        while(ptr->scope == curr_scope) {
             ptr = ptr->next;
-        } else {
-            sym_table = ptr;
-        }
+            printf("Hidden %s \n", ptr->name);
+        } 
+        sym_table = ptr;
     }
-}
+    printf("HIDDEN SCOPE\n");
+}*/
 
 void setrealval(char * sym_name, double real_val, int scope) {
     symrec *ptr;

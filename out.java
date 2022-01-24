@@ -1,18 +1,18 @@
 import java.lang.Math;
 public class out{ 
 
-public static double sum(Integer id3 , double id2) {
+public static double myabs(Integer id3 , double id2) {
 double c;
 id2 =  2.000000 ;
 id3 =  9 ;
 c = Math.abs(id2 - id3);
 return c;
 }
-public static double sum1(Integer id31 , double id21) {
+public static double myexp(Integer id31 , double id21) {
 double c1;
-id21 =  2.000000 ;
-id31 =  9 ;
-c1 = Math.abs(id21 - id31);
+id21 =  45.000000 ;
+id31 =  67 ;
+c1 = Math.exp(id21 - id31);
 return c1;
 }
 public static void main(String args[]){
@@ -20,25 +20,30 @@ double d;
 d =  1.000000 ;
 
 if( d <  34 ) {
-d = sum( 3  ,  34.500000 );
+d = myabs( 12  ,  10.120000 );
+Integer i4;
 System.out.println(d);
  } else if(d ==  35 ) {
-System.out.println( 35 );
-double id4;
+d = myabs( 35  ,  10.130000 );
+System.out.println(d);
 } else {
-System.out.println( 52 );
-Integer i;
-i =  2 ;
+d = myexp( 30  ,  20.200000 );
+System.out.println(d);
 };
+Integer i4;
 Integer i;
+double o;
+o =  9.890000 ;
 i =  9 ;
 while (i <  45 ) {
-Integer o;
+double l;
+l = myexp( 31  ,  45.780000 );
+o = o + l;
+System.out.println(o);
 System.out.println(i);
-d =  90 ;
-Integer id4;
 i = i +  1 ;
  };
-double o;
+System.out.println("The sum of all exp is : ");
+System.out.println(o);
 }
 }
